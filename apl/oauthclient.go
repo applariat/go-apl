@@ -16,5 +16,6 @@ func getOauth2HTTPClient() *http.Client {
 		TokenURL:     tokenPath,
 		Scopes:       []string{},
 	}
+
 	return oauthConfig.Client(oauth2.NoContext)
 }
