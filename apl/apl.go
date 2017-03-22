@@ -10,9 +10,9 @@ type Client struct {
 
 	// Different appLariat API Services
 	Credentials *CredentialService
-	Types       *TypeService
+	//Types       *TypeService
 	Components  *ComponentService
-	StackVersions *StackVersionService
+	//StackVersions *StackVersionService
 }
 
 // NewClient returns the client object to access the applariat API
@@ -22,9 +22,9 @@ func NewClient() *Client {
 
 	return &Client{
 		Credentials: NewCredentialsService(base.New()),
-		Types:       NewTypesService(base.New()),
+		//Types:       NewTypesService(base.New()),
 		Components:  NewComponentsService(base.New()),
-		StackVersions: NewStackVersionsService(base.New()),
+		//StackVersions: NewStackVersionsService(base.New()),
 	}
 
 }

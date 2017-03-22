@@ -3,3 +3,4 @@
 env.sh
 sandbox.go
 apl/todo
+.DS_Store

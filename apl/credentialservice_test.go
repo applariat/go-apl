@@ -1,7 +1,7 @@
 package apl_test
 
 import (
-	"applariat.io/go-apl/apl"
+	"github.com/applariat/go-apl/apl"
 	"fmt"
 	"testing"
 )
@@ -12,7 +12,7 @@ func TestCredentialService_Create(t *testing.T) {
 	in := &apl.CredentialInput{
 		ID:             "chris-test-id",
 		Name:           "creds for chris",
-		CredentialType: apl.CredentialTypeDocker,
+		CredentialType: "docker",
 		Credentials: map[string]string{
 			"registry_email":    "floopy@glorp.com",
 			"registry_password": "urpasswd",
@@ -34,6 +34,7 @@ func TestCredentialService_List(t *testing.T) {
 
 	out, _, err := aplSvs.Credentials.List(nil)
 
+	fmt.Println("count:", len(out))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +47,7 @@ func TestCredentialService_ListByType(t *testing.T) {
 	aplSvc := apl.NewClient()
 
 	params := &apl.CredentialParams{
-		CredentialType: apl.CredentialTypeDocker,
+		CredentialType: "docker",
 	}
 	out, _, err := aplSvc.Credentials.List(params)
 
@@ -78,17 +79,16 @@ func TestCredentialService_Get(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println("Updated Name:", out.Name)
+	fmt.Println("Name:", out.Name)
 }
 
 func TestCredentialService_Delete(t *testing.T) {
 	aplSvc := apl.NewClient()
-
 	out, _, err := aplSvc.Credentials.Delete("chris-test-id")
 
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println("Deleted:", out.Result.Deleted)
+	fmt.Println("Deleted:", out.Deleted)
 
 }
