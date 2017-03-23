@@ -13,18 +13,22 @@ type Client struct {
 	//Types       *TypeService
 	Components  *ComponentService
 	//StackVersions *StackVersionService
+	StackArtifacts  *StackArtifactService
+	Deployments 	*DeploymentService
 }
 
 // NewClient returns the client object to access the applariat API
 func NewClient() *Client {
 
-	base := sling.New().Client(getOauth2HTTPClient()).Base(conf.API)
+	base := sling.New().Client(getOauth2HTTPClient()).Base(APLConfig.API)
 
 	return &Client{
 		Credentials: NewCredentialsService(base.New()),
 		//Types:       NewTypesService(base.New()),
 		Components:  NewComponentsService(base.New()),
 		//StackVersions: NewStackVersionsService(base.New()),
+		StackArtifacts: NewStackArtifactsService(base.New()),
+		Deployments: NewDeploymentsService(base.New()),
 	}
 
 }

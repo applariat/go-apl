@@ -37,36 +37,23 @@ type ComponentParams struct {
 	Name     string `url:"name,omitempty"`
 }
 
-// listComponentsOutput used to wrap the data for API result
-type listComponentsOutput struct {
-	Data []Component `json:"data"`
-}
-
-// getComponentOutput used to wrap the data for API result
-type getComponentOutput struct {
-	Data Component `json:"data"`
-}
-
 // List gets a list of components with optional filter params
 func (c *ComponentService) List(params *ComponentParams) ([]Component, *http.Response, error) {
-	output := new(listComponentsOutput)
-	apiError := new(APIError)
-
-	resp, err := c.sling.New().Get(c.endpoint).QueryStruct(params).Receive(output, apiError)
-
-	return output.Data, resp, relevantError(err, apiError)
+	output := &struct{Data []Component `json:"data"`}{}
+	resp, err := doList(c.sling, c.endpoint, params, output)
+	return output.Data, resp, err
 }
 
 // Get get a component for the id specified
 func (c *ComponentService) Get(id string) (Component, *http.Response, error) {
 
+	// wrap output data
 	// TODO: Fix the component endpoint to return { "data": {...}}
-	//output := new(getComponentOutput)
+	//output := &struct{Data Component `json:"data"`}{}
 	output := Component{}
-	apiError := new(APIError)
-
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
-	resp, err := c.sling.New().Get(path).Receive(&output, apiError)
+	resp, err := doGet(c.sling, path, output)
+	//return output.Data, resp, err
+	return output, resp, err
 
-	return output, resp, relevantError(err, apiError)
 }

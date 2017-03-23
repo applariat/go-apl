@@ -45,67 +45,35 @@ type CredentialParams struct {
 	Name           string `url:"name,omitempty"`
 }
 
-// listCredentialsOutput used to wrap the data for API result
-type listCredentialsOutput struct {
-	Data []Credential `json:"data"`
-}
-
-// getCredentialOutput used to wrap the data for API result
-type getCredentialOutput struct {
-	Data Credential `json:"data"`
-}
 
 // List gets a list of credentials with optional filter params
 func (c *CredentialService) List(params *CredentialParams) ([]Credential, *http.Response, error) {
-	output := new(listCredentialsOutput)
-	apiError := new(APIError)
-
-	resp, err := c.sling.New().Get(c.endpoint).QueryStruct(params).Receive(output, apiError)
-	return output.Data, resp, relevantError(err, apiError)
+	output := &struct{Data []Credential `json:"data"`}{}
+	resp, err := doList(c.sling, c.endpoint, params, output)
+	return output.Data, resp, err
 }
 
 // Get get a credential for the id specified
 func (c *CredentialService) Get(id string) (Credential, *http.Response, error) {
-	output := new(getCredentialOutput)
-	apiError := new(APIError)
-
+	output := &struct{Data Credential `json:"data"`}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
-
-	resp, err := c.sling.New().Get(path).Receive(output, apiError)
-
-	return output.Data, resp, relevantError(err, apiError)
+	resp, err := doGet(c.sling, path, output)
+	return output.Data, resp, err
 }
 
 // Create will create a credential
 func (c *CredentialService) Create(input *CredentialInput) (CreateResult, *http.Response, error) {
-	output := CreateResult{}
-	apiError := new(APIError)
-
-	body := &CreateInput{Data: input}
-	resp, err := c.sling.New().Post(c.endpoint).BodyJSON(body).Receive(&output, apiError)
-
-	return output, resp, relevantError(err, apiError)
+	return doCreate(c.sling, c.endpoint, input)
 }
 
 // Update will update a credential for the id specified
 func (c *CredentialService) Update(id string, input *CredentialInput) (ModifyResult, *http.Response, error) {
-	output := ModifyOutput{}
-	apiError := new(APIError)
-
-	body := &CreateInput{Data: input}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
-	resp, err := c.sling.New().Put(path).BodyJSON(body).Receive(&output, apiError)
-
-	return output.ModifyResult, resp, relevantError(err, apiError)
+	return doUpdate(c.sling, path, input)
 }
 
 // Delete will delete the credential for the id specified
 func (c *CredentialService) Delete(id string) (ModifyResult, *http.Response, error) {
-	output := ModifyOutput{}
-	apiError := new(APIError)
-
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
-	resp, err := c.sling.New().Delete(path).Receive(&output, apiError)
-
-	return output.ModifyResult, resp, relevantError(err, apiError)
+	return doDelete(c.sling, path)
 }
