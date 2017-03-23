@@ -8,9 +8,9 @@ import (
 
 // Config holds the values gathered from the environment
 type Config struct {
-	API      string `default:"https://api.applariat.io/v1/"`
-	Username string `required:"true"`
-	Password string `required:"true"`
+	API      string
+	Username string
+	Password string
 }
 
 var APLConfig Config
