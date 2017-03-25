@@ -71,16 +71,16 @@ type DeploymentUpdateInput struct {
 // DeploymentParams filter parameters
 type DeploymentParams struct {
 	Name                 string `url:"name,omitempty"`
-	StackVersionID       string `url:"stack_version_id"`
-	ProjectID            string `url:"project_id"`
-	WorkloadID           string `url:"workload_id"`
-	ReleaseVersion       int    `url:"release_version"`
-	LeaseType            string `url:"lease_type"`
-	LeasePeriodDays      int    `url:"lease_period_days"`
-	LeaseExpirationEpoch int64  `url:"lease_expiration_epoch"`
-	WorkloadName         string `url:"workload_name"`
-	LeaseExpiration      string `url:"lease_expiration"`
-	QosLevel             string `url:"qos_level"`
+	StackVersionID       string `url:"stack_version_id,omitempty"`
+	ProjectID            string `url:"project_id,omitempty"`
+	WorkloadID           string `url:"workload_id,omitempty"`
+	ReleaseVersion       int    `url:"release_version,omitempty"`
+	LeaseType            string `url:"lease_type,omitempty"`
+	LeasePeriodDays      int    `url:"lease_period_days,omitempty"`
+	LeaseExpirationEpoch int64  `url:"lease_expiration_epoch,omitempty"`
+	WorkloadName         string `url:"workload_name,omitempty"`
+	LeaseExpiration      string `url:"lease_expiration,omitempty"`
+	QosLevel             string `url:"qos_level,omitempty"`
 }
 
 // List gets a list of deployments with optional filter params

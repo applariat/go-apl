@@ -25,6 +25,17 @@ type CreateInput struct {
 	Data interface{} `json:"data"`
 }
 
+// UpdateInput Used to wrap the data json required by the api
+type UpdateInput struct {
+	Data interface{} `json:"data"`
+}
+
+// ListParams Used to wrap params for function passing
+type ListParams struct {
+	Data interface{} `json:"data"`
+}
+
+
 // CreatedByUser used as a join in many results
 type CreatedByUser struct {
 	ID        string `json:"id,omitempty"`

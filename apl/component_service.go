@@ -49,11 +49,11 @@ func (c *ComponentService) Get(id string) (Component, *http.Response, error) {
 
 	// wrap output data
 	// TODO: Fix the component endpoint to return { "data": {...}}
-	//output := &struct{Data Component `json:"data"`}{}
-	output := Component{}
+	output := &struct{Data Component `json:"data"`}{}
+	//output := Component{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
-	//return output.Data, resp, err
-	return output, resp, err
+	return output.Data, resp, err
+	//return output, resp, err
 
 }
