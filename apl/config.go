@@ -23,6 +23,7 @@ func init() {
 	}
 }
 
+// ProcessConfigs ...
 func ProcessConfigs() error {
 
 	// Check to see if already processed

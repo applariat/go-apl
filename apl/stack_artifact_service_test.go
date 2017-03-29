@@ -90,5 +90,9 @@ func TestStackArtifactService_Delete(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	fmt.Println("Skipped:", out.Skipped)
 	fmt.Println("Deleted:", out.Deleted)
+	fmt.Println("Unchanged:", out.Unchanged)
+	fmt.Println("Replaced:", out.Replaced)
+	fmt.Println("Errors:", out.Errors)
 }

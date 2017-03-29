@@ -6,12 +6,21 @@ import (
 	"testing"
 )
 
+var (
+	testDeploymentId string
+	testDeploymentFilter string
+)
+
 func TestDeploymentService_Create(t *testing.T) {
+
+	testDeploymentId = "deployment-test-id"
+	testDeploymentFilter = "deployment"
+
 	aplSvs := apl.NewClient()
 
 	in := &apl.DeploymentCreateInput{
-		ID:             "chris-test-id",
-		Name: "Chris Test",
+		ID: testDeploymentId,
+		Name: "Deployment Test",
 	}
 
 	out, _, err := aplSvs.Deployments.Create(in)
@@ -19,7 +28,8 @@ func TestDeploymentService_Create(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println("PrimaryKey:", out.PrimaryKey)
+
+	fmt.Println("New Deployment ID:", out.PrimaryKey)
 
 }
 
@@ -31,9 +41,12 @@ func TestDeploymentService_List(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, item := range out {
-		//fmt.Println("Name:", item.Name)
-		fmt.Println(item.Name)
+
+	rowCount := len(out)
+	if rowCount > 0 {
+		fmt.Printf("Deployment found %d rows\n", rowCount)
+	} else {
+		t.Fatal("No Deployment rows found")
 	}
 
 }
@@ -42,16 +55,20 @@ func TestDeploymentService_ListByType(t *testing.T) {
 	aplSvc := apl.NewClient()
 
 	params := &apl.DeploymentParams{
-		//LeaseType: "temporary",
-		//ProjectID: "p-mobile-apps-apl",
-		Name: "mobile-app-r3-to-gke",
+		Name: "deployment",
 	}
 	out, _, err := aplSvc.Deployments.List(params)
 
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(out)
+	rowCount := len(out)
+	if rowCount == 0 {
+		t.Fatal("No Deployment rows found for filter", testDeploymentFilter)
+	}
+
+	fmt.Printf("Deployment filtered found %d rows for filter \"%s\"\n", rowCount, testDeploymentFilter)
+
 
 }
 
@@ -59,32 +76,47 @@ func TestDeploymentService_Update(t *testing.T) {
 	aplSvc := apl.NewClient()
 
 	in := &apl.DeploymentUpdateInput{Name: "stack artifact UPDATED!"}
-	out, _, err := aplSvc.Deployments.Update("chris-test-id", in)
+	out, _, err := aplSvc.Deployments.Update(testDeploymentId, in)
 
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println("Updated:", out)
+	fmt.Println("Skipped:", out.Skipped)
+	fmt.Println("Deleted:", out.Deleted)
+	fmt.Println("Unchanged:", out.Unchanged)
+	fmt.Println("Replaced:", out.Replaced)
+	fmt.Println("Errors:", out.Errors)
+
 
 }
 
 func TestDeploymentService_Get(t *testing.T) {
 	aplSvc := apl.NewClient()
 
-	out, _, err := aplSvc.Deployments.Get("3d9c7ac3-7b87-4b4c-ba5d-750a91629d05")
+	out, _, err := aplSvc.Deployments.Get(testDeploymentId)
 
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println("Deployment ID:", out.ID)
+
+	if out == (apl.Deployment{}) {
+		t.Fatal("No Deployment found for ID", testDeploymentId)
+	}
+
+	fmt.Println("Deployment found for ID", testDeploymentId)
+
 }
 
 func TestDeploymentService_Delete(t *testing.T) {
 	aplSvc := apl.NewClient()
-	out, _, err := aplSvc.Deployments.Delete("3d9c7ac3-7b87-4b4c-ba5d-750a91629d05")
+	out, _, err := aplSvc.Deployments.Delete(testCredentialId)
 
 	if err != nil {
 		t.Fatal(err)
 	}
+	fmt.Println("Skipped:", out.Skipped)
 	fmt.Println("Deleted:", out.Deleted)
+	fmt.Println("Unchanged:", out.Unchanged)
+	fmt.Println("Replaced:", out.Replaced)
+	fmt.Println("Errors:", out.Errors)
 }

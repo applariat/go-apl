@@ -26,20 +26,27 @@ type Credential struct {
 	CredentialType  string      `json:"credential_type"`
 	Name            string      `json:"name"`
 	Credentials     interface{} `json:"credentials"`
-	CreatedByUserID string      `json:"created_by_user_id,omitempty"`
-	LastModified    string      `json:"last_modified,omitempty"`
-	CreatedTime     string      `json:"created_time,omitempty"`
+	CreatedByUserID string      `json:"created_by_user_id"`
+	LastModified    string      `json:"last_modified"`
+	CreatedTime     string      `json:"created_time"`
 }
 
-// CredentialInput is used for the update/create of credentials
-type CredentialInput struct {
+// CredentialCreateInput is used for the create of credentials
+type CredentialCreateInput struct {
 	ID             string      `json:"id,omitempty"`
 	CredentialType string 	   `json:"credential_type"`
 	Name           string      `json:"name"`
 	Credentials    interface{} `json:"credentials"`
 }
 
-// CredentialParams filter parameters
+// CredentialUpdateInput is used for the update of credentials
+type CredentialUpdateInput struct {
+	ID             string      `json:"id,omitempty"`
+	Name           string      `json:"name"`
+	Credentials    interface{} `json:"credentials"`
+}
+
+// CredentialParams filter parameters used in list operations
 type CredentialParams struct {
 	CredentialType string `url:"credential_type,omitempty"`
 	Name           string `url:"name,omitempty"`
@@ -62,12 +69,12 @@ func (c *CredentialService) Get(id string) (Credential, *http.Response, error) {
 }
 
 // Create will create a credential
-func (c *CredentialService) Create(input *CredentialInput) (CreateResult, *http.Response, error) {
+func (c *CredentialService) Create(input *CredentialCreateInput) (CreateResult, *http.Response, error) {
 	return doCreate(c.sling, c.endpoint, input)
 }
 
 // Update will update a credential for the id specified
-func (c *CredentialService) Update(id string, input *CredentialInput) (ModifyResult, *http.Response, error) {
+func (c *CredentialService) Update(id string, input *CredentialUpdateInput) (ModifyResult, *http.Response, error) {
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	return doUpdate(c.sling, path, input)
 }
