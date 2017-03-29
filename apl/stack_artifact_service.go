@@ -23,21 +23,20 @@ func NewStackArtifactsService(sling *sling.Sling) *StackArtifactService {
 // StackArtifact represents a stack_artifact row
 type StackArtifact struct {
 	ID              string `json:"id,omitempty"`
-	LocArtifactID   string `json:"loc_artifact_id,omitempty"`
-	ProjectID       string `json:"project_id,omitempty"`
-	StackID         string `json:"stack_id,omitempty"`
-	Name            string `json:"name,omitempty"`
-	Type            string `json:"type,omitempty"`
-	Version         string `json:"version,omitempty"`
-	// TODO: Remove FileName, it is not supported later on. Replaced with ArtifactName
-	FileName        string `json:"file_name,omitempty"`
-	ArtifactName    string `json:"artifact_name,omitempty"`
-	Package         string `json:"package,omitempty"`
-	MetaData `json:"meta_data,omitempty"`
-	CreatedByUserID string `json:"created_by_user_id,omitempty"`
-	CreatedTime     string `json:"created_time,omitempty"`
-	LastModified    string `json:"last_modified,omitempty"`
+	CreatedByUserID string `json:"created_by_user_id"`
+	ArtifactName string `json:"artifact_name"`
+	Name string `json:"name"`
+	Package string `json:"package"`
+	StackID string `json:"stack_id"`
+	LocArtifactID string `json:"loc_artifact_id"`
+	LastModified string `json:"last_modified"`
+	Version string `json:"version"`
+	CreatedTime string `json:"created_time"`
+	ProjectID string `json:"project_id"`
+	Type string `json:"type"`
 }
+
+
 
 // StackArtifactInput is used for the update/create of stack_artifacts
 type StackArtifactCreateInput struct {
@@ -50,19 +49,15 @@ type StackArtifactCreateInput struct {
 	Version       string `json:"version,omitempty"`
 	ArtifactName  string `json:"artifact_name,omitempty"`
 	Package       string `json:"package,omitempty"`
-	MetaData `json:"meta_data,omitempty"`
 }
 
 type StackArtifactUpdateInput struct {
 	Name          string `json:"name,omitempty"`
-	Type          string `json:"type,omitempty"`
-	Version       string `json:"version,omitempty"`
 	ArtifactName  string `json:"artifact_name,omitempty"`
 	Package       string `json:"package,omitempty"`
-	MetaData `json:"meta_data,omitempty"`
 }
 
-// StackArtifactParams filter parameters
+// StackArtifactParams filter parameters used in list operations
 type StackArtifactParams struct {
 	LocArtifactID string `url:"loc_artifact_id,omitempty"`
 	ProjectID     string `url:"project_id,omitempty"`

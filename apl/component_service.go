@@ -31,7 +31,7 @@ type Component struct {
 	MetaData `json:"meta_data,omitempty"`
 }
 
-// ComponentParams filter parameters
+// ComponentParams filter parameters used in list operations
 type ComponentParams struct {
 	Category string `url:"category,omitempty"`
 	Name     string `url:"name,omitempty"`
