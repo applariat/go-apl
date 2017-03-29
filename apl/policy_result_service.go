@@ -48,6 +48,7 @@ type PolicyResultCreateInput struct {
 
 // PolicyResultParams filter parameters used in list operations
 type PolicyResultParams struct {
+
 	PolicyID         string `url:"policy_id,omitempty"`
 	PolicyScheduleID string `url:"policy_schedule_id,omitempty"`
 	ProjectID        string `url:"project_id,omitempty"`

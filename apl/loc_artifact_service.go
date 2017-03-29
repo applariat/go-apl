@@ -50,6 +50,7 @@ type LocArtifactCreateInput struct {
 	CredentialType     string `json:"credential_type,omitempty"`
 	SecretCredentialID string `json:"secret_credential_id,omitempty"`
 	RegistryURI        string `json:"registry_uri,omitempty"`
+
 	ProjectBlacklist   interface{} `json:"project_blacklist,omitempty"`
 	SupportedTypes     interface{} `json:"supported_types,omitempty"`
 	URL                string `json:"url,omitempty"`

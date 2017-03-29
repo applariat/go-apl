@@ -35,6 +35,7 @@ type Org struct {
 
 // OrgUpdateInput is used for the update of orgs
 type OrgUpdateInput struct {
+
 	CompanyName    string `json:"company_name,omitempty"`
 	OrgType        string `json:"org_type,omitempty"`
 	Country        string `json:"country,omitempty"`

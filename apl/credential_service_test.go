@@ -35,6 +35,7 @@ func TestCredentialService_Create(t *testing.T) {
 		t.Fatal(err)
 	}
 
+
 	fmt.Println("New Credential ID:", out.Data)
 
 }
@@ -80,6 +81,7 @@ func TestCredentialService_ListByType(t *testing.T) {
 
 func TestCredentialService_Update(t *testing.T) {
 	aplSvc := apl.NewClient()
+
 
 	in := &apl.CredentialUpdateInput{Name: "UPDATED!"}
 	out, _, err := aplSvc.Credentials.Update(testCredentialId, in)

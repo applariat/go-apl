@@ -22,7 +22,6 @@ func TestTypeService_List(t *testing.T) {
 
 	fmt.Printf("Type filtered found %d rows", rowCount)
 
-
 }
 
 func TestTypeService_Get(t *testing.T) {

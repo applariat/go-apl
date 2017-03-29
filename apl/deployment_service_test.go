@@ -29,6 +29,7 @@ func TestDeploymentService_Create(t *testing.T) {
 		t.Fatal(err)
 	}
 
+
 	fmt.Println("New Deployment ID:", out.Data)
 
 }

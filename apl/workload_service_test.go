@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
+
 var (
 	testWorkloadId = "wl-level2-apl"
 	testWorkloadFilter = "wl-level1"
 )
-
 //func TestWorkloadService_Create(t *testing.T) {
 //	aplSvs := apl.NewClient()
 //
@@ -51,13 +51,13 @@ func TestWorkloadService_List(t *testing.T) {
 		t.Fatal("No Workload rows found")
 	}
 
-
 }
 
 func TestWorkloadService_ListByType(t *testing.T) {
 	aplSvc := apl.NewClient()
 
 	params := &apl.WorkloadParams{
+
 		WorkloadType: testWorkloadFilter,
 	}
 	out, _, err := aplSvc.Workloads.List(params)

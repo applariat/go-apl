@@ -29,6 +29,7 @@ func TestLocArtifactService_Create(t *testing.T) {
 		t.Fatal(err)
 	}
 
+
 	fmt.Println("New LocArtifact ID:", out.Data)
 
 }
@@ -74,6 +75,7 @@ func TestLocArtifactService_ListByType(t *testing.T) {
 
 func TestLocArtifactService_Update(t *testing.T) {
 	aplSvc := apl.NewClient()
+
 
 	in := &apl.LocArtifactUpdateInput{Name: "name UPDATED!"}
 	out, _, err := aplSvc.LocArtifacts.Update(testLocArtifactId, in)

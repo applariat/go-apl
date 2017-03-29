@@ -29,9 +29,9 @@ func TestEventService_Create(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	testEventId = out.Data.(string)
 	fmt.Println("New Event ID:", testEventId)
-
 
 }
 

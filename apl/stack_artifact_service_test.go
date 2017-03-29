@@ -74,7 +74,6 @@ func TestStackArtifactService_ListByType(t *testing.T) {
 
 	fmt.Printf("StackArtifact filtered found %d rows for filter \"%s\"\n", rowCount, testStackArtifactFilter)
 
-
 }
 
 func TestStackArtifactService_Update(t *testing.T) {
