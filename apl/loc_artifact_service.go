@@ -31,8 +31,8 @@ type LocArtifact struct {
 	CredentialType     string `json:"credential_type,omitempty"`
 	SecretCredentialID string `json:"secret_credential_id,omitempty"`
 	RegistryURI        string `json:"registry_uri,omitempty"`
-	ProjectBlacklist   []string `json:"project_blacklist,omitempty"`
-	SupportedTypes     []string `json:"supported_types,omitempty"`
+	ProjectBlacklist   interface{} `json:"project_blacklist,omitempty"`
+	SupportedTypes     interface{} `json:"supported_types,omitempty"`
 	Metadata           interface{} `json:"metadata,omitempty"`
 	URL                string `json:"url,omitempty"`
 	LastModified       string `json:"last_modified"`
@@ -50,23 +50,23 @@ type LocArtifactCreateInput struct {
 	CredentialType     string `json:"credential_type,omitempty"`
 	SecretCredentialID string `json:"secret_credential_id,omitempty"`
 	RegistryURI        string `json:"registry_uri,omitempty"`
-	ProjectBlacklist   []string `json:"project_blacklist,omitempty"`
-	SupportedTypes     []string `json:"supported_types,omitempty"`
+	ProjectBlacklist   interface{} `json:"project_blacklist,omitempty"`
+	SupportedTypes     interface{} `json:"supported_types,omitempty"`
 	URL                string `json:"url,omitempty"`
 }
 
 // LocArtifactUpdateInput is used for the update of loc_artifacts
 type LocArtifactUpdateInput struct {
-	Name               string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
 }
 
 // LocArtifactParams filter parameters used in list operations
 type LocArtifactParams struct {
 	Name               string `url:"name,omitempty"`
-	LocArtifactsType   string `url:"loc_artifacts_typeurl"`
+	LocArtifactsType   string `url:"loc_artifacts_type,omitempty"`
 	Bucket             string `url:"bucket,omitempty"`
-	CredentialID       string `url:"credential_idurl"`
-	CredentialType     string `url:"credential_typeurl"`
+	CredentialID       string `url:"credential_id,omitempty"`
+	CredentialType     string `url:"credential_type,omitempty"`
 	SecretCredentialID string `url:"secret_credential_id,omitempty"`
 	RegistryURI        string `url:"registry_uri,omitempty"`
 	URL                string `url:"url,omitempty"`

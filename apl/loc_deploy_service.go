@@ -23,41 +23,49 @@ func NewLocDeploysService(sling *sling.Sling) *LocDeployService {
 
 // LocDeploy represents a loc_deploy row
 type LocDeploy struct {
-	ID string      `json:"id,omitempty"`
-
-	CreatedByUserID string `json:"created_by_user_id"`
-	Status interface{} `json:"status"`
-	Workloads []string `json:"workloads"`
-	IsDeleted bool `json:"is_deleted"`
-	Name string `json:"name"`
+	ID             string `json:"id,omitempty"`
+	Name           string `json:"name"`
+	IsDeleted      bool   `json:"is_deleted"`
+	AplManaged     bool   `json:"apl_managed"`
 	LocDeploysType string `json:"loc_deploys_type"`
-	CommandPayload interface{} `json:"command_payload,omitempty"`
-	AplManaged bool `json:"apl_managed"`
-
-	CredentialID string `json:"credential_id"`
-	Cluster interface{} `json:"cluster"`
-	LastModified string `json:"last_modified"`
-	Command string `json:"command,omitempty"`
-	Policies interface{} `json:"policies,omitempty"`
-	CreatedTime string `json:"created_time"`
+	CredentialID   string `json:"credential_id"`
 	CredentialType string `json:"credential_type,omitempty"`
-	Config interface{} `json:"config"`
+	Command        string `json:"command,omitempty"`
+	LastModified   string `json:"last_modified"`
+	CreatedTime    string `json:"created_time"`
+	Workloads      interface{} `json:"workloads"`
+	Status         interface{} `json:"status"`
+	Cluster        interface{} `json:"cluster"`
+	CommandPayload interface{} `json:"command_payload,omitempty"`
+	Policies       interface{} `json:"policies,omitempty"`
+	Config         interface{} `json:"config"`
 	CreatedByUser `json:"created_by_user"`
 }
 
 // LocDeployCreateInput is used for the create of loc_deploys
 type LocDeployCreateInput struct {
-	ID string      `json:"id,omitempty"`
+	ID             string `json:"id,omitempty"`
+	Name           string `json:"name"`
+	ProjectID      string `json:"project_id"`
+	LocDeploysType string `json:"loc_deploys_type"`
+	Workloads      interface{} `json:"workloads"`
+	Config         interface{} `json:"config"`
+	Policies       interface{} `json:"policies"`
 }
 
-// LocDeployUpdateInput is used for the update of loc_deploys
-type LocDeployUpdateInput struct {
-	ID string      `json:"id,omitempty"`
-}
+//// LocDeployUpdateInput is used for the update of loc_deploys
+//type LocDeployUpdateInput struct {
+//	Name     string `json:"name"`
+//	Policies interface{} `json:"policies,omitempty"`
+//}
 
 // LocDeployParams filter parameters used in list operations
 type LocDeployParams struct {
-	Name string `url:"name,omitempty"`
+	Name           string `url:"name,omitempty"`
+	LocDeploysType string `url:"loc_deploys_type,omitempty"`
+	CredentialID   string `url:"credential_id,omitempty"`
+	CredentialType string `url:"credential_type,omitempty"`
+	Command        string `url:"command,omitempty"`
 }
 
 
@@ -81,11 +89,11 @@ func (c *LocDeployService) Create(input *LocDeployCreateInput) (CreateResult, *h
 	return doCreate(c.sling, c.endpoint, input)
 }
 
-// Update will update a loc_deploy for the id specified
-func (c *LocDeployService) Update(id string, input *LocDeployUpdateInput) (ModifyResult, *http.Response, error) {
-	path := fmt.Sprintf("%s/%s", c.endpoint, id)
-	return doUpdate(c.sling, path, input)
-}
+//// Update will update a loc_deploy for the id specified
+//func (c *LocDeployService) Update(id string, input *LocDeployUpdateInput) (ModifyResult, *http.Response, error) {
+//	path := fmt.Sprintf("%s/%s", c.endpoint, id)
+//	return doUpdate(c.sling, path, input)
+//}
 
 // Delete will delete the loc_deploy for the id specified
 func (c *LocDeployService) Delete(id string) (ModifyResult, *http.Response, error) {

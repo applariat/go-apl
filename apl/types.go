@@ -1,8 +1,9 @@
 package apl
 
 // CreateOutput is the PK of the row just created
+// Or it's a more complex struct of results.
 type CreateResult struct {
-	PrimaryKey string `json:"data"`
+	Data interface{} `json:"data"`
 }
 
 type ModifyResult struct {

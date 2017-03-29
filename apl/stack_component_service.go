@@ -23,32 +23,50 @@ func NewStackComponentsService(sling *sling.Sling) *StackComponentService {
 
 // StackComponent represents a stack_component row
 type StackComponent struct {
-	ID string      `json:"id,omitempty"`
-	StackID string `json:"stack_id"`
-	StackVersionID string `json:"stack_version_id"`
-	ComponentID string `json:"component_id"`
+	ID                 string `json:"id,omitempty"`
+	ComponentID        string `json:"component_id"`
 	ComponentVersionID string `json:"component_version_id"`
-	ProjectID string `json:"project_id"`
-	Name string `json:"name"`
-	Services interface{} `json:"services"`
-	CreatedByUserID string `json:"created_by_user_id"`
-	LastModified string `json:"last_modified"`
-	CreatedTime string `json:"created_time"`
+	StackID            string `json:"stack_id"`
+	StackVersionID     string `json:"stack_version_id"`
+	ProjectID          string `json:"project_id"`
+	Name               string `json:"name"`
+	Services           interface{} `json:"services"`
+	LastModified       string `json:"last_modified"`
+	CreatedTime        string `json:"created_time"`
+	CreatedByUserID    string `json:"created_by_user_id"`
 }
 
 // StackComponentCreateInput is used for the create of stack_components
 type StackComponentCreateInput struct {
-	ID string      `json:"id,omitempty"`
+	ID                 string `json:"id,omitempty"`
+	ComponentID        string `json:"component_id"`
+	ComponentVersionID string `json:"component_version_id"`
+	StackID            string `json:"stack_id"`
+	StackVersionID     string `json:"stack_version_id"`
+	ProjectID          string `json:"project_id"`
+	Name               string `json:"name"`
+	Services           interface{} `json:"services"`
 }
 
 // StackComponentUpdateInput is used for the update of stack_components
 type StackComponentUpdateInput struct {
-	ID string      `json:"id,omitempty"`
+	//ComponentID        string `json:"component_id"`
+	//ComponentVersionID string `json:"component_version_id"`
+	//StackID            string `json:"stack_id"`
+	//StackVersionID     string `json:"stack_version_id"`
+	//ProjectID          string `json:"project_id"`
+	Name               string `json:"name"`
+	Services           interface{} `json:"services"`
 }
 
 // StackComponentParams filter parameters used in list operations
 type StackComponentParams struct {
-	Name string `url:"name,omitempty"`
+	Name               string `url:"name,omitempty"`
+	ComponentID        string `url:"component_id,omitempty"`
+	ComponentVersionID string `url:"component_version_id,omitempty"`
+	StackID            string `url:"stack_id,omitempty"`
+	StackVersionID     string `url:"stack_version_id,omitempty"`
+	ProjectID          string `url:"project_id,omitempty"`
 }
 
 

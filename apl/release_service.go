@@ -23,27 +23,41 @@ func NewReleasesService(sling *sling.Sling) *ReleaseService {
 
 // Release represents a release row
 type Release struct {
-	ID              string      `json:"id,omitempty"`
-	Version         int `json:"version"`
-	StackVersionID  string `json:"stack_version_id"`
-	StackID         string `json:"stack_id"`
-	LastModified    string `json:"last_modified"`
-	Components      interface{} `json:"components"`
-	CreatedTime     string `json:"created_time"`
-	ProjectID       string `json:"project_id"`
+	ID             string `json:"id,omitempty"`
+	Version        int `json:"version"`
+	StackID        string `json:"stack_id"`
+	StackVersionID string `json:"stack_version_id"`
+	ProjectID      string `json:"project_id"`
+	LocImageID     string `json:"loc_image_id,omitempty"`
+	BuildStatus    string `json:"build_status,omitempty"`
+	Components     interface{} `json:"components"`
+
+	LastModified   string `json:"last_modified"`
+	CreatedTime    string `json:"created_time"`
 	CreatedByUser `json:"created_by_user"`
-	BuildStatus     string `json:"build_status,omitempty"`
-	LocImageID      string `json:"loc_image_id,omitempty"`
 }
 
 // ReleaseCreateInput is used for the create of releases
 type ReleaseCreateInput struct {
-	ID string      `json:"id,omitempty"`
+	ID             string `json:"id,omitempty"`
+	Version        int `json:"version"`
+	StackID        string `json:"stack_id"`
+	StackVersionID string `json:"stack_version_id"`
+	ProjectID      string `json:"project_id"`
+	LocImageID     string `json:"loc_image_id,omitempty"`
+	BuildStatus    string `json:"build_status,omitempty"`
+	Components     interface{} `json:"components"`
 }
 
 // ReleaseParams filter parameters used in list operations
 type ReleaseParams struct {
-	Name string `url:"name,omitempty"`
+	Name           string `url:"name,omitempty"`
+	Version        string `url:"version,omitempty"`
+	StackID        string `url:"stack_id,omitempty"`
+	StackVersionID string `url:"stack_version_id,omitempty"`
+	ProjectID      string `url:"project_id,omitempty"`
+	LocImageID     string `url:"loc_image_id,omitempty"`
+	BuildStatus    string `url:"build_status,omitempty"`
 }
 
 // List gets a list of releases with optional filter params

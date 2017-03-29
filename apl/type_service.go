@@ -23,7 +23,7 @@ func NewTypesService(sling *sling.Sling) *TypeService {
 // Type represents a type row
 type Type struct {
 	ID    string `json:"id"`
-	Types []string `json:"types"`
+	Types interface{} `json:"types"`
 }
 
 // List gets a list of types with optional filter params

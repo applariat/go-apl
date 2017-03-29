@@ -23,33 +23,44 @@ func NewPolicySchedulesService(sling *sling.Sling) *PolicyScheduleService {
 
 // PolicySchedule represents a policy_schedule row
 type PolicySchedule struct {
-	ID string      `json:"id,omitempty"`
+	ID              string `json:"id,omitempty"`
+	Name            string `json:"name"`
+	ResourceID      string `json:"resource_id"`
+	ResourceType    string `json:"resource_type"`
+	PolicyID        string `json:"policy_id"`
+	Status          string `json:"status"`
+	Inputs          interface{} `json:"inputs"`
+	Schedule        interface{} `json:"schedule"`
+	CreatedTime     string `json:"created_time"`
+	LastModified    string `json:"last_modified"`
 	CreatedByUserID string `json:"created_by_user_id"`
-	Inputs interface{} `json:"inputs"`
-	Name string `json:"name"`
-	ResourceID string `json:"resource_id"`
-	Schedule interface{} `json:"schedule"`
-	OrgID string `json:"org_id"`
-	LastModified string `json:"last_modified"`
-	Status string `json:"status"`
-	CreatedTime string `json:"created_time"`
-	ResourceType string `json:"resource_type"`
-	PolicyID string `json:"policy_id"`
 }
 
 // PolicyScheduleCreateInput is used for the create of policy_schedules
 type PolicyScheduleCreateInput struct {
-	ID string      `json:"id,omitempty"`
+	ID           string `json:"id,omitempty"`
+	Name         string `json:"name"`
+	ResourceID   string `json:"resource_id"`
+	ResourceType string `json:"resource_type"`
+	PolicyID     string `json:"policy_id"`
+	Inputs       interface{} `json:"inputs"`
+	Schedule     interface{} `json:"schedule"`
 }
 
 // PolicyScheduleUpdateInput is used for the update of policy_schedules
 type PolicyScheduleUpdateInput struct {
-	ID string      `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+	Inputs       interface{} `json:"inputs,omitempty"`
+	Schedule     interface{} `json:"schedule,omitempty"`
 }
 
 // PolicyScheduleParams filter parameters used in list operations
 type PolicyScheduleParams struct {
-	Name string `url:"name,omitempty"`
+	Name         string `url:"name,omitempty"`
+	ResourceID   string `url:"resource_id,omitempty"`
+	ResourceType string `url:"resource_type,omitempty"`
+	PolicyID     string `url:"policy_id,omitempty"`
+	Status       string `url:"status,omitempty"`
 }
 
 

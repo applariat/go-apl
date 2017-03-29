@@ -3,6 +3,7 @@ package apl
 import (
 	"github.com/dghubble/sling"
 	"net/http"
+	"strings"
 )
 
 // Helper function for list
@@ -15,6 +16,11 @@ func doList(sling *sling.Sling, path string, params interface{}, output interfac
 // Helper function for get
 func doGet(sling *sling.Sling, path string, output interface{}) (*http.Response, error){
 	apiError := new(APIError)
+	if strings.HasSuffix(path, "/") {
+		apiError.Message = "ID not provided or is empty"
+		apiError.StatusCode = 400
+		return nil, apiError
+	}
 	resp, err := sling.New().Get(path).Receive(output, apiError)
 	return resp, relevantError(err, apiError)
 }
@@ -42,6 +48,12 @@ func doUpdate(sling *sling.Sling, path string, input interface{}) (ModifyResult,
 func doDelete(sling *sling.Sling, path string) (ModifyResult, *http.Response, error) {
 	output := ModifyOutput{}
 	apiError := new(APIError)
+
+	if strings.HasSuffix(path, "/") {
+		apiError.Message = "ID not provided or is empty"
+		apiError.StatusCode = 400
+		return ModifyResult{Errors: 1}, nil, apiError
+	}
 
 	resp, err := sling.New().Delete(path).Receive(&output, apiError)
 	return output.ModifyResult, resp, relevantError(err, apiError)

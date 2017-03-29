@@ -29,7 +29,7 @@ func TestLocArtifactService_Create(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Println("New LocArtifact ID:", out.PrimaryKey)
+	fmt.Println("New LocArtifact ID:", out.Data)
 
 }
 
@@ -75,7 +75,7 @@ func TestLocArtifactService_ListByType(t *testing.T) {
 func TestLocArtifactService_Update(t *testing.T) {
 	aplSvc := apl.NewClient()
 
-	in := &apl.LocArtifactUpdateInput{Name: "artifact UPDATED!"}
+	in := &apl.LocArtifactUpdateInput{Name: "name UPDATED!"}
 	out, _, err := aplSvc.LocArtifacts.Update(testLocArtifactId, in)
 
 	if err != nil {
@@ -89,27 +89,27 @@ func TestLocArtifactService_Update(t *testing.T) {
 
 
 }
-//
-//func TestLocArtifactService_Get(t *testing.T) {
-//	aplSvc := apl.NewClient()
-//
-//	out, _, err := aplSvc.LocArtifacts.Get(testLocArtifactId)
-//
-//	if err != nil {
-//		t.Fatal(err)
-//	}
-//
-//	if out == (apl.LocArtifact{}) {
-//		t.Fatal("No LocArtifact found for ID", testLocArtifactId)
-//	}
-//
-//	fmt.Println("LocArtifact found for ID", testLocArtifactId)
-//
-//}
+
+func TestLocArtifactService_Get(t *testing.T) {
+	aplSvc := apl.NewClient()
+
+	out, _, err := aplSvc.LocArtifacts.Get(testLocArtifactId)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if out == (apl.LocArtifact{}) {
+		t.Fatal("No LocArtifact found for ID", testLocArtifactId)
+	}
+
+	fmt.Println("LocArtifact found for ID", testLocArtifactId)
+
+}
 
 func TestLocArtifactService_Delete(t *testing.T) {
 	aplSvc := apl.NewClient()
-	out, _, err := aplSvc.LocArtifacts.Delete(testCredentialId)
+	out, _, err := aplSvc.LocArtifacts.Delete(testLocArtifactId)
 
 	if err != nil {
 		t.Fatal(err)

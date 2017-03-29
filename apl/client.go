@@ -17,15 +17,22 @@ type Client struct {
 	Forms 			*FormService
 	Jobs 			*JobService
 	LocArtifacts 	*LocArtifactService
+	LocDeploys  	*LocDeployService
+	Orgs 			*OrgService
+	PolicyResults 	*PolicyResultService
+	PolicySchedules *PolicyScheduleService
+	Policies 		*PolicyService
 	ProjectRoles 	*ProjectRoleService
+	Projects 		*ProjectService
+	Releases 		*ReleaseService
 	Roles 			*RoleService
 	StackArtifacts  *StackArtifactService
+	StackComponents *StackComponentService
+	Stacks 			*StackService
+	StackVersions 	*StackVersionService
 	Types 			*TypeService
 	Users			*UserService
 	Workloads 		*WorkloadService
-
-	//StackVersions *StackVersionService
-
 }
 
 // NewClient returns the client object to access the applariat API
@@ -42,14 +49,22 @@ func NewClient() *Client {
 		Forms: NewFormsService(base.New()),
 		Jobs: NewJobsService(base.New()),
 		LocArtifacts: NewLocArtifactsService(base.New()),
+		LocDeploys: NewLocDeploysService(base.New()),
+		Orgs: NewOrgsService(base.New()),
+		PolicyResults: NewPolicyResultsService(base.New()),
+		PolicySchedules: NewPolicySchedulesService(base.New()),
+		Policies: NewPolicyService(base.New()),
 		ProjectRoles: NewProjectRolesService(base.New()),
+		Projects: NewProjectsService(base.New()),
+		Releases: NewReleasesService(base.New()),
 		Roles: NewRolesService(base.New()),
 		StackArtifacts: NewStackArtifactsService(base.New()),
+		StackComponents: NewStackComponentsService(base.New()),
+		Stacks: NewStacksService(base.New()),
+		StackVersions: NewStackVersionsService(base.New()),
 		Types: NewTypesService(base.New()),
 		Users: NewUsersService(base.New()),
 		Workloads: NewWorkloadsService(base.New()),
-
-		//StackVersions: NewStackVersionsService(base.New()),
 	}
 
 }
