@@ -8,11 +8,15 @@ import (
 )
 
 var (
-	testUserId = "user-test-id"
+	testUserId = "user-test-id2"
 	testUserFilter = "user"
 )
 
 func TestUserService_Create(t *testing.T) {
+
+	// Skipping. This works and we don't need to create junk users every time we test
+	t.SkipNow()
+
 	aplSvs := apl.NewClient()
 
 	data := []byte("transfloopiglorpsnarfle")
@@ -22,7 +26,7 @@ func TestUserService_Create(t *testing.T) {
 		ID: testUserId,
 		FirstName: "TestFirstName",
 		LastName: "TestLastName",
-		Email: "testing@example.com",
+		Email: "user-test-id@example.com",
 		Password: passwd,
 		UserType: testUserFilter,
 		WorkRole: "Unknown",
@@ -80,6 +84,9 @@ func TestUserService_ListByType(t *testing.T) {
 }
 
 func TestUserService_Update(t *testing.T) {
+
+	t.SkipNow()
+
 	aplSvc := apl.NewClient()
 
 	in := &apl.UserUpdateInput{FirstName: "UPDATED!"}
@@ -96,6 +103,7 @@ func TestUserService_Update(t *testing.T) {
 }
 
 func TestUserService_Get(t *testing.T) {
+	t.SkipNow()
 	aplSvc := apl.NewClient()
 
 	out, _, err := aplSvc.Users.Get(testUserId)
@@ -112,6 +120,7 @@ func TestUserService_Get(t *testing.T) {
 }
 
 func TestUserService_Delete(t *testing.T) {
+	t.SkipNow()
 	aplSvc := apl.NewClient()
 	out, _, err := aplSvc.Users.Delete(testUserId)
 
