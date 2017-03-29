@@ -23,26 +23,27 @@ func NewProjectsService(sling *sling.Sling) *ProjectService {
 
 // Project represents a project row
 type Project struct {
-	ID string      `json:"id,omitempty"`
+	ID           string `json:"id,omitempty"`
+	Name         string `json:"name"`
+	Settings     interface{} `json:"settings"`
+	Users        interface{} `json:"users"`
 
-	CreatedByUserID string `json:"created_by_user_id"`
-	Name string `json:"name"`
-	Settings interface{} `json:"settings"`
-	OrgID string `json:"org_id"`
 	LastModified string `json:"last_modified"`
-	CreatedTime string `json:"created_time"`
+	CreatedTime  string `json:"created_time"`
 	CreatedByUser  `json:"created_by_user"`
-	Users interface{} `json:"users"`
 }
 
 // ProjectCreateInput is used for the create of projects
 type ProjectCreateInput struct {
-	ID string      `json:"id,omitempty"`
+	ID       string `json:"id,omitempty"`
+	Name     string `json:"name"`
+	Settings interface{} `json:"settings,omitempty"`
+	Users    interface{} `json:"users,omitempty"`
 }
 
 // ProjectUpdateInput is used for the update of projects
 type ProjectUpdateInput struct {
-	ID string      `json:"id,omitempty"`
+	Name string `json:"name"`
 }
 
 // ProjectParams filter parameters used in list operations

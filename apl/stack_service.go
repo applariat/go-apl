@@ -23,31 +23,45 @@ func NewStacksService(sling *sling.Sling) *StackService {
 
 // Stack represents a stack row
 type Stack struct {
-	ID              string      `json:"id,omitempty"`
-	Name            string `json:"name"`
-	VersionNumber   int `json:"version_number,omitempty"`
-	ReleaseNumber   int `json:"release_number,omitempty"`
-	Project         interface{} `json:"project"`
-	StackVersions   interface{} `json:"stack_versions"`
-	StackArtifacts  interface{} `json:"stack_artifacts"`
-	CreatedByUser    `json:"created_by_user"`
-	LastModified    string `json:"last_modified"`
-	CreatedTime     string `json:"created_time"`
+	ID             string `json:"id,omitempty"`
+	Name           string `json:"name"`
+	VersionNumber  int `json:"version_number,omitempty"`
+	ReleaseNumber  int `json:"release_number,omitempty"`
+	Project        interface{} `json:"project"`
+	StackVersions  interface{} `json:"stack_versions"`
+	StackArtifacts interface{} `json:"stack_artifacts"`
+
+	CreatedByUser `json:"created_by_user"`
+	LastModified   string `json:"last_modified"`
+	CreatedTime    string `json:"created_time"`
 }
 
 // StackCreateInput is used for the create of stacks
 type StackCreateInput struct {
-	ID string      `json:"id,omitempty"`
+	ID             string `json:"id,omitempty"`
+	Name           string `json:"name"`
+	VersionNumber  int `json:"version_number,omitempty"`
+	ReleaseNumber  int `json:"release_number,omitempty"`
+	Project        interface{} `json:"project,omitempty"`
+	StackVersions  interface{} `json:"stack_versions,omitempty"`
+	StackArtifacts interface{} `json:"stack_artifacts,omitempty"`
 }
 
 // StackUpdateInput is used for the update of stacks
 type StackUpdateInput struct {
-	ID string      `json:"id,omitempty"`
+	Name           string `json:"name"`
+	VersionNumber  int `json:"version_number,omitempty"`
+	ReleaseNumber  int `json:"release_number,omitempty"`
+	Project        interface{} `json:"project,omitempty"`
+	StackVersions  interface{} `json:"stack_versions,omitempty"`
+	StackArtifacts interface{} `json:"stack_artifacts,omitempty"`
 }
 
 // StackParams filter parameters used in list operations
 type StackParams struct {
-	Name string `url:"name,omitempty"`
+	Name          string `url:"name,omitempty"`
+	VersionNumber int `url:"version_number,omitempty"`
+	ReleaseNumber int `url:"release_number,omitempty"`
 }
 
 

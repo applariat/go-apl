@@ -23,19 +23,22 @@ func NewPolicyResultsService(sling *sling.Sling) *PolicyResultService {
 
 // PolicyResult represents a policy_result row
 type PolicyResult struct {
-	ID string      `json:"id,omitempty"`
+	ID               string `json:"id"`
+	PolicyID         string `json:"policy_id"`
+	PolicyScheduleID string `json:"policy_schedule_id,omitempty"`
+	ProjectID        string `json:"project_id,omitempty"`
 
-	CreatedByUserID string `json:"created_by_user_id"`
-	PolicyScheduleID string `json:"policy_schedule_id"`
-	LastModified string `json:"last_modified"`
-	CreatedTime string `json:"created_time"`
-	ProjectID string `json:"project_id"`
-	PolicyID string `json:"policy_id"`
+	LastModified     string `json:"last_modified"`
+	CreatedTime      string `json:"created_time"`
+	CreatedByUserID  string `json:"created_by_user_id"`
 }
 
 // PolicyResultCreateInput is used for the create of policy_results
 type PolicyResultCreateInput struct {
-	ID string      `json:"id,omitempty"`
+	ID               string `json:"id,omitempty"`
+	PolicyID         string `json:"policy_id"`
+	PolicyScheduleID string `json:"policy_schedule_id,omitempty"`
+	ProjectID        string `json:"project_id,omitempty"`
 }
 
 //// PolicyResultUpdateInput is used for the update of policy_results
@@ -45,7 +48,10 @@ type PolicyResultCreateInput struct {
 
 // PolicyResultParams filter parameters used in list operations
 type PolicyResultParams struct {
-	Name string `url:"name,omitempty"`
+
+	PolicyID         string `url:"policy_id,omitempty"`
+	PolicyScheduleID string `url:"policy_schedule_id,omitempty"`
+	ProjectID        string `url:"project_id,omitempty"`
 }
 
 

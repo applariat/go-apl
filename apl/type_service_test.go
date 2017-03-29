@@ -15,7 +15,12 @@ func TestTypeService_List(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	fmt.Println(out)
+	rowCount := len(out)
+	if rowCount == 0 {
+		t.Fatal("No Type rows found")
+	}
+
+	fmt.Printf("Type filtered found %d rows", rowCount)
 
 }
 
@@ -27,5 +32,11 @@ func TestTypeService_Get(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	fmt.Println(out)
+
+	if out == (apl.Type{}) {
+		t.Fatal("No Type found for ID", "credential_type")
+	}
+
+	fmt.Println("Type found for ID", "credential_type")
+
 }

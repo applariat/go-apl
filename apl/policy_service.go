@@ -23,38 +23,55 @@ func NewPolicyService(sling *sling.Sling) *PolicyService {
 
 // Policy represents a policy row
 type Policy struct {
-	ID               string      `json:"id,omitempty"`
-
-	CreatedByUserID  string `json:"created_by_user_id"`
-	Inputs           interface{} `json:"inputs,omitempty"`
-	Return           string `json:"return"`
-	Assets           interface{} `json:"assets"`
-	Actions          interface{} `json:"actions"`
-	PolicyType       string `json:"policy_type"`
-	LastModified     string `json:"last_modified"`
-	Status           string `json:"status"`
-	PolicyGroup      string `json:"policy_group"`
-	Operations       interface{} `json:"operations"`
-	CreatedTime      string `json:"created_time"`
-	Attributes       interface{} `json:"attributes"`
-	PolicyTemplateID string `json:"policy_template_id"`
+	ID               string `json:"id"`
 	Name             string `json:"name"`
+	PolicyType       string `json:"policy_type"`
+	PolicyGroup      string `json:"policy_group"`
+	PolicyTemplateID string `json:"policy_template_id"`
+	Status           string `json:"status"`
+	Return           string `json:"return"`
+
+	Inputs           interface{} `json:"inputs,omitempty"`
+	Assets           interface{} `json:"assets,omitempty"`
+	Actions          interface{} `json:"actions,omitempty"`
+	Operations       interface{} `json:"operations,omitempty"`
+	Attributes       interface{} `json:"attributes,omitempty"`
 	Constants        interface{} `json:"constants,omitempty"`
+
+	LastModified     string `json:"last_modified"`
+	CreatedTime      string `json:"created_time"`
+	CreatedByUserID  string `json:"created_by_user_id"`
 }
 
 // PolicyCreateInput is used for the create of policies
 type PolicyCreateInput struct {
-	ID string      `json:"id,omitempty"`
+	ID               string `json:"id,omitempty"`
+	Name             string `json:"name"`
+	PolicyType       string `json:"policy_type"`
+	PolicyGroup      string `json:"policy_group"`
+	PolicyTemplateID string `json:"policy_template_id"`
+	Return           string `json:"return"`
+
+	Inputs           interface{} `json:"inputs,omitempty"`
+	Assets           interface{} `json:"assets,omitempty"`
+	Actions          interface{} `json:"actions,omitempty"`
+	Operations       interface{} `json:"operations,omitempty"`
+	Attributes       interface{} `json:"attributes,omitempty"`
+	Constants        interface{} `json:"constants,omitempty"`
 }
 
 // PolicyUpdateInput is used for the update of policies
 type PolicyUpdateInput struct {
-	ID string      `json:"id,omitempty"`
+	Name string `json:"name"`
 }
 
 // PolicyParams filter parameters used in list operations
 type PolicyParams struct {
-	Name string `url:"name,omitempty"`
+	Name             string `url:"name,omitempty"`
+	PolicyType       string `url:"policy_type,omitempty"`
+	PolicyGroup      string `url:"policy_group,omitempty"`
+	PolicyTemplateID string `url:"policy_template_id,omitempty"`
+	Return           string `url:"return,omitempty"`
 }
 
 

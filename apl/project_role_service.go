@@ -33,7 +33,7 @@ type ProjectRole struct {
 // ProjectRoleParams filter parameters used in list operations
 type ProjectRoleParams struct {
 	UserID    string `url:"user_id,omitempty"`
-	ProjectID string `json:"project_id,omitempty"`
+	ProjectID string `url:"project_id,omitempty"`
 }
 
 

@@ -23,13 +23,13 @@ func NewRolesService(sling *sling.Sling) *RoleService {
 // Role represents a role row
 type Role struct {
 	ID           string `json:"id"`
-	Name         string   `json:"name"`
-	Role         string   `json:"role"`
-	AccessLevel  int      `json:"access_level"`
-	Workloads    []string `json:"workloads,omitempty"`
-	Permissions  []string `json:"permissions,omitempty"`
-	LastModified string   `json:"last_modified"`
-	CreatedTime  string   `json:"created_time"`
+	Name         string `json:"name"`
+	Role         string `json:"role"`
+	AccessLevel  int    `json:"access_level"`
+	Workloads    interface{} `json:"workloads,omitempty"`
+	Permissions  interface{} `json:"permissions,omitempty"`
+	LastModified string `json:"last_modified"`
+	CreatedTime  string `json:"created_time"`
 }
 
 // RoleParams filter parameters used in list operations
