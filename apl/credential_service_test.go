@@ -7,14 +7,11 @@ import (
 )
 
 var (
-	testCredentialId string
-	testCredentialFilter string
+	testCredentialId = "credential-test-id"
+	testCredentialFilter = "docker"
 )
 
 func TestCredentialService_Create(t *testing.T) {
-
-	testCredentialId = "credential-test-id"
-	testCredentialFilter = "docker"
 
 	aplSvs := apl.NewClient()
 
