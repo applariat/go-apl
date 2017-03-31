@@ -8,7 +8,9 @@ matrix:
   allow_failures:
     - go: master
   fast_finish: true
+install:
+  - # This is needed to prevent default install action "go get -t -v ./..."
 script:
-  - diff -u <(echo -n) <(gofmt -d .)
-  - go tool vet .
-  - go test -v -race ./...
+  - diff -u <(echo -n) <(gofmt -d ./apl ./tests)
+  - go tool vet ./apl ./tests
+  - go test -v -race ./apl
