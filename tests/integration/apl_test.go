@@ -2,6 +2,7 @@
 //
 // These tests call the live appLariat API and should be run by hand with care.
 // They require env vars or config file
+// +build integration
 
 package tests
 
