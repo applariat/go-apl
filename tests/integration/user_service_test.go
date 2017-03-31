@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"encoding/base64"
@@ -17,8 +19,6 @@ func TestUserService_Create(t *testing.T) {
 	// Skipping. This works and we don't need to create junk users every time we test
 	t.SkipNow()
 
-	aplSvs := apl.NewClient()
-
 	data := []byte("transfloopiglorpsnarfle")
 	passwd := base64.StdEncoding.EncodeToString(data)
 
@@ -33,7 +33,7 @@ func TestUserService_Create(t *testing.T) {
 		RoleId:    "ops-role-id",
 	}
 
-	out, _, err := aplSvs.Users.Create(in)
+	out, _, err := aplClient.Users.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -44,9 +44,8 @@ func TestUserService_Create(t *testing.T) {
 }
 
 func TestUserService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Users.List(nil)
+	out, _, err := aplClient.Users.List(nil)
 
 	fmt.Println("count:", len(out))
 	if err != nil {

@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -14,7 +16,6 @@ var (
 func TestEventService_Create(t *testing.T) {
 
 	testEventFilter = "cluster"
-	aplSvs := apl.NewClient()
 
 	in := &apl.EventCreateInput{
 		ObjectType: testEventFilter,
@@ -24,7 +25,7 @@ func TestEventService_Create(t *testing.T) {
 		Source:     "api",
 	}
 
-	out, _, err := aplSvs.Events.Create(in)
+	out, _, err := aplClient.Events.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -36,9 +37,8 @@ func TestEventService_Create(t *testing.T) {
 }
 
 func TestEventService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Events.List(nil)
+	out, _, err := aplClient.Events.List(nil)
 
 	if err != nil {
 		t.Fatal(err)

@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -12,9 +14,8 @@ var (
 )
 
 func TestJobService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Jobs.List(nil)
+	out, _, err := aplClient.Jobs.List(nil)
 
 	if err != nil {
 		t.Fatal(err)

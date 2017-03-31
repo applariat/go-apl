@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -11,9 +13,8 @@ var (
 )
 
 func TestOrgService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Orgs.List()
+	out, _, err := aplClient.Orgs.List()
 
 	if err != nil {
 		t.Fatal(err)

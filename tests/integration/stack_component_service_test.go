@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -16,13 +18,11 @@ func TestStackComponentService_Create(t *testing.T) {
 	// TODO: Fix TestStackComponentService_Create!
 	t.SkipNow()
 
-	aplSvs := apl.NewClient()
-
 	in := &apl.StackComponentCreateInput{
 		ID: testStackComponentId,
 	}
 
-	out, _, err := aplSvs.StackComponents.Create(in)
+	out, _, err := aplClient.StackComponents.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -32,9 +32,8 @@ func TestStackComponentService_Create(t *testing.T) {
 }
 
 func TestStackComponentService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.StackComponents.List(nil)
+	out, _, err := aplClient.StackComponents.List(nil)
 
 	fmt.Println("count:", len(out))
 	if err != nil {
