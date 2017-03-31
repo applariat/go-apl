@@ -1,8 +1,8 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 

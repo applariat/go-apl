@@ -22,14 +22,14 @@ func NewRolesService(sling *sling.Sling) *RoleService {
 
 // Role represents a role row
 type Role struct {
-	ID           string `json:"id"`
-	Name         string `json:"name"`
-	Role         string `json:"role"`
-	AccessLevel  int    `json:"access_level"`
+	ID           string      `json:"id"`
+	Name         string      `json:"name"`
+	Role         string      `json:"role"`
+	AccessLevel  int         `json:"access_level"`
 	Workloads    interface{} `json:"workloads,omitempty"`
 	Permissions  interface{} `json:"permissions,omitempty"`
-	LastModified string `json:"last_modified"`
-	CreatedTime  string `json:"created_time"`
+	LastModified string      `json:"last_modified"`
+	CreatedTime  string      `json:"created_time"`
 }
 
 // RoleParams filter parameters used in list operations
@@ -44,17 +44,20 @@ type RoleUpdateInput struct {
 	Workloads []string `json:"workloads"`
 }
 
-
 // List gets a list of roles with optional filter params
 func (c *RoleService) List(params *RoleParams) ([]Role, *http.Response, error) {
-	output := &struct{ Data []Role `json:"data"` }{}
+	output := &struct {
+		Data []Role `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a role for the id specified
 func (c *RoleService) Get(id string) (Role, *http.Response, error) {
-	output := &struct{ Data Role `json:"data"` }{}
+	output := &struct {
+		Data Role `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

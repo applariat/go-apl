@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 // LocDeployService is the service object for loc_deploy operations
 type LocDeployService struct {
 	sling    *sling.Sling
@@ -23,31 +22,30 @@ func NewLocDeploysService(sling *sling.Sling) *LocDeployService {
 
 // LocDeploy represents a loc_deploy row
 type LocDeploy struct {
-	ID             string `json:"id,omitempty"`
-	Name           string `json:"name"`
-	IsDeleted      bool   `json:"is_deleted"`
-	AplManaged     bool   `json:"apl_managed"`
-	LocDeploysType string `json:"loc_deploys_type"`
-	CredentialID   string `json:"credential_id"`
-	CredentialType string `json:"credential_type,omitempty"`
-	Command        string `json:"command,omitempty"`
-	LastModified   string `json:"last_modified"`
-	CreatedTime    string `json:"created_time"`
+	ID             string      `json:"id,omitempty"`
+	Name           string      `json:"name"`
+	IsDeleted      bool        `json:"is_deleted"`
+	AplManaged     bool        `json:"apl_managed"`
+	LocDeploysType string      `json:"loc_deploys_type"`
+	CredentialID   string      `json:"credential_id"`
+	CredentialType string      `json:"credential_type,omitempty"`
+	LastModified   string      `json:"last_modified"`
+	CreatedTime    string      `json:"created_time"`
 	Workloads      interface{} `json:"workloads"`
 	Status         interface{} `json:"status"`
 	Cluster        interface{} `json:"cluster"`
 	CommandPayload interface{} `json:"command_payload,omitempty"`
 	Policies       interface{} `json:"policies,omitempty"`
 	Config         interface{} `json:"config"`
-	CreatedByUser `json:"created_by_user"`
+	CreatedByUser  `json:"created_by_user"`
 }
 
 // LocDeployCreateInput is used for the create of loc_deploys
 type LocDeployCreateInput struct {
-	ID             string `json:"id,omitempty"`
-	Name           string `json:"name"`
-	ProjectID      string `json:"project_id"`
-	LocDeploysType string `json:"loc_deploys_type"`
+	ID             string      `json:"id,omitempty"`
+	Name           string      `json:"name"`
+	ProjectID      string      `json:"project_id"`
+	LocDeploysType string      `json:"loc_deploys_type"`
 	Workloads      interface{} `json:"workloads"`
 	Config         interface{} `json:"config"`
 	Policies       interface{} `json:"policies"`
@@ -55,8 +53,7 @@ type LocDeployCreateInput struct {
 
 //// LocDeployUpdateInput is used for the update of loc_deploys
 //type LocDeployUpdateInput struct {
-//	Name     string `json:"name"`
-//	Policies interface{} `json:"policies,omitempty"`
+//	Command string `json:"command"`
 //}
 
 // LocDeployParams filter parameters used in list operations
@@ -65,20 +62,22 @@ type LocDeployParams struct {
 	LocDeploysType string `url:"loc_deploys_type,omitempty"`
 	CredentialID   string `url:"credential_id,omitempty"`
 	CredentialType string `url:"credential_type,omitempty"`
-	Command        string `url:"command,omitempty"`
 }
-
 
 // List gets a list of loc_deploys with optional filter params
 func (c *LocDeployService) List(params *LocDeployParams) ([]LocDeploy, *http.Response, error) {
-	output := &struct{ Data []LocDeploy `json:"data"` }{}
+	output := &struct {
+		Data []LocDeploy `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a loc_deploy for the id specified
 func (c *LocDeployService) Get(id string) (LocDeploy, *http.Response, error) {
-	output := &struct{ Data LocDeploy `json:"data"` }{}
+	output := &struct {
+		Data LocDeploy `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

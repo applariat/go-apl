@@ -1,14 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
-
 var (
-	testStackArtifactId = "test-stack-artifact-id"
+	testStackArtifactId     = "test-stack-artifact-id"
 	testStackArtifactFilter = "archive"
 )
 
@@ -16,14 +15,14 @@ func TestStackArtifactService_Create(t *testing.T) {
 	aplSvs := apl.NewClient()
 
 	in := &apl.StackArtifactCreateInput{
-		ID: testStackArtifactId,
-		Name: "Chris Test Zip",
-		ArtifactName: "Chris/chris.zip",
+		ID:            testStackArtifactId,
+		Name:          "Chris Test Zip",
+		ArtifactName:  "Chris/chris.zip",
 		LocArtifactID: "la-gs-apl",
-		ProjectID: "p-mobile-apps-apl",
-		StackID: "aa409e87-70ef-4977-8588-10a618a1612f",
-		Version: "1.1.1",
-		Package: "archive",
+		ProjectID:     "p-mobile-apps-apl",
+		StackID:       "aa409e87-70ef-4977-8588-10a618a1612f",
+		Version:       "1.1.1",
+		Package:       "archive",
 	}
 
 	out, _, err := aplSvs.StackArtifacts.Create(in)
@@ -51,7 +50,6 @@ func TestStackArtifactService_List(t *testing.T) {
 	}
 
 	fmt.Printf("StackArtifact found %d rows\n", rowCount)
-
 
 }
 

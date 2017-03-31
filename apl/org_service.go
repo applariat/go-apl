@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 // OrgService is the service object for org operations
 type OrgService struct {
 	sling    *sling.Sling
@@ -30,12 +29,11 @@ type Org struct {
 	LastModified   string `json:"last_modified"`
 	CompanyName    string `json:"company_name"`
 	CreatedTime    string `json:"created_time"`
-	IsDeleted      bool `json:"is_deleted"`
+	IsDeleted      bool   `json:"is_deleted"`
 }
 
 // OrgUpdateInput is used for the update of orgs
 type OrgUpdateInput struct {
-
 	CompanyName    string `json:"company_name,omitempty"`
 	OrgType        string `json:"org_type,omitempty"`
 	Country        string `json:"country,omitempty"`
@@ -44,14 +42,18 @@ type OrgUpdateInput struct {
 
 // List gets a list of orgs with optional filter params
 func (c *OrgService) List() (Org, *http.Response, error) {
-	output := &struct{ Data Org `json:"data"` }{}
+	output := &struct {
+		Data Org `json:"data"`
+	}{}
 	resp, err := doGet(c.sling, c.endpoint, output)
 	return output.Data, resp, err
 }
 
 // Get get a org for the id specified
 func (c *OrgService) Get(id string) (Org, *http.Response, error) {
-	output := &struct{ Data Org `json:"data"` }{}
+	output := &struct {
+		Data Org `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err
@@ -62,4 +64,3 @@ func (c *OrgService) Update(id string, input *OrgUpdateInput) (ModifyResult, *ht
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	return doUpdate(c.sling, path, input)
 }
-

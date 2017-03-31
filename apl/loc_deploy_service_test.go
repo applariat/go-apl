@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testLocDeployId string
+	testLocDeployId     string
 	testLocDeployFilter = "gke"
 )
 
@@ -69,7 +69,6 @@ func TestLocDeployService_ListByType(t *testing.T) {
 	}
 
 	fmt.Printf("LocDeploy filtered found %d rows for filter \"%s\"\n", rowCount, testLocDeployFilter)
-
 
 }
 

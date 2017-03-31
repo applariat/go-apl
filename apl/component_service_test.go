@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testComponentId string
+	testComponentId     string
 	testComponentFilter string
 )
 
@@ -30,7 +30,6 @@ func TestComponentService_List(t *testing.T) {
 
 	fmt.Printf("Component found %d rows\n", rowCount)
 
-
 }
 
 func TestComponentService_ListByType(t *testing.T) {
@@ -51,7 +50,6 @@ func TestComponentService_ListByType(t *testing.T) {
 	}
 
 	fmt.Printf("Component filtered found %d rows for filter \"%s\"\n", rowCount, testComponentFilter)
-
 
 }
 

@@ -1,8 +1,8 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
@@ -48,7 +48,6 @@ func TestStackVersionService_List(t *testing.T) {
 	fmt.Printf("StackVersion found %d rows\n", rowCount)
 
 }
-
 
 func TestStackVersionService_Get(t *testing.T) {
 

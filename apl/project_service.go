@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 // ProjectService is the service object for project operations
 type ProjectService struct {
 	sling    *sling.Sling
@@ -23,20 +22,20 @@ func NewProjectsService(sling *sling.Sling) *ProjectService {
 
 // Project represents a project row
 type Project struct {
-	ID           string `json:"id,omitempty"`
-	Name         string `json:"name"`
-	Settings     interface{} `json:"settings"`
-	Users        interface{} `json:"users"`
+	ID       string      `json:"id,omitempty"`
+	Name     string      `json:"name"`
+	Settings interface{} `json:"settings"`
+	Users    interface{} `json:"users"`
 
-	LastModified string `json:"last_modified"`
-	CreatedTime  string `json:"created_time"`
-	CreatedByUser  `json:"created_by_user"`
+	LastModified  string `json:"last_modified"`
+	CreatedTime   string `json:"created_time"`
+	CreatedByUser `json:"created_by_user"`
 }
 
 // ProjectCreateInput is used for the create of projects
 type ProjectCreateInput struct {
-	ID       string `json:"id,omitempty"`
-	Name     string `json:"name"`
+	ID       string      `json:"id,omitempty"`
+	Name     string      `json:"name"`
 	Settings interface{} `json:"settings,omitempty"`
 	Users    interface{} `json:"users,omitempty"`
 }
@@ -51,17 +50,20 @@ type ProjectParams struct {
 	Name string `url:"name,omitempty"`
 }
 
-
 // List gets a list of projects with optional filter params
 func (c *ProjectService) List(params *ProjectParams) ([]Project, *http.Response, error) {
-	output := &struct{ Data []Project `json:"data"` }{}
+	output := &struct {
+		Data []Project `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a project for the id specified
 func (c *ProjectService) Get(id string) (Project, *http.Response, error) {
-	output := &struct{ Data Project `json:"data"` }{}
+	output := &struct {
+		Data Project `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

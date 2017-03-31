@@ -14,7 +14,7 @@ func doList(sling *sling.Sling, path string, params interface{}, output interfac
 }
 
 // Helper function for get
-func doGet(sling *sling.Sling, path string, output interface{}) (*http.Response, error){
+func doGet(sling *sling.Sling, path string, output interface{}) (*http.Response, error) {
 	apiError := new(APIError)
 	if strings.HasSuffix(path, "/") {
 		apiError.Message = "ID not provided or is empty"
@@ -24,6 +24,7 @@ func doGet(sling *sling.Sling, path string, output interface{}) (*http.Response,
 	resp, err := sling.New().Get(path).Receive(output, apiError)
 	return resp, relevantError(err, apiError)
 }
+
 // Helper function for create
 func doCreate(sling *sling.Sling, path string, input interface{}) (CreateResult, *http.Response, error) {
 	output := CreateResult{}

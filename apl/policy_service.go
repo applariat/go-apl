@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 // PolicyService is the service object for policy operations
 type PolicyService struct {
 	sling    *sling.Sling
@@ -31,16 +30,16 @@ type Policy struct {
 	Status           string `json:"status"`
 	Return           string `json:"return"`
 
-	Inputs           interface{} `json:"inputs,omitempty"`
-	Assets           interface{} `json:"assets,omitempty"`
-	Actions          interface{} `json:"actions,omitempty"`
-	Operations       interface{} `json:"operations,omitempty"`
-	Attributes       interface{} `json:"attributes,omitempty"`
-	Constants        interface{} `json:"constants,omitempty"`
+	Inputs     interface{} `json:"inputs,omitempty"`
+	Assets     interface{} `json:"assets,omitempty"`
+	Actions    interface{} `json:"actions,omitempty"`
+	Operations interface{} `json:"operations,omitempty"`
+	Attributes interface{} `json:"attributes,omitempty"`
+	Constants  interface{} `json:"constants,omitempty"`
 
-	LastModified     string `json:"last_modified"`
-	CreatedTime      string `json:"created_time"`
-	CreatedByUserID  string `json:"created_by_user_id"`
+	LastModified    string `json:"last_modified"`
+	CreatedTime     string `json:"created_time"`
+	CreatedByUserID string `json:"created_by_user_id"`
 }
 
 // PolicyCreateInput is used for the create of policies
@@ -52,12 +51,12 @@ type PolicyCreateInput struct {
 	PolicyTemplateID string `json:"policy_template_id"`
 	Return           string `json:"return"`
 
-	Inputs           interface{} `json:"inputs,omitempty"`
-	Assets           interface{} `json:"assets,omitempty"`
-	Actions          interface{} `json:"actions,omitempty"`
-	Operations       interface{} `json:"operations,omitempty"`
-	Attributes       interface{} `json:"attributes,omitempty"`
-	Constants        interface{} `json:"constants,omitempty"`
+	Inputs     interface{} `json:"inputs,omitempty"`
+	Assets     interface{} `json:"assets,omitempty"`
+	Actions    interface{} `json:"actions,omitempty"`
+	Operations interface{} `json:"operations,omitempty"`
+	Attributes interface{} `json:"attributes,omitempty"`
+	Constants  interface{} `json:"constants,omitempty"`
 }
 
 // PolicyUpdateInput is used for the update of policies
@@ -74,17 +73,20 @@ type PolicyParams struct {
 	Return           string `url:"return,omitempty"`
 }
 
-
 // List gets a list of policies with optional filter params
 func (c *PolicyService) List(params *PolicyParams) ([]Policy, *http.Response, error) {
-	output := &struct{ Data []Policy `json:"data"` }{}
+	output := &struct {
+		Data []Policy `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a policy for the id specified
 func (c *PolicyService) Get(id string) (Policy, *http.Response, error) {
-	output := &struct{ Data Policy `json:"data"` }{}
+	output := &struct {
+		Data Policy `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

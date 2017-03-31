@@ -1,8 +1,8 @@
 package apl
 
 import (
-	"github.com/spf13/viper"
 	"fmt"
+	"github.com/spf13/viper"
 	"os"
 )
 
@@ -39,7 +39,6 @@ func ProcessConfigs() error {
 	// Try to read from conf, if not found ignore
 	v.ReadInConfig()
 
-
 	v.SetEnvPrefix("apl")
 	v.BindEnv("api")
 	v.BindEnv("svc_username")
@@ -51,7 +50,7 @@ func ProcessConfigs() error {
 
 	if api == "" || username == "" || password == "" {
 		var errorString string
-		if api == ""{
+		if api == "" {
 			errorString += "Missing env var \"APL_API\" or config file value \"api\".\n"
 		}
 
@@ -67,11 +66,10 @@ func ProcessConfigs() error {
 	}
 
 	APLConfig = Config{
-		API: api,
+		API:      api,
 		Username: username,
 		Password: password,
 	}
 	//fmt.Println(APLConfig)
 	return nil
 }
-

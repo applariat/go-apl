@@ -1,14 +1,14 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
-	"fmt"
-	"testing"
 	"encoding/base64"
+	"fmt"
+	"github.com/applariat/go-apl/apl"
+	"testing"
 )
 
 var (
-	testUserId = "user-test-id2"
+	testUserId     = "user-test-id2"
 	testUserFilter = "user"
 )
 
@@ -23,14 +23,14 @@ func TestUserService_Create(t *testing.T) {
 	passwd := base64.StdEncoding.EncodeToString(data)
 
 	in := &apl.UserCreateInput{
-		ID: testUserId,
+		ID:        testUserId,
 		FirstName: "TestFirstName",
-		LastName: "TestLastName",
-		Email: "user-test-id@example.com",
-		Password: passwd,
-		UserType: testUserFilter,
-		WorkRole: "Unknown",
-		RoleId: "ops-role-id",
+		LastName:  "TestLastName",
+		Email:     "user-test-id@example.com",
+		Password:  passwd,
+		UserType:  testUserFilter,
+		WorkRole:  "Unknown",
+		RoleId:    "ops-role-id",
 	}
 
 	out, _, err := aplSvs.Users.Create(in)
@@ -38,7 +38,7 @@ func TestUserService_Create(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	
+
 	fmt.Println("New User ID:", out.Data)
 
 }

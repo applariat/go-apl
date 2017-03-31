@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 // StackVersionService is the service object for stack_version operations
 type StackVersionService struct {
 	sling    *sling.Sling
@@ -22,32 +21,32 @@ func NewStackVersionsService(sling *sling.Sling) *StackVersionService {
 }
 
 type StackVersionList struct {
-	StackID       string `json:"stack_id"`
+	StackID       string         `json:"stack_id"`
 	StackVersions []StackVersion `json:"stack_versions"`
 }
 
 // StackVersion represents a stack_version row
 type StackVersion struct {
-	ID              string `json:"id"`
-	StackID         string `json:"stack_id"`
-	ProjectID       string `json:"project_id"`
-	Version         int `json:"version"`
-	VersionSub      int `json:"version_sub"`
+	ID              string      `json:"id"`
+	StackID         string      `json:"stack_id"`
+	ProjectID       string      `json:"project_id"`
+	Version         int         `json:"version"`
+	VersionSub      int         `json:"version_sub"`
 	Releases        interface{} `json:"releases"`
 	MetaData        interface{} `json:"meta_data"`
 	StackComponents interface{} `json:"stack_components"`
 	Stack           interface{} `json:"stack"`
 	StackArtifacts  interface{} `json:"stack_artifacts"`
 
-	LastModified    string `json:"last_modified"`
-	CreatedTime     string `json:"created_time"`
-	CreatedByUser    `json:"created_by_user"`
+	LastModified  string `json:"last_modified"`
+	CreatedTime   string `json:"created_time"`
+	CreatedByUser `json:"created_by_user"`
 }
 
 // StackVersionCreateInput is used for the create of stack_versions
 type StackVersionCreateInput struct {
 	//ID            string      `json:"id,omitempty"`
-	StackID       string `json:"stack_id"`
+	StackID       string         `json:"stack_id"`
 	StackVersions []StackVersion `json:"stack_versions"`
 
 	//ProjectID       string `json:"project_id"`
@@ -62,14 +61,18 @@ type StackVersionCreateInput struct {
 
 // List gets a list of stack_versions with optional filter params
 func (c *StackVersionService) List() ([]StackVersionList, *http.Response, error) {
-	output := &struct{ Data []StackVersionList `json:"data"` }{}
+	output := &struct {
+		Data []StackVersionList `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, nil, output)
 	return output.Data, resp, err
 }
 
 // Get get a stack_version for the id specified
 func (c *StackVersionService) Get(id string) (StackVersion, *http.Response, error) {
-	output := &struct{ Data StackVersion `json:"data"` }{}
+	output := &struct {
+		Data StackVersion `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err
@@ -79,7 +82,6 @@ func (c *StackVersionService) Get(id string) (StackVersion, *http.Response, erro
 func (c *StackVersionService) Create(input *StackVersionCreateInput) (CreateResult, *http.Response, error) {
 	return doCreate(c.sling, c.endpoint, input)
 }
-
 
 // Delete will delete the stack_version for the id specified
 func (c *StackVersionService) Delete(id string) (ModifyResult, *http.Response, error) {

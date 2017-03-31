@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testDeploymentId = "deployment-test-id"
+	testDeploymentId     = "deployment-test-id"
 	testDeploymentFilter = "deployment"
 )
 
@@ -19,7 +19,7 @@ func TestDeploymentService_Create(t *testing.T) {
 	aplSvs := apl.NewClient()
 
 	in := &apl.DeploymentCreateInput{
-		ID: testDeploymentId,
+		ID:   testDeploymentId,
 		Name: "Deployment Test",
 	}
 
@@ -28,7 +28,6 @@ func TestDeploymentService_Create(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 
 	fmt.Println("New Deployment ID:", out.Data)
 
@@ -73,7 +72,6 @@ func TestDeploymentService_ListByType(t *testing.T) {
 	}
 
 	fmt.Printf("Deployment filtered found %d rows for filter \"%s\"\n", rowCount, testDeploymentFilter)
-
 
 }
 

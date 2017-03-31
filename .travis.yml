@@ -1,6 +1,14 @@
+sudo: false
 language: go
 go:
- - 1.7
-
+  - 1.7.x
+  - 1.8.x
+  - master
+matrix:
+  allow_failures:
+    - go: master
+  fast_finish: true
 script:
- - go test -v ./...
+  - diff -u <(echo -n) <(gofmt -d .)
+  - go tool vet .
+  - go test -v -race ./...

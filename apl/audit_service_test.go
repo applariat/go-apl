@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testAuditId string
+	testAuditId     string
 	testAuditFilter string
 )
 
@@ -68,5 +68,3 @@ func TestAuditService_Get(t *testing.T) {
 
 	fmt.Println("Audit found for ID", testAuditId)
 }
-
-

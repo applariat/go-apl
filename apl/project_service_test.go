@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testProjectId = "project-test-id"
+	testProjectId     = "project-test-id"
 	testProjectFilter = "project-test-name"
 )
 
@@ -16,8 +16,8 @@ func TestProjectService_Create(t *testing.T) {
 	aplSvs := apl.NewClient()
 
 	in := &apl.ProjectCreateInput{
-		ID: testProjectId,
-		Name: testProjectFilter,
+		ID:       testProjectId,
+		Name:     testProjectFilter,
 		Settings: map[string]int{"settings": 1},
 		//Users: "[]",
 	}

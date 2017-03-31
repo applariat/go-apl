@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testJobId string
+	testJobId     string
 	testJobFilter string
 )
 
@@ -29,7 +29,6 @@ func TestJobService_List(t *testing.T) {
 	}
 
 	fmt.Printf("Job found %d rows\n", rowCount)
-
 
 }
 
@@ -54,7 +53,6 @@ func TestJobService_ListByType(t *testing.T) {
 
 }
 
-
 func TestJobService_Get(t *testing.T) {
 	aplSvc := apl.NewClient()
 
@@ -70,4 +68,3 @@ func TestJobService_Get(t *testing.T) {
 
 	fmt.Println("Job found for ID", testJobId)
 }
-

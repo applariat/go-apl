@@ -15,7 +15,6 @@ type ModifyResult struct {
 	Inserted  int `json:"inserted"`
 } // `json:"data"`
 
-
 // ModifyOutput is the information returned after a delete/update
 type ModifyOutput struct {
 	ModifyResult `json:"data"`
@@ -36,7 +35,6 @@ type ListParams struct {
 	Data interface{} `json:"data"`
 }
 
-
 // CreatedByUser used as a join in many results
 type CreatedByUser struct {
 	ID        string `json:"id,omitempty"`
@@ -44,7 +42,6 @@ type CreatedByUser struct {
 	LastName  string `json:"last_name,omitempty"`
 	Email     string `json:"email,omitempty"`
 } // `json:"created_by_user"`
-
 
 // MetaData ...
 type MetaData struct {
@@ -55,8 +52,8 @@ type MetaData struct {
 } // `json:"meta_data"`
 
 type Releases struct {
-	ID string `json:"id"`
-	Version int `json:"version"`
+	ID       string `json:"id"`
+	Version  int    `json:"version"`
 	MetaData `json:"meta_data"`
 } // `json:"releases"`
 

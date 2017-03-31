@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testStackId = "test-stack-id"
+	testStackId     = "test-stack-id"
 	testStackFilter = "acme-test"
 )
 
@@ -19,7 +19,7 @@ func TestStackService_Create(t *testing.T) {
 	aplSvs := apl.NewClient()
 
 	in := &apl.StackCreateInput{
-		ID: testStackId,
+		ID:   testStackId,
 		Name: testStackFilter,
 		//StackVersions: "[]",
 		//Project: map[string]string{},

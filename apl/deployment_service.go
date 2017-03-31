@@ -1,8 +1,8 @@
 package apl
 
 import (
-	"github.com/dghubble/sling"
 	"fmt"
+	"github.com/dghubble/sling"
 	"net/http"
 )
 
@@ -22,39 +22,39 @@ func NewDeploymentsService(sling *sling.Sling) *DeploymentService {
 
 // Deployment represents a deployment row
 type Deployment struct {
-	ID                   string `json:"id"`
-	StackVersionID       string `json:"stack_version_id"`
-	ProjectID            string `json:"project_id"`
-	Name                 string `json:"name"`
-	ReleaseVersion       int    `json:"release_version"`
-	LeaseType            string `json:"lease_type,omitempty"`
-	LeasePeriodDays      int    `json:"lease_period_days,omitempty"`
-	LeaseExpirationEpoch int64  `json:"lease_expiration_epoch,omitempty"`
-	WorkloadID           string `json:"workload_id,omitempty"`
-	WorkloadName         string `json:"workload_name,omitempty"`
-	LeaseExpiration      string `json:"lease_expiration,omitempty"`
-	QosLevel             string `json:"qos_level,omitempty"`
+	ID                   string      `json:"id"`
+	StackVersionID       string      `json:"stack_version_id"`
+	ProjectID            string      `json:"project_id"`
+	Name                 string      `json:"name"`
+	ReleaseVersion       int         `json:"release_version"`
+	LeaseType            string      `json:"lease_type,omitempty"`
+	LeasePeriodDays      int         `json:"lease_period_days,omitempty"`
+	LeaseExpirationEpoch int64       `json:"lease_expiration_epoch,omitempty"`
+	WorkloadID           string      `json:"workload_id,omitempty"`
+	WorkloadName         string      `json:"workload_name,omitempty"`
+	LeaseExpiration      string      `json:"lease_expiration,omitempty"`
+	QosLevel             string      `json:"qos_level,omitempty"`
 	StackVersion         interface{} `json:"stack_version,omitempty"`
 	Location             interface{} `json:"location,omitempty"`
 	Status               interface{} `json:"status,omitempty"`
 	Stack                interface{} `json:"stack,omitempty"`
-	Release              interface{}  `json:"release,omitempty"`
-	CreatedTime          string `json:"created_time"`
-	LastModified         string `json:"last_modified"`
+	Release              interface{} `json:"release,omitempty"`
+	CreatedTime          string      `json:"created_time"`
+	LastModified         string      `json:"last_modified"`
 	CreatedByUser        interface{} `json:"created_by_user"`
 }
 
 // DeploymentInput is used for the update/create of deployments
 type DeploymentCreateInput struct {
-	ID              string `json:"id,omitempty"`
-	Name            string `json:"name"`
-	ReleaseID       string `json:"release_id"`
-	LocDeployID     string `json:"loc_deploy_id`
-	LeaseType       string `json:"lease_type,omitempty"`
-	LeasePeriodDays int    `json:"lease_period_days,omitempty"`
-	QosLevel        string `json:"qos_level,omitempty"`
-	WorkloadID      string `json:"workload_id,omitempty"`
-	Components      interface{}  `json:"components,omitempty"`
+	ID              string      `json:"id,omitempty"`
+	Name            string      `json:"name"`
+	ReleaseID       string      `json:"release_id"`
+	LocDeployID     string      `json:"loc_deploy_id"`
+	LeaseType       string      `json:"lease_type,omitempty"`
+	LeasePeriodDays int         `json:"lease_period_days,omitempty"`
+	QosLevel        string      `json:"qos_level,omitempty"`
+	WorkloadID      string      `json:"workload_id,omitempty"`
+	Components      interface{} `json:"components,omitempty"`
 }
 
 type DeploymentUpdateInput struct {
@@ -85,14 +85,18 @@ type DeploymentParams struct {
 
 // List gets a list of deployments with optional filter params
 func (c *DeploymentService) List(params *DeploymentParams) ([]Deployment, *http.Response, error) {
-	output := &struct{ Data []Deployment `json:"data"` }{}
+	output := &struct {
+		Data []Deployment `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a deployment for the id specified
 func (c *DeploymentService) Get(id string) (Deployment, *http.Response, error) {
-	output := &struct{ Data Deployment `json:"data"` }{}
+	output := &struct {
+		Data Deployment `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err
