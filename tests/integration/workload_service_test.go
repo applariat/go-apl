@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -12,7 +14,7 @@ var (
 )
 
 //func TestWorkloadService_Create(t *testing.T) {
-//	aplSvs := apl.NewClient()
+//
 //
 //	in := &apl.WorkloadCreateInput{
 //		ID:             "chris-test-id",
@@ -25,7 +27,7 @@ var (
 //		QualityOfService: "best_effort",
 //	}
 //
-//	out, _, err := aplSvs.Workloads.Create(in)
+//	out, _, err := aplClient.Workloads.Create(in)
 //
 //	if err != nil {
 //		t.Fatal(err)
@@ -35,9 +37,8 @@ var (
 //}
 
 func TestWorkloadService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Workloads.List(nil)
+	out, _, err := aplClient.Workloads.List(nil)
 
 	fmt.Println("count:", len(out))
 	if err != nil {

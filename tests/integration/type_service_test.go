@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -7,9 +9,8 @@ import (
 )
 
 func TestTypeService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Types.List()
+	out, _, err := aplClient.Types.List()
 
 	if err != nil {
 		t.Fatal(err)

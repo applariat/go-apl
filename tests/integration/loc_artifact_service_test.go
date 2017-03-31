@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -18,15 +20,13 @@ func TestLocArtifactService_Create(t *testing.T) {
 
 	testLocArtifactId = "loc-artifact-test-id"
 
-	aplSvs := apl.NewClient()
-
 	in := &apl.LocArtifactCreateInput{
 		ID:               testLocArtifactId,
 		Name:             "LocArtifact Test",
 		LocArtifactsType: testLocArtifactFilter,
 	}
 
-	out, _, err := aplSvs.LocArtifacts.Create(in)
+	out, _, err := aplClient.LocArtifacts.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -37,9 +37,8 @@ func TestLocArtifactService_Create(t *testing.T) {
 }
 
 func TestLocArtifactService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.LocArtifacts.List(nil)
+	out, _, err := aplClient.LocArtifacts.List(nil)
 
 	if err != nil {
 		t.Fatal(err)

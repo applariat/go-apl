@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -12,9 +14,8 @@ var (
 )
 
 func TestProjectRoleService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.ProjectRoles.List(nil)
+	out, _, err := aplClient.ProjectRoles.List(nil)
 
 	if err != nil {
 		t.Fatal(err)

@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -15,7 +17,7 @@ var (
 //
 //	testLocDeployId = "loc-artifact-test-id"
 //
-//	aplSvs := apl.NewClient()
+//
 //
 //	in := &apl.LocDeployCreateInput{
 //		ID: testLocDeployId,
@@ -23,7 +25,7 @@ var (
 //		LocDeploysType: testLocDeployFilter,
 //	}
 //
-//	out, _, err := aplSvs.LocDeploys.Create(in)
+//	out, _, err := aplClient.LocDeploys.Create(in)
 //
 //	if err != nil {
 //		t.Fatal(err)
@@ -34,9 +36,8 @@ var (
 //}
 
 func TestLocDeployService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.LocDeploys.List(nil)
+	out, _, err := aplClient.LocDeploys.List(nil)
 
 	if err != nil {
 		t.Fatal(err)

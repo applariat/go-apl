@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -12,9 +14,8 @@ var (
 )
 
 func TestFormService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Forms.List(nil)
+	out, _, err := aplClient.Forms.List(nil)
 
 	if err != nil {
 		t.Fatal(err)

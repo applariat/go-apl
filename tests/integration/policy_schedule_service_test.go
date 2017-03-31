@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -15,8 +17,6 @@ func TestPolicyScheduleService_Create(t *testing.T) {
 
 	// TODO: Fix TestPolicyScheduleService_Create!
 	t.SkipNow()
-
-	aplSvs := apl.NewClient()
 
 	in := &apl.PolicyScheduleCreateInput{
 		ID:           testPolicyScheduleId,
@@ -35,7 +35,7 @@ func TestPolicyScheduleService_Create(t *testing.T) {
 		Inputs: map[string]string{"lease_type": "temporary"},
 	}
 
-	out, _, err := aplSvs.PolicySchedules.Create(in)
+	out, _, err := aplClient.PolicySchedules.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -46,9 +46,8 @@ func TestPolicyScheduleService_Create(t *testing.T) {
 }
 
 func TestPolicyScheduleService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.PolicySchedules.List(nil)
+	out, _, err := aplClient.PolicySchedules.List(nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -77,7 +76,7 @@ func TestPolicyScheduleService_ListByType(t *testing.T) {
 
 	rowCount := len(out)
 	if rowCount == 0 {
-		fmt.Println("No PolicySchedule rows found for filter", testPolicyScheduleFilter)
+		fmt.Printf("No PolicySchedule rows found for filter", testPolicyScheduleFilter)
 	}
 
 	fmt.Printf("PolicySchedule filtered found %d rows for filter \"%s\"\n", rowCount, testPolicyScheduleFilter)

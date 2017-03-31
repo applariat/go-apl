@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -12,9 +14,8 @@ var (
 )
 
 func TestAuditService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Audits.List(nil)
+	out, _, err := aplClient.Audits.List(nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -33,12 +34,11 @@ func TestAuditService_List(t *testing.T) {
 }
 
 func TestAuditService_ListByType(t *testing.T) {
-	aplSvs := apl.NewClient()
 
 	params := &apl.AuditParams{
 		ResourceType: testAuditFilter,
 	}
-	out, _, err := aplSvs.Audits.List(params)
+	out, _, err := aplClient.Audits.List(params)
 
 	if err != nil {
 		t.Fatal(err)
@@ -54,9 +54,8 @@ func TestAuditService_ListByType(t *testing.T) {
 }
 
 func TestAuditService_Get(t *testing.T) {
-	aplSvc := apl.NewClient()
 
-	out, _, err := aplSvc.Audits.Get(testAuditId)
+	out, _, err := aplClient.Audits.Get(testAuditId)
 
 	if err != nil {
 		t.Fatal(err)

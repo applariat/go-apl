@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -12,7 +14,6 @@ var (
 )
 
 func TestStackArtifactService_Create(t *testing.T) {
-	aplSvs := apl.NewClient()
 
 	in := &apl.StackArtifactCreateInput{
 		ID:            testStackArtifactId,
@@ -25,7 +26,7 @@ func TestStackArtifactService_Create(t *testing.T) {
 		Package:       "archive",
 	}
 
-	out, _, err := aplSvs.StackArtifacts.Create(in)
+	out, _, err := aplClient.StackArtifacts.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -35,9 +36,8 @@ func TestStackArtifactService_Create(t *testing.T) {
 }
 
 func TestStackArtifactService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.StackArtifacts.List(nil)
+	out, _, err := aplClient.StackArtifacts.List(nil)
 
 	fmt.Println("count:", len(out))
 	if err != nil {

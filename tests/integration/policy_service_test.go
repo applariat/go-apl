@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -12,8 +14,6 @@ var (
 )
 
 func TestPolicyService_Create(t *testing.T) {
-
-	aplSvs := apl.NewClient()
 
 	in := &apl.PolicyCreateInput{
 		ID:         testPolicyId,
@@ -31,7 +31,7 @@ func TestPolicyService_Create(t *testing.T) {
 		Constants:        "{}",
 	}
 
-	out, _, err := aplSvs.Policies.Create(in)
+	out, _, err := aplClient.Policies.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -42,9 +42,8 @@ func TestPolicyService_Create(t *testing.T) {
 }
 
 func TestPolicyService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Policies.List(nil)
+	out, _, err := aplClient.Policies.List(nil)
 
 	if err != nil {
 		t.Fatal(err)

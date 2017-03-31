@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -13,8 +15,6 @@ var (
 
 func TestProjectService_Create(t *testing.T) {
 
-	aplSvs := apl.NewClient()
-
 	in := &apl.ProjectCreateInput{
 		ID:       testProjectId,
 		Name:     testProjectFilter,
@@ -22,7 +22,7 @@ func TestProjectService_Create(t *testing.T) {
 		//Users: "[]",
 	}
 
-	out, _, err := aplSvs.Projects.Create(in)
+	out, _, err := aplClient.Projects.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -33,9 +33,8 @@ func TestProjectService_Create(t *testing.T) {
 }
 
 func TestProjectService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Projects.List(nil)
+	out, _, err := aplClient.Projects.List(nil)
 
 	if err != nil {
 		t.Fatal(err)

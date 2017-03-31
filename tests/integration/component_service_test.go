@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -12,9 +14,8 @@ var (
 )
 
 func TestComponentService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Components.List(nil)
+	out, _, err := aplClient.Components.List(nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -33,12 +34,11 @@ func TestComponentService_List(t *testing.T) {
 }
 
 func TestComponentService_ListByType(t *testing.T) {
-	aplSvs := apl.NewClient()
 
 	params := &apl.ComponentParams{
 		Category: testComponentFilter,
 	}
-	out, _, err := aplSvs.Components.List(params)
+	out, _, err := aplClient.Components.List(params)
 
 	if err != nil {
 		t.Fatal(err)

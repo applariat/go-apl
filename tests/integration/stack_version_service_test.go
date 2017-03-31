@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -15,13 +17,11 @@ func TestStackVersionService_Create(t *testing.T) {
 	// TODO: Fix TestStackVersionService_Create!
 	t.SkipNow()
 
-	aplSvs := apl.NewClient()
-
 	in := &apl.StackVersionCreateInput{
 		StackID: testStackVersionId,
 	}
 
-	out, _, err := aplSvs.StackVersions.Create(in)
+	out, _, err := aplClient.StackVersions.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -31,9 +31,8 @@ func TestStackVersionService_Create(t *testing.T) {
 }
 
 func TestStackVersionService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.StackVersions.List()
+	out, _, err := aplClient.StackVersions.List()
 
 	fmt.Println("count:", len(out))
 	if err != nil {

@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -16,14 +18,12 @@ func TestDeploymentService_Create(t *testing.T) {
 	// TODO: Fix TestDeploymentService_Create!
 	t.SkipNow()
 
-	aplSvs := apl.NewClient()
-
 	in := &apl.DeploymentCreateInput{
 		ID:   testDeploymentId,
 		Name: "Deployment Test",
 	}
 
-	out, _, err := aplSvs.Deployments.Create(in)
+	out, _, err := aplClient.Deployments.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -34,9 +34,8 @@ func TestDeploymentService_Create(t *testing.T) {
 }
 
 func TestDeploymentService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Deployments.List(nil)
+	out, _, err := aplClient.Deployments.List(nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -123,7 +122,7 @@ func TestDeploymentService_Delete(t *testing.T) {
 	t.SkipNow()
 
 	aplSvc := apl.NewClient()
-	out, _, err := aplSvc.Deployments.Delete(testCredentialId)
+	out, _, err := aplSvc.Deployments.Delete(testDeploymentId)
 
 	if err != nil {
 		t.Fatal(err)

@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -16,8 +18,6 @@ func TestReleaseService_Create(t *testing.T) {
 	// TODO: Fix TestReleaseService_Create!
 	t.SkipNow()
 
-	aplSvs := apl.NewClient()
-
 	in := &apl.ReleaseCreateInput{
 		ID:             testReleaseId,
 		Version:        testReleaseFilter,
@@ -29,7 +29,7 @@ func TestReleaseService_Create(t *testing.T) {
 		Components:     "[]",
 	}
 
-	out, _, err := aplSvs.Releases.Create(in)
+	out, _, err := aplClient.Releases.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -40,9 +40,8 @@ func TestReleaseService_Create(t *testing.T) {
 }
 
 func TestReleaseService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Releases.List(nil)
+	out, _, err := aplClient.Releases.List(nil)
 
 	if err != nil {
 		t.Fatal(err)
@@ -78,7 +77,7 @@ func TestReleaseService_ListByType(t *testing.T) {
 		t.Fatal("No Release rows found for filter", testReleaseFilter)
 	}
 
-	fmt.Printf("Release filtered found %d rows for filter \"%d\"\n", rowCount, testReleaseFilter)
+	fmt.Printf("Release filtered found %d rows for filter \"%s\"\n", rowCount, testReleaseFilter)
 
 }
 

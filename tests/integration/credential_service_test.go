@@ -1,4 +1,6 @@
-package apl_test
+// +build integration
+
+package tests
 
 import (
 	"fmt"
@@ -13,8 +15,6 @@ var (
 
 func TestCredentialService_Create(t *testing.T) {
 
-	aplSvs := apl.NewClient()
-
 	in := &apl.CredentialCreateInput{
 		ID:             testCredentialId,
 		Name:           "creds for credential test",
@@ -26,7 +26,7 @@ func TestCredentialService_Create(t *testing.T) {
 		},
 	}
 
-	out, _, err := aplSvs.Credentials.Create(in)
+	out, _, err := aplClient.Credentials.Create(in)
 
 	if err != nil {
 		t.Fatal(err)
@@ -37,9 +37,8 @@ func TestCredentialService_Create(t *testing.T) {
 }
 
 func TestCredentialService_List(t *testing.T) {
-	aplSvs := apl.NewClient()
 
-	out, _, err := aplSvs.Credentials.List(nil)
+	out, _, err := aplClient.Credentials.List(nil)
 
 	if err != nil {
 		t.Fatal(err)
