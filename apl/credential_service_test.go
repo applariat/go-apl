@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testCredentialId = "credential-test-id"
+	testCredentialId     = "credential-test-id"
 	testCredentialFilter = "docker"
 )
 
@@ -31,7 +31,6 @@ func TestCredentialService_Create(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 
 	fmt.Println("New Credential ID:", out.Data)
 
@@ -78,7 +77,6 @@ func TestCredentialService_ListByType(t *testing.T) {
 
 func TestCredentialService_Update(t *testing.T) {
 	aplSvc := apl.NewClient()
-
 
 	in := &apl.CredentialUpdateInput{Name: "UPDATED!"}
 	out, _, err := aplSvc.Credentials.Update(testCredentialId, in)

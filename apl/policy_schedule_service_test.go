@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testPolicyScheduleId = "ps-lease-term-sched-apl"
+	testPolicyScheduleId     = "ps-lease-term-sched-apl"
 	testPolicyScheduleFilter = "loc_deploy"
 )
 
@@ -19,18 +19,18 @@ func TestPolicyScheduleService_Create(t *testing.T) {
 	aplSvs := apl.NewClient()
 
 	in := &apl.PolicyScheduleCreateInput{
-		ID: testPolicyScheduleId,
-		Name: "policy-schedule-test-name",
-		PolicyID: "po-lease-termination-apl",
-		ResourceID: "ld-gke-deploy",
+		ID:           testPolicyScheduleId,
+		Name:         "policy-schedule-test-name",
+		PolicyID:     "po-lease-termination-apl",
+		ResourceID:   "ld-gke-deploy",
 		ResourceType: testPolicyScheduleFilter,
 		Schedule: map[string]interface{}{
-			"crontab": "0 0 02 * * ?",
-			"iterations": 1,
+			"crontab":            "0 0 02 * * ?",
+			"iterations":         1,
 			"schedule_frequency": "day",
-			"schedule_value": 2,
-			"timezone": "America/Los_Angeles",
-			"value_type": "hour_of_day",
+			"schedule_value":     2,
+			"timezone":           "America/Los_Angeles",
+			"value_type":         "hour_of_day",
 		},
 		Inputs: map[string]string{"lease_type": "temporary"},
 	}
@@ -77,7 +77,7 @@ func TestPolicyScheduleService_ListByType(t *testing.T) {
 
 	rowCount := len(out)
 	if rowCount == 0 {
-		fmt.Printf("No PolicySchedule rows found for filter", testPolicyScheduleFilter)
+		fmt.Println("No PolicySchedule rows found for filter", testPolicyScheduleFilter)
 	}
 
 	fmt.Printf("PolicySchedule filtered found %d rows for filter \"%s\"\n", rowCount, testPolicyScheduleFilter)

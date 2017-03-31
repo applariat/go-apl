@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 // PolicyResultService is the service object for policy_result operations
 type PolicyResultService struct {
 	sling    *sling.Sling
@@ -28,9 +27,9 @@ type PolicyResult struct {
 	PolicyScheduleID string `json:"policy_schedule_id,omitempty"`
 	ProjectID        string `json:"project_id,omitempty"`
 
-	LastModified     string `json:"last_modified"`
-	CreatedTime      string `json:"created_time"`
-	CreatedByUserID  string `json:"created_by_user_id"`
+	LastModified    string `json:"last_modified"`
+	CreatedTime     string `json:"created_time"`
+	CreatedByUserID string `json:"created_by_user_id"`
 }
 
 // PolicyResultCreateInput is used for the create of policy_results
@@ -48,23 +47,25 @@ type PolicyResultCreateInput struct {
 
 // PolicyResultParams filter parameters used in list operations
 type PolicyResultParams struct {
-
 	PolicyID         string `url:"policy_id,omitempty"`
 	PolicyScheduleID string `url:"policy_schedule_id,omitempty"`
 	ProjectID        string `url:"project_id,omitempty"`
 }
 
-
 // List gets a list of policy_results with optional filter params
 func (c *PolicyResultService) List(params *PolicyResultParams) ([]PolicyResult, *http.Response, error) {
-	output := &struct{ Data []PolicyResult `json:"data"` }{}
+	output := &struct {
+		Data []PolicyResult `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a policy_result for the id specified
 func (c *PolicyResultService) Get(id string) (PolicyResult, *http.Response, error) {
-	output := &struct{ Data PolicyResult `json:"data"` }{}
+	output := &struct {
+		Data PolicyResult `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

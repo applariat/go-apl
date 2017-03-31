@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testStackComponentId = "test-stack-component-id"
+	testStackComponentId     = "test-stack-component-id"
 	testStackComponentFilter = "c-mongodb"
 )
 
@@ -20,7 +20,6 @@ func TestStackComponentService_Create(t *testing.T) {
 
 	in := &apl.StackComponentCreateInput{
 		ID: testStackComponentId,
-
 	}
 
 	out, _, err := aplSvs.StackComponents.Create(in)

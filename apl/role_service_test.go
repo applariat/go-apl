@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testRoleId string
+	testRoleId     string
 	testRoleFilter = "qa"
 )
 
@@ -49,7 +49,6 @@ func TestRoleService_ListByType(t *testing.T) {
 	}
 
 	fmt.Printf("Role filtered found %d rows for filter \"%s\"\n", rowCount, testRoleFilter)
-
 
 }
 
@@ -99,4 +98,3 @@ func TestRoleService_Get(t *testing.T) {
 	fmt.Println("Role found for ID", testRoleId)
 
 }
-

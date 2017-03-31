@@ -36,19 +36,21 @@ type ProjectRoleParams struct {
 	ProjectID string `url:"project_id,omitempty"`
 }
 
-
 // List gets a list of project_roles with optional filter params
 func (c *ProjectRoleService) List(params *ProjectRoleParams) ([]ProjectRole, *http.Response, error) {
-	output := &struct{ Data []ProjectRole `json:"data"` }{}
+	output := &struct {
+		Data []ProjectRole `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a project_role for the id specified
 func (c *ProjectRoleService) Get(id string) (ProjectRole, *http.Response, error) {
-	output := &struct{ Data ProjectRole `json:"data"` }{}
+	output := &struct {
+		Data ProjectRole `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err
 }
-

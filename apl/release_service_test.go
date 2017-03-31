@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testReleaseId = "release-test-id"
+	testReleaseId     = "release-test-id"
 	testReleaseFilter = 1
 )
 
@@ -19,14 +19,14 @@ func TestReleaseService_Create(t *testing.T) {
 	aplSvs := apl.NewClient()
 
 	in := &apl.ReleaseCreateInput{
-		ID: testReleaseId,
-		Version: testReleaseFilter,
-		StackID: "",
+		ID:             testReleaseId,
+		Version:        testReleaseFilter,
+		StackID:        "",
 		StackVersionID: "",
-		ProjectID: "",
-		LocImageID: "",
-		BuildStatus: "",
-		Components: "[]",
+		ProjectID:      "",
+		LocImageID:     "",
+		BuildStatus:    "",
+		Components:     "[]",
 	}
 
 	out, _, err := aplSvs.Releases.Create(in)
@@ -78,7 +78,7 @@ func TestReleaseService_ListByType(t *testing.T) {
 		t.Fatal("No Release rows found for filter", testReleaseFilter)
 	}
 
-	fmt.Printf("Release filtered found %d rows for filter \"%s\"\n", rowCount, testReleaseFilter)
+	fmt.Printf("Release filtered found %d rows for filter \"%d\"\n", rowCount, testReleaseFilter)
 
 }
 

@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 // StackComponentService is the service object for stack_component operations
 type StackComponentService struct {
 	sling    *sling.Sling
@@ -23,28 +22,28 @@ func NewStackComponentsService(sling *sling.Sling) *StackComponentService {
 
 // StackComponent represents a stack_component row
 type StackComponent struct {
-	ID                 string `json:"id,omitempty"`
-	ComponentID        string `json:"component_id"`
-	ComponentVersionID string `json:"component_version_id"`
-	StackID            string `json:"stack_id"`
-	StackVersionID     string `json:"stack_version_id"`
-	ProjectID          string `json:"project_id"`
-	Name               string `json:"name"`
+	ID                 string      `json:"id,omitempty"`
+	ComponentID        string      `json:"component_id"`
+	ComponentVersionID string      `json:"component_version_id"`
+	StackID            string      `json:"stack_id"`
+	StackVersionID     string      `json:"stack_version_id"`
+	ProjectID          string      `json:"project_id"`
+	Name               string      `json:"name"`
 	Services           interface{} `json:"services"`
-	LastModified       string `json:"last_modified"`
-	CreatedTime        string `json:"created_time"`
-	CreatedByUserID    string `json:"created_by_user_id"`
+	LastModified       string      `json:"last_modified"`
+	CreatedTime        string      `json:"created_time"`
+	CreatedByUserID    string      `json:"created_by_user_id"`
 }
 
 // StackComponentCreateInput is used for the create of stack_components
 type StackComponentCreateInput struct {
-	ID                 string `json:"id,omitempty"`
-	ComponentID        string `json:"component_id"`
-	ComponentVersionID string `json:"component_version_id"`
-	StackID            string `json:"stack_id"`
-	StackVersionID     string `json:"stack_version_id"`
-	ProjectID          string `json:"project_id"`
-	Name               string `json:"name"`
+	ID                 string      `json:"id,omitempty"`
+	ComponentID        string      `json:"component_id"`
+	ComponentVersionID string      `json:"component_version_id"`
+	StackID            string      `json:"stack_id"`
+	StackVersionID     string      `json:"stack_version_id"`
+	ProjectID          string      `json:"project_id"`
+	Name               string      `json:"name"`
 	Services           interface{} `json:"services"`
 }
 
@@ -55,8 +54,8 @@ type StackComponentUpdateInput struct {
 	//StackID            string `json:"stack_id"`
 	//StackVersionID     string `json:"stack_version_id"`
 	//ProjectID          string `json:"project_id"`
-	Name               string `json:"name"`
-	Services           interface{} `json:"services"`
+	Name     string      `json:"name"`
+	Services interface{} `json:"services"`
 }
 
 // StackComponentParams filter parameters used in list operations
@@ -69,17 +68,20 @@ type StackComponentParams struct {
 	ProjectID          string `url:"project_id,omitempty"`
 }
 
-
 // List gets a list of stack_components with optional filter params
 func (c *StackComponentService) List(params *StackComponentParams) ([]StackComponent, *http.Response, error) {
-	output := &struct{ Data []StackComponent `json:"data"` }{}
+	output := &struct {
+		Data []StackComponent `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a stack_component for the id specified
 func (c *StackComponentService) Get(id string) (StackComponent, *http.Response, error) {
-	output := &struct{ Data StackComponent `json:"data"` }{}
+	output := &struct {
+		Data StackComponent `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

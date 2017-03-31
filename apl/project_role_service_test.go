@@ -1,14 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
-
 var (
-	testProjectRoleId string
+	testProjectRoleId     string
 	testProjectRoleFilter string
 )
 
@@ -30,7 +29,6 @@ func TestProjectRoleService_List(t *testing.T) {
 	}
 
 	fmt.Printf("ProjectRole found %d rows\n", rowCount)
-
 
 }
 
@@ -55,7 +53,6 @@ func TestProjectRoleService_ListByType(t *testing.T) {
 
 }
 
-
 func TestProjectRoleService_Get(t *testing.T) {
 	aplSvc := apl.NewClient()
 
@@ -72,4 +69,3 @@ func TestProjectRoleService_Get(t *testing.T) {
 	fmt.Println("ProjectRole found for ID", testProjectRoleId)
 
 }
-

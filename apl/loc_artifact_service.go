@@ -6,7 +6,6 @@ import (
 	"net/http"
 )
 
-
 // LocArtifactService is the service object for loc_artifact operations
 type LocArtifactService struct {
 	sling    *sling.Sling
@@ -23,6 +22,25 @@ func NewLocArtifactsService(sling *sling.Sling) *LocArtifactService {
 
 // LocArtifact represents a loc_artifact row
 type LocArtifact struct {
+	ID                 string      `json:"id,omitempty"`
+	Name               string      `json:"name"`
+	LocArtifactsType   string      `json:"loc_artifacts_type"`
+	Bucket             string      `json:"bucket,omitempty"`
+	CredentialID       string      `json:"credential_id"`
+	CredentialType     string      `json:"credential_type,omitempty"`
+	SecretCredentialID string      `json:"secret_credential_id,omitempty"`
+	RegistryURI        string      `json:"registry_uri,omitempty"`
+	ProjectBlacklist   interface{} `json:"project_blacklist,omitempty"`
+	SupportedTypes     interface{} `json:"supported_types,omitempty"`
+	Metadata           interface{} `json:"metadata,omitempty"`
+	URL                string      `json:"url,omitempty"`
+	LastModified       string      `json:"last_modified"`
+	CreatedTime        string      `json:"created_time"`
+	CreatedByUser      `json:"created_by_user"`
+}
+
+// LocArtifactCreateInput is used for the create of loc_artifacts
+type LocArtifactCreateInput struct {
 	ID                 string `json:"id,omitempty"`
 	Name               string `json:"name"`
 	LocArtifactsType   string `json:"loc_artifacts_type"`
@@ -31,29 +49,10 @@ type LocArtifact struct {
 	CredentialType     string `json:"credential_type,omitempty"`
 	SecretCredentialID string `json:"secret_credential_id,omitempty"`
 	RegistryURI        string `json:"registry_uri,omitempty"`
-	ProjectBlacklist   interface{} `json:"project_blacklist,omitempty"`
-	SupportedTypes     interface{} `json:"supported_types,omitempty"`
-	Metadata           interface{} `json:"metadata,omitempty"`
-	URL                string `json:"url,omitempty"`
-	LastModified       string `json:"last_modified"`
-	CreatedTime        string `json:"created_time"`
-	CreatedByUser `json:"created_by_user"`
-}
 
-// LocArtifactCreateInput is used for the create of loc_artifacts
-type LocArtifactCreateInput struct {
-	ID                 string      `json:"id,omitempty"`
-	Name               string `json:"name"`
-	LocArtifactsType   string `json:"loc_artifacts_type"`
-	Bucket             string `json:"bucket,omitempty"`
-	CredentialID       string `json:"credential_id"`
-	CredentialType     string `json:"credential_type,omitempty"`
-	SecretCredentialID string `json:"secret_credential_id,omitempty"`
-	RegistryURI        string `json:"registry_uri,omitempty"`
-
-	ProjectBlacklist   interface{} `json:"project_blacklist,omitempty"`
-	SupportedTypes     interface{} `json:"supported_types,omitempty"`
-	URL                string `json:"url,omitempty"`
+	ProjectBlacklist interface{} `json:"project_blacklist,omitempty"`
+	SupportedTypes   interface{} `json:"supported_types,omitempty"`
+	URL              string      `json:"url,omitempty"`
 }
 
 // LocArtifactUpdateInput is used for the update of loc_artifacts
@@ -73,17 +72,20 @@ type LocArtifactParams struct {
 	URL                string `url:"url,omitempty"`
 }
 
-
 // List gets a list of loc_artifacts with optional filter params
 func (c *LocArtifactService) List(params *LocArtifactParams) ([]LocArtifact, *http.Response, error) {
-	output := &struct{ Data []LocArtifact `json:"data"` }{}
+	output := &struct {
+		Data []LocArtifact `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a loc_artifact for the id specified
 func (c *LocArtifactService) Get(id string) (LocArtifact, *http.Response, error) {
-	output := &struct{ Data LocArtifact `json:"data"` }{}
+	output := &struct {
+		Data LocArtifact `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

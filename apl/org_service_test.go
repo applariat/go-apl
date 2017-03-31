@@ -1,8 +1,8 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
@@ -26,7 +26,6 @@ func TestOrgService_List(t *testing.T) {
 	testOrgId = out.ID
 
 	fmt.Println("Org found for ID", testOrgId)
-
 
 }
 
@@ -62,4 +61,3 @@ func TestOrgService_Get(t *testing.T) {
 	fmt.Println("Org found for ID", testOrgId)
 
 }
-

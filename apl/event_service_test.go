@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testEventId string
+	testEventId     string
 	testEventFilter string
 )
 
@@ -19,9 +19,9 @@ func TestEventService_Create(t *testing.T) {
 	in := &apl.EventCreateInput{
 		ObjectType: testEventFilter,
 		ObjectName: "floopy1",
-		Message: "this event was created by a test.",
-		EventType: "no_action",
-		Source: "api",
+		Message:    "this event was created by a test.",
+		EventType:  "no_action",
+		Source:     "api",
 	}
 
 	out, _, err := aplSvs.Events.Create(in)
@@ -90,4 +90,3 @@ func TestEventService_Get(t *testing.T) {
 	fmt.Println("Event found for ID", testEventId)
 
 }
-

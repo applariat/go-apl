@@ -34,16 +34,16 @@ type Credential struct {
 // CredentialCreateInput is used for the create of credentials
 type CredentialCreateInput struct {
 	ID             string      `json:"id,omitempty"`
-	CredentialType string 	   `json:"credential_type"`
+	CredentialType string      `json:"credential_type"`
 	Name           string      `json:"name"`
 	Credentials    interface{} `json:"credentials"`
 }
 
 // CredentialUpdateInput is used for the update of credentials
 type CredentialUpdateInput struct {
-	ID             string      `json:"id,omitempty"`
-	Name           string      `json:"name"`
-	Credentials    interface{} `json:"credentials"`
+	ID          string      `json:"id,omitempty"`
+	Name        string      `json:"name"`
+	Credentials interface{} `json:"credentials"`
 }
 
 // CredentialParams filter parameters used in list operations
@@ -52,17 +52,20 @@ type CredentialParams struct {
 	Name           string `url:"name,omitempty"`
 }
 
-
 // List gets a list of credentials with optional filter params
 func (c *CredentialService) List(params *CredentialParams) ([]Credential, *http.Response, error) {
-	output := &struct{Data []Credential `json:"data"`}{}
+	output := &struct {
+		Data []Credential `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a credential for the id specified
 func (c *CredentialService) Get(id string) (Credential, *http.Response, error) {
-	output := &struct{Data Credential `json:"data"`}{}
+	output := &struct {
+		Data Credential `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

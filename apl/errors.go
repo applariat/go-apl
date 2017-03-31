@@ -33,14 +33,13 @@ func (e APLError) Empty() bool {
 	return false
 }
 
-
 // from the two errors, return one APLError
 func relevantError(httpError error, apiError *APIError) error {
 
 	if httpError != nil {
 		return APLError{
 			StatusCode: 400,
-			Message: httpError.Error(),
+			Message:    httpError.Error(),
 		}
 	}
 

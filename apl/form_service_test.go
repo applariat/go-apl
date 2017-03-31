@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testFormId string
+	testFormId     string
 	testFormFilter string
 )
 
@@ -29,7 +29,6 @@ func TestFormService_List(t *testing.T) {
 	}
 
 	fmt.Printf("Form found %d rows\n", rowCount)
-
 
 }
 
@@ -54,7 +53,6 @@ func TestFormService_ListByType(t *testing.T) {
 
 }
 
-
 func TestFormService_Get(t *testing.T) {
 	aplSvc := apl.NewClient()
 
@@ -70,4 +68,3 @@ func TestFormService_Get(t *testing.T) {
 
 	fmt.Println("Form found for ID", testFormId)
 }
-

@@ -1,36 +1,34 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testPolicyId = "policy-test-id"
+	testPolicyId     = "policy-test-id"
 	testPolicyFilter = "scheduled"
 )
 
 func TestPolicyService_Create(t *testing.T) {
 
-
 	aplSvs := apl.NewClient()
 
 	in := &apl.PolicyCreateInput{
-		ID:             testPolicyId,
-		Name:           "policy test name",
+		ID:         testPolicyId,
+		Name:       "policy test name",
 		PolicyType: testPolicyFilter,
 
-		PolicyGroup: "cluster_management",
+		PolicyGroup:      "cluster_management",
 		PolicyTemplateID: "pt-auto-scale-cluster",
-		Return: "OP1",
-		Inputs: "{}",
-		Assets: "{}",
-		Actions: "{}",
-		Operations: "{}",
-		Attributes: "{}",
-		Constants: "{}",
-
+		Return:           "OP1",
+		Inputs:           "{}",
+		Assets:           "{}",
+		Actions:          "{}",
+		Operations:       "{}",
+		Attributes:       "{}",
+		Constants:        "{}",
 	}
 
 	out, _, err := aplSvs.Policies.Create(in)

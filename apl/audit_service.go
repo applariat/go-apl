@@ -22,13 +22,13 @@ func NewAuditsService(sling *sling.Sling) *AuditService {
 
 // Audit represents a audit row
 type Audit struct {
-	ID           string `json:"id"`
-	UserID       string `json:"user_id"`
-	ResourceID   string `json:"resource_id"`
-	Timestamp    int64  `json:"timestamp"`
-	Action       string `json:"action"`
-	Message      string `json:"message"`
-	ResourceType string `json:"resource_type"`
+	ID           string      `json:"id"`
+	UserID       string      `json:"user_id"`
+	ResourceID   string      `json:"resource_id"`
+	Timestamp    int64       `json:"timestamp"`
+	Action       string      `json:"action"`
+	Message      string      `json:"message"`
+	ResourceType string      `json:"resource_type"`
 	Params       interface{} `json:"params,omitempty"`
 	Result       interface{} `json:"result"`
 	Data         interface{} `json:"data,omitempty"`
@@ -44,14 +44,18 @@ type AuditParams struct {
 
 // List gets a list of audits with optional filter params
 func (c *AuditService) List(params *AuditParams) ([]Audit, *http.Response, error) {
-	output := &struct{ Data []Audit `json:"data"` }{}
+	output := &struct {
+		Data []Audit `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a audit for the id specified
 func (c *AuditService) Get(id string) (Audit, *http.Response, error) {
-	output := &struct{ Data Audit `json:"data"` }{}
+	output := &struct {
+		Data Audit `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err

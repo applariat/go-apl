@@ -22,13 +22,13 @@ func NewComponentsService(sling *sling.Sling) *ComponentService {
 
 // Component represents a component row
 type Component struct {
-	ID                string `json:"id"`
-	Name              string `json:"name"`
-	Category          string `json:"category"`
-	LastModified      string `json:"last_modified"`
-	CreatedTime       string `json:"created_time"`
+	ID                string      `json:"id"`
+	Name              string      `json:"name"`
+	Category          string      `json:"category"`
+	LastModified      string      `json:"last_modified"`
+	CreatedTime       string      `json:"created_time"`
 	ComponentVersions interface{} `json:"component_versions,omitempty"`
-	MetaData `json:"meta_data,omitempty"`
+	MetaData          `json:"meta_data,omitempty"`
 }
 
 // ComponentParams filter parameters used in list operations
@@ -39,7 +39,9 @@ type ComponentParams struct {
 
 // List gets a list of components with optional filter params
 func (c *ComponentService) List(params *ComponentParams) ([]Component, *http.Response, error) {
-	output := &struct{Data []Component `json:"data"`}{}
+	output := &struct {
+		Data []Component `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
@@ -49,7 +51,9 @@ func (c *ComponentService) Get(id string) (Component, *http.Response, error) {
 
 	// wrap output data
 	// TODO: Fix the component endpoint to return { "data": {...}}
-	output := &struct{Data Component `json:"data"`}{}
+	output := &struct {
+		Data Component `json:"data"`
+	}{}
 	//output := Component{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)

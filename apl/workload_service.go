@@ -55,17 +55,20 @@ type WorkloadParams struct {
 	QualityOfService   string `url:"quality_of_service,omitempty"`
 }
 
-
 // List gets a list of workloads with optional filter params
 func (c *WorkloadService) List(params *WorkloadParams) ([]Workload, *http.Response, error) {
-	output := &struct{ Data []Workload `json:"data"` }{}
+	output := &struct {
+		Data []Workload `json:"data"`
+	}{}
 	resp, err := doList(c.sling, c.endpoint, params, output)
 	return output.Data, resp, err
 }
 
 // Get get a workload for the id specified
 func (c *WorkloadService) Get(id string) (Workload, *http.Response, error) {
-	output := &struct{ Data Workload `json:"data"` }{}
+	output := &struct {
+		Data Workload `json:"data"`
+	}{}
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	resp, err := doGet(c.sling, path, output)
 	return output.Data, resp, err
@@ -76,4 +79,3 @@ func (c *WorkloadService) Update(id string, input *WorkloadUpdateInput) (ModifyR
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	return doUpdate(c.sling, path, input)
 }
-

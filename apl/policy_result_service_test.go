@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testPolicyResultId string
+	testPolicyResultId     string
 	testPolicyResultFilter = "p-mobile-apps-apl"
 )
 
@@ -16,7 +16,7 @@ func TestPolicyResultService_Create(t *testing.T) {
 	aplSvs := apl.NewClient()
 
 	in := &apl.PolicyResultCreateInput{
-		PolicyID: "po-lease-termination-apl",
+		PolicyID:  "po-lease-termination-apl",
 		ProjectID: testPolicyResultFilter,
 	}
 
@@ -27,7 +27,6 @@ func TestPolicyResultService_Create(t *testing.T) {
 	}
 	testPolicyResultId = out.Data.(string)
 	fmt.Println("New PolicyResult ID:", testPolicyResultId)
-
 
 }
 
@@ -86,4 +85,3 @@ func TestPolicyResultService_Get(t *testing.T) {
 	fmt.Println("PolicyResult found for ID", testPolicyResultId)
 
 }
-

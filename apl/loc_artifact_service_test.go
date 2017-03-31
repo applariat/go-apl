@@ -1,13 +1,13 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
 var (
-	testLocArtifactId string
+	testLocArtifactId     string
 	testLocArtifactFilter = "docker"
 )
 
@@ -21,8 +21,8 @@ func TestLocArtifactService_Create(t *testing.T) {
 	aplSvs := apl.NewClient()
 
 	in := &apl.LocArtifactCreateInput{
-		ID: testLocArtifactId,
-		Name: "LocArtifact Test",
+		ID:               testLocArtifactId,
+		Name:             "LocArtifact Test",
 		LocArtifactsType: testLocArtifactFilter,
 	}
 
@@ -31,7 +31,6 @@ func TestLocArtifactService_Create(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 
 	fmt.Println("New LocArtifact ID:", out.Data)
 
@@ -73,7 +72,6 @@ func TestLocArtifactService_ListByType(t *testing.T) {
 
 	fmt.Printf("LocArtifact filtered found %d rows for filter \"%s\"\n", rowCount, testLocArtifactFilter)
 
-
 }
 
 func TestLocArtifactService_Update(t *testing.T) {
@@ -82,7 +80,6 @@ func TestLocArtifactService_Update(t *testing.T) {
 	t.SkipNow()
 
 	aplSvc := apl.NewClient()
-
 
 	in := &apl.LocArtifactUpdateInput{Name: "name UPDATED!"}
 	out, _, err := aplSvc.LocArtifacts.Update(testLocArtifactId, in)
@@ -95,7 +92,6 @@ func TestLocArtifactService_Update(t *testing.T) {
 	fmt.Println("Unchanged:", out.Unchanged)
 	fmt.Println("Replaced:", out.Replaced)
 	fmt.Println("Errors:", out.Errors)
-
 
 }
 

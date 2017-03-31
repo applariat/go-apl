@@ -1,16 +1,16 @@
 package apl_test
 
 import (
-	"github.com/applariat/go-apl/apl"
 	"fmt"
+	"github.com/applariat/go-apl/apl"
 	"testing"
 )
 
-
 var (
-	testWorkloadId = "wl-level2-apl"
+	testWorkloadId     = "wl-level2-apl"
 	testWorkloadFilter = "wl-level1"
 )
+
 //func TestWorkloadService_Create(t *testing.T) {
 //	aplSvs := apl.NewClient()
 //
