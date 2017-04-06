@@ -31,12 +31,14 @@ type LocDeploy struct {
 	CredentialType string      `json:"credential_type,omitempty"`
 	LastModified   string      `json:"last_modified"`
 	CreatedTime    string      `json:"created_time"`
+	Description    string      `json:"description"`
 	Workloads      interface{} `json:"workloads"`
 	Status         interface{} `json:"status"`
 	Cluster        interface{} `json:"cluster"`
 	CommandPayload interface{} `json:"command_payload,omitempty"`
 	Policies       interface{} `json:"policies,omitempty"`
 	Config         interface{} `json:"config"`
+	Metadata       interface{} `json:"meta_data,omitempty"`
 	CreatedByUser  `json:"created_by_user"`
 }
 
@@ -46,6 +48,10 @@ type LocDeployCreateInput struct {
 	Name           string      `json:"name"`
 	ProjectID      string      `json:"project_id"`
 	LocDeploysType string      `json:"loc_deploys_type"`
+	CredentialID   string      `json:"credential_id"`
+	CredentialType string      `json:"credential_type,omitempty"`
+	Description    string      `json:"description,omitempty"`
+	Status         interface{} `json:"status,omitempty"`
 	Workloads      interface{} `json:"workloads"`
 	Config         interface{} `json:"config"`
 	Policies       interface{} `json:"policies"`
