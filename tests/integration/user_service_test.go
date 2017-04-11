@@ -5,7 +5,7 @@ package tests
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/applariat/go-apl/apl"
+	"github.com/applariat/go-apl/pkg/apl"
 	"testing"
 )
 

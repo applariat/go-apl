@@ -1,16 +1,30 @@
-sudo: false
 language: go
-go:
-  - 1.7.x
-  - 1.8.x
-  - master
+sudo: false
 matrix:
-  allow_failures:
-    - go: master
-  fast_finish: true
-install:
-  - # This is needed to prevent default install action "go get -t -v ./..."
+  include:
+  - go: 1.7
+    env: VERSION=0.0.4
 script:
-  - diff -u <(echo -n) <(gofmt -d ./apl ./tests)
-  - go tool vet ./apl ./tests
-  - go test -v -race ./apl
+  - diff -u <(echo -n) <(gofmt -d ./cmd ./pkg ./tests)
+  - go tool vet ./cmd ./pkg ./tests
+  - go test -v -race ./cmd ./pkg ./tests
+before_deploy:
+- cd cmd/apl
+- GOARCH=amd64 GOOS=linux  CGO_ENABLED=0 go build -o apl main.go && tar czvf apl-$VERSION-linux_amd64.tgz apl
+- GOARCH=386   GOOS=linux  CGO_ENABLED=0 go build -o apl main.go && tar czvf apl-$VERSION-linux_386.tgz apl
+- GOARCH=amd64 GOOS=darwin CGO_ENABLED=0 go build -o apl main.go && tar czvf apl-$VERSION-darwin_amd64.tgz apl
+- GOARCH=386   GOOS=darwin CGO_ENABLED=0 go build -o apl main.go && tar czvf apl-$VERSION-darwin_386.tgz apl
+deploy:
+  provider: releases
+  api_key:
+    secure: lONklOTfrA7V0KTl3Fp9bJAwU31uS9wFwsURe7TSWdRPLd/RkTSpZ6owDf3JXcv1clyvMzvLHV3Spp2492F1nUMI0qUTyiy/53hU+3NgkdJVd5GU1LCuWnjVrO47Gq+8LMKIo7rrAEkBb87hbAxTxJUO216mw1MTWKn9QHLo+zfK8m8AuRoZZSRbSYLmCg0vTqDbb6JdqfOtw6n0QedyUrQnq6CbbVHX7Tb9udypc+8Meqn/T38/unX8Q2tjPbbid4xfy95TZSsl5UhYieDJ3HYXZZvGHEkFgip2is0YfBHYA/85zp4iExv8Wyz8RAfHhqn9lgsBe2s359qDMiF6+U7Ck+fJRAtQpczjDsMmSkweZX03yKzBd/hDy7LzodXd/E+r5J+ZUbO01i5Rm6cVGSDay3SCD/rbD2C2U8uO0DIYT9auJI8lws5L36UbDpWQxPzh26nZYzW5g70IPMVmiVP3VO6/HCTWKj4vLGn9l5AmZ9xHTVndCuULVUqjzX1zxClZsY0hIbR7gIttINnwEIFHU+8rEp29tf9UyalHdXLAzBiOoOHC7cGvh1Y9kTo+jwRD+xfWYcBVkx6fG5qAwLgA+LAeLCjGQGe21HB+qTjKjA/tzsONhKFifN6nVc1prg/W1HD9mGAKgRSwV7aONM4wdElGGLZMElUDjO00//E=
+  file:
+    - apl-$VERSION-darwin_386.tgz
+    - apl-$VERSION-darwin_amd64.tgz
+    - apl-$VERSION-linux_386.tgz
+    - apl-$VERSION-linux_amd64.tgz
+  skip_cleanup: true
+  on:
+    repo: applariat/go-apl
+    branch: master
+    tags: true

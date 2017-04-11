@@ -4,7 +4,7 @@ package tests
 
 import (
 	"fmt"
-	"github.com/applariat/go-apl/apl"
+	"github.com/applariat/go-apl/pkg/apl"
 	"testing"
 )
 
