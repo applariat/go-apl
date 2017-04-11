@@ -5,9 +5,8 @@ matrix:
   - go: 1.7
     env: VERSION=0.0.4
 script:
-  - diff -u <(echo -n) <(gofmt -d ./cmd ./pkg ./tests)
-  - go tool vet ./cmd ./pkg ./tests
-  - go test -v -race ./cmd ./pkg ./tests
+  - diff -u <(echo -n) <(gofmt -d .)
+  - go tool vet .
 before_deploy:
 - cd cmd/apl
 - GOARCH=amd64 GOOS=linux  CGO_ENABLED=0 go build -o apl main.go && tar czvf apl-$VERSION-linux_amd64.tgz apl
