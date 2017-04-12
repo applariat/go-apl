@@ -39,14 +39,13 @@ type StackArtifact struct {
 // StackArtifactInput is used for the update/create of stack_artifacts
 type StackArtifactCreateInput struct {
 	ID            string `json:"id,omitempty"`
-	LocArtifactID string `json:"loc_artifact_id,omitempty"`
-	ProjectID     string `json:"project_id,omitempty"`
-	StackID       string `json:"stack_id,omitempty"`
-	Name          string `json:"name,omitempty"`
-	Type          string `json:"type,omitempty,omitempty"`
+	LocArtifactID string `json:"loc_artifact_id"`
+	StackID       string `json:"stack_id"`
+	Name          string `json:"name"`
+	ArtifactName  string `json:"artifact_name"`
+
+	// Version is optional, will be auto-generated
 	Version       string `json:"version,omitempty"`
-	ArtifactName  string `json:"artifact_name,omitempty"`
-	Package       string `json:"package,omitempty"`
 }
 
 type StackArtifactUpdateInput struct {

@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 	"net/http"
 	"reflect"
+	"os"
 )
 
 // All of the commands are created and ran the same way.
@@ -175,7 +176,7 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 	output, _, err := getReflectOutput(response)
 	if err != nil {
 		printResults(err)
-		return
+		os.Exit(1)
 	}
 
 	printResults(output)
@@ -207,7 +208,7 @@ func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 	output, _, err := getReflectOutput(response)
 	if err != nil {
 		printResults(err)
-		return
+		os.Exit(1)
 	}
 
 	printResults(output)
@@ -227,7 +228,7 @@ func runDeleteCommand(args []string, callMe interface{}) {
 	output, _, err := getReflectOutput(response)
 	if err != nil {
 		printResults(err)
-		return
+		os.Exit(1)
 	}
 
 	printResults(output)
