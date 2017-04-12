@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"net/http"
-	"reflect"
 	"os"
+	"reflect"
 )
 
 // All of the commands are created and ran the same way.

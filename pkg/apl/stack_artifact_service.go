@@ -45,7 +45,7 @@ type StackArtifactCreateInput struct {
 	ArtifactName  string `json:"artifact_name"`
 
 	// Version is optional, will be auto-generated
-	Version       string `json:"version,omitempty"`
+	Version string `json:"version,omitempty"`
 }
 
 type StackArtifactUpdateInput struct {
