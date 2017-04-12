@@ -7,7 +7,7 @@
 package tests
 
 import (
-	"github.com/applariat/go-apl/apl"
+	"github.com/applariat/go-apl/pkg/apl"
 )
 
 var (
