@@ -3,7 +3,7 @@ sudo: false
 matrix:
   include:
   - go: 1.7
-    env: VERSION=0.0.43
+    env: VERSION=0.0.44
 script:
   - diff -u <(echo -n) <(gofmt -d .)
   - go tool vet .
