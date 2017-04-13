@@ -13,7 +13,6 @@ func NewPolicyResultsCommand() *cobra.Command {
 	getCmd := createGetCommand(cmdGetPolicyResults, "policy-result", "")
 	createCmd := createCreateCommand(cmdCreatePolicyResults, "policy-result", "")
 
-
 	// command flags
 	cmd.Flags().StringVar(&policyResultParams.PolicyID, "policy-id", "", "Filter policy-results by policy_id")
 	cmd.Flags().StringVar(&policyResultParams.PolicyScheduleID, "policy-schedule-id", "", "Filter policy-results by policy_schedule_id")

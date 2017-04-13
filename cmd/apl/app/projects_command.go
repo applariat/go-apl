@@ -15,7 +15,7 @@ func NewProjectsCommand() *cobra.Command {
 	updateCmd := createUpdateCommand(cmdUpdateProjects, "project", "")
 	deleteCmd := createDeleteCommand(cmdDeleteProjects, "project", "")
 
-		// command flags
+	// command flags
 	cmd.Flags().StringVar(&projectParams.Name, "name", "", "Filter projects by name")
 
 	// add sub commands
