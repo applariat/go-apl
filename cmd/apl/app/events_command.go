@@ -7,6 +7,7 @@ import (
 
 var eventParams apl.EventParams
 
+// NewEventsCommand Creates a cobra command for Events
 func NewEventsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListEvents, "events", "")

@@ -7,6 +7,7 @@ import (
 
 var stackComponentParams apl.StackComponentParams
 
+// NewStackComponentsCommand Creates a cobra command for StackComponents
 func NewStackComponentsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListStackComponents, "stack-components", "")

@@ -30,7 +30,7 @@ func TestUserService_Create(t *testing.T) {
 		Password:  passwd,
 		UserType:  testUserFilter,
 		WorkRole:  "Unknown",
-		RoleId:    "ops-role-id",
+		RoleID:    "ops-role-id",
 	}
 
 	out, _, err := aplClient.Users.Create(in)

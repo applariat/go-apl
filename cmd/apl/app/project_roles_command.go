@@ -7,6 +7,7 @@ import (
 
 var projectRoleParams apl.ProjectRoleParams
 
+// NewProjectRolesCommand Creates a cobra command for ProjectRoles
 func NewProjectRolesCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListProjectRoles, "project-roles", "")

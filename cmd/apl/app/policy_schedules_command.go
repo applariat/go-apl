@@ -7,6 +7,7 @@ import (
 
 var policyScheduleParams apl.PolicyScheduleParams
 
+// NewPolicySchedulesCommand Creates a cobra command for PolicySchedules
 func NewPolicySchedulesCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListPolicySchedules, "policy-schedules", "")

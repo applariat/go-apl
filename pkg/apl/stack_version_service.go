@@ -20,6 +20,7 @@ func NewStackVersionsService(sling *sling.Sling) *StackVersionService {
 	}
 }
 
+// StackVersionList represents a list of stack versions per stack
 type StackVersionList struct {
 	StackID       string         `json:"stack_id"`
 	StackVersions []StackVersion `json:"stack_versions"`

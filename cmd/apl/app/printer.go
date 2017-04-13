@@ -66,7 +66,7 @@ func printResults(data interface{}) {
 		}
 
 		// Print apl.APLError
-		if aplError, ok := data.(apl.APLError); ok {
+		if aplError, ok := data.(apl.APIError); ok {
 			data := [][]string{
 				[]string{strconv.Itoa(aplError.StatusCode), aplError.Message},
 			}

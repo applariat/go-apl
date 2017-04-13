@@ -50,7 +50,7 @@ type UserCreateInput struct {
 	Password  string `json:"password"`
 	Phone     string `json:"phone,omitempty"`
 	//Role            interface{} `json:"role"`
-	RoleId   string      `json:"role_id"`
+	RoleID   string      `json:"role_id"`
 	Projects interface{} `json:"projects,omitempty"`
 }
 

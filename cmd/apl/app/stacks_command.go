@@ -7,6 +7,7 @@ import (
 
 var stackParams apl.StackParams
 
+// NewStacksCommand Creates a cobra command for Stacks
 func NewStacksCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListStacks, "stacks", "")

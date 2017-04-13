@@ -7,6 +7,7 @@ import (
 
 var auditParams apl.AuditParams
 
+// NewAuditsCommand Creates a cobra command for Audits
 func NewAuditsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListAudits, "audits", "")

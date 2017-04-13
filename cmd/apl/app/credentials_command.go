@@ -7,6 +7,7 @@ import (
 
 var credentialsParams apl.CredentialParams
 
+// NewCredentialsCommand Creates a cobra command for Credentials
 func NewCredentialsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListCredentials, "credentials", "")

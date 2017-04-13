@@ -7,6 +7,7 @@ import (
 
 var orgFilterName string
 
+// NewOrgsCommand Creates a cobra command for Orgs
 func NewOrgsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListOrgs, "orgs", "")

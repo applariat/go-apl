@@ -7,6 +7,7 @@ import (
 
 var stackArtifactParams apl.StackArtifactParams
 
+// NewStackArtifactsCommand Creates a cobra command for StackArtifacts
 func NewStackArtifactsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListStackArtifacts, "stack-artifacts", "")

@@ -31,13 +31,13 @@ func inputFileToStruct(v interface{}) error {
 				return err
 			}
 			return nil
-		} else {
-			err = json.Unmarshal(raw, &v)
-			if err != nil {
-				return err
-			}
-			return nil
 		}
+
+		err = json.Unmarshal(raw, &v)
+		if err != nil {
+			return err
+		}
+		return nil
 	}
 	return fmt.Errorf("Problem reading inputfile: %s", inputFile)
 }

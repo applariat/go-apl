@@ -1,11 +1,12 @@
 package apl
 
-// CreateOutput is the PK of the row just created
+// CreateResult is the PK of the row just created
 // Or it's a more complex struct of results.
 type CreateResult struct {
 	Data interface{} `json:"data"`
 }
 
+// ModifyResult is the information returned after a delete/update
 type ModifyResult struct {
 	Skipped   int `json:"skipped"`
 	Deleted   int `json:"deleted"`
@@ -15,7 +16,7 @@ type ModifyResult struct {
 	Inserted  int `json:"inserted"`
 } // `json:"data"`
 
-// ModifyOutput is the information returned after a delete/update
+// ModifyOutput wraps a ModifyResult with 'data'
 type ModifyOutput struct {
 	ModifyResult `json:"data"`
 }
@@ -51,6 +52,7 @@ type MetaData struct {
 	Icon        string `json:"icon,omitempty"`
 } // `json:"meta_data"`
 
+// Releases ...
 type Releases struct {
 	ID       string `json:"id"`
 	Version  int    `json:"version"`
