@@ -7,6 +7,7 @@ import (
 
 var workloadParams apl.WorkloadParams
 
+// NewWorkloadsCommand Creates a cobra command for Workloads
 func NewWorkloadsCommand() *cobra.Command {
 	cmd := createListCommand(cmdListWorkloads, "workloads", "")
 	getCmd := createGetCommand(cmdGetWorkloads, "workload", "")

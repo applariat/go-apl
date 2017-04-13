@@ -7,6 +7,7 @@ import (
 
 var locArtifactParams apl.LocArtifactParams
 
+// NewLocArtifactsCommand Creates a cobra command for Location Artifacts
 func NewLocArtifactsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListLocArtifacts, "loc-artifacts", "")

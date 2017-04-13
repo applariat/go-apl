@@ -7,6 +7,7 @@ import (
 
 var componentParams apl.ComponentParams
 
+// NewComponentsCommand Creates a cobra command for Components
 func NewComponentsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListComponents, "components", "")

@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewTypesCommand Creates a cobra command for Types
 func NewTypesCommand() *cobra.Command {
 	cmd := createListCommand(cmdListTypes, "types", "")
 	getCmd := createGetCommand(cmdGetTypes, "type", "")

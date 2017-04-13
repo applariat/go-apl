@@ -7,6 +7,7 @@ import (
 
 var locDeployParams apl.LocDeployParams
 
+// NewLocDeploysCommand Creates a cobra command for Deployment Locations
 func NewLocDeploysCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListLocDeploys, "loc-deploys", "")

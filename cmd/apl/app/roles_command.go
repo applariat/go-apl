@@ -7,6 +7,7 @@ import (
 
 var roleParams apl.RoleParams
 
+// NewRolesCommand Creates a cobra command for Roles
 func NewRolesCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListRoles, "roles", "")

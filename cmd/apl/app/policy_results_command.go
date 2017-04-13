@@ -7,6 +7,7 @@ import (
 
 var policyResultParams apl.PolicyResultParams
 
+// NewPolicyResultsCommand Creates a cobra command for PolicyResults
 func NewPolicyResultsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListPolicyResults, "policy-results", "")
