@@ -5,52 +5,37 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	policyScheduleFilterName        string
-	policyScheduleFilteResourceID   string
-	policyScheduleFilteResourceType string
-	policyScheduleFiltePolicyID     string
-	policyScheduleFilteStatus       string
+var policyScheduleParams apl.PolicyScheduleParams
 
-	policySchedulesCmd       = createListCommand(cmdListPolicySchedules, "policy-schedules", "")
-	policySchedulesGetCmd    = createGetCommand(cmdGetPolicySchedules, "policy-schedule", "")
-	policySchedulesCreateCmd = createCreateCommand(cmdCreatePolicySchedules, "policy-schedule", "")
-	policySchedulesUpdateCmd = createUpdateCommand(cmdUpdatePolicySchedules, "policy-schedule", "")
-	policySchedulesDeleteCmd = createDeleteCommand(cmdDeletePolicySchedules, "policy-schedule", "")
-)
+func NewPolicySchedulesCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListPolicySchedules, "policy-schedules", "")
+	getCmd := createGetCommand(cmdGetPolicySchedules, "policy-schedule", "")
+	createCmd := createCreateCommand(cmdCreatePolicySchedules, "policy-schedule", "")
+	updateCmd := createUpdateCommand(cmdUpdatePolicySchedules, "policy-schedule", "")
+	deleteCmd := createDeleteCommand(cmdDeletePolicySchedules, "policy-schedule", "")
 
 	// command flags
-	policySchedulesCmd.Flags().StringVar(&policyScheduleFilterName, "name", "", "Filter policy-schedules by name")
-	policySchedulesCmd.Flags().StringVar(&policyScheduleFilteResourceID, "resource-id", "", "Filter policy-schedules by resource_id")
-	policySchedulesCmd.Flags().StringVar(&policyScheduleFilteResourceType, "resource-type", "", "Filter policy-schedules by resource_type")
-	policySchedulesCmd.Flags().StringVar(&policyScheduleFiltePolicyID, "policy-id", "", "Filter policy-schedules by policy_id")
-	policySchedulesCmd.Flags().StringVar(&policyScheduleFilteStatus, "status", "", "Filter policy-schedules by status")
+	cmd.Flags().StringVar(&policyScheduleParams.Name, "name", "", "Filter policy-schedules by name")
+	cmd.Flags().StringVar(&policyScheduleParams.ResourceID, "resource-id", "", "Filter policy-schedules by resource_id")
+	cmd.Flags().StringVar(&policyScheduleParams.ResourceType, "resource-type", "", "Filter policy-schedules by resource_type")
+	cmd.Flags().StringVar(&policyScheduleParams.PolicyID, "policy-id", "", "Filter policy-schedules by policy_id")
+	cmd.Flags().StringVar(&policyScheduleParams.Status, "status", "", "Filter policy-schedules by status")
 
 	// add sub commands
-	policySchedulesCmd.AddCommand(policySchedulesGetCmd)
-	policySchedulesCmd.AddCommand(policySchedulesCreateCmd)
-	policySchedulesCmd.AddCommand(policySchedulesUpdateCmd)
-	policySchedulesCmd.AddCommand(policySchedulesDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(policySchedulesCmd)
+	return cmd
 }
 
 // cmdListPolicySchedules returns a list of policySchedules
 func cmdListPolicySchedules(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.PolicyScheduleParams{
-		Name:         policyScheduleFilterName,
-		ResourceID:   policyScheduleFilteResourceID,
-		ResourceType: policyScheduleFilteResourceType,
-		PolicyID:     policyScheduleFiltePolicyID,
-		Status:       policyScheduleFilteStatus,
-	}
-
-	output := runListCommand(params, aplSvc.PolicySchedules.List)
+	output := runListCommand(&policyScheduleParams, aplSvc.PolicySchedules.List)
 
 	if output != nil {
 		fields := []string{"ID", "Name", "ResourceType", "Status", "CreatedTime"}

@@ -7,24 +7,25 @@ import (
 	"os"
 )
 
-var (
-	outputFolder  string
-	genDocCommand = &cobra.Command{
+var genDocsOutputFolder string
+
+func NewGenerateDocumentationCommand() *cobra.Command {
+
+	cmd := &cobra.Command{
 		Use:   "gen-docs",
 		Short: "Generate markdown documentation",
 		Run: func(cmd *cobra.Command, args []string) {
-			if _, err := os.Stat(outputFolder); err != nil {
+			if _, err := os.Stat(genDocsOutputFolder); err != nil {
 				if os.IsNotExist(err) {
-					fmt.Println("Directory not found", outputFolder)
+					fmt.Println("Directory not found", genDocsOutputFolder)
 					return
 				}
 			}
-			doc.GenMarkdownTree(AppLariatCmd, outputFolder)
+			doc.GenMarkdownTree(AppLariatCmd, genDocsOutputFolder)
 		},
 	}
-)
 
-func init() {
-	genDocCommand.Flags().StringVar(&outputFolder, "doc-dir", "docs", "The directory to write docs to")
-	AppLariatCmd.AddCommand(genDocCommand)
+	cmd.Flags().StringVar(&genDocsOutputFolder, "doc-dir", "docs", "The directory to write docs to")
+
+	return cmd
 }

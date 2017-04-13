@@ -5,37 +5,28 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	projectRoleFilterUserID    string
-	projectRoleFilterProjectID string
+var projectRoleParams apl.ProjectRoleParams
 
-	projectRolesCmd    = createListCommand(cmdListProjectRoles, "project-roles", "")
-	projectRolesGetCmd = createGetCommand(cmdGetProjectRoles, "project-role", "")
-)
+func NewProjectRolesCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListProjectRoles, "project-roles", "")
+	getCmd := createGetCommand(cmdGetProjectRoles, "project-role", "")
 
 	// command flags
-	projectRolesCmd.Flags().StringVar(&projectRoleFilterUserID, "user-id", "", "Filter project-roles by user_id")
-	projectRolesCmd.Flags().StringVar(&projectRoleFilterProjectID, "project-id", "", "Filter project-roles by project_id")
+	cmd.Flags().StringVar(&projectRoleParams.UserID, "user-id", "", "Filter project-roles by user_id")
+	cmd.Flags().StringVar(&projectRoleParams.ProjectID, "project-id", "", "Filter project-roles by project_id")
 
 	// add sub commands
-	projectRolesCmd.AddCommand(projectRolesGetCmd)
+	cmd.AddCommand(getCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(projectRolesCmd)
+	return cmd
 }
 
 // cmdListProjectRoles returns a list of projectRoles
 func cmdListProjectRoles(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.ProjectRoleParams{
-		UserID:    projectRoleFilterUserID,
-		ProjectID: projectRoleFilterProjectID,
-	}
-
-	output := runListCommand(params, aplSvc.ProjectRoles.List)
+	output := runListCommand(&projectRoleParams, aplSvc.ProjectRoles.List)
 
 	if output != nil {
 		fields := []string{"ID", "UserID", "ProjectID", "CreatedTime"}

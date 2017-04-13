@@ -5,25 +5,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	orgFilterName string
+var orgFilterName string
 
-	orgsCmd       = createListCommand(cmdListOrgs, "orgs", "")
-	orgsGetCmd    = createGetCommand(cmdGetOrgs, "org", "")
-	orgsUpdateCmd = createUpdateCommand(cmdUpdateOrgs, "org", "")
-)
+func NewOrgsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListOrgs, "orgs", "")
+	getCmd := createGetCommand(cmdGetOrgs, "org", "")
+	updateCmd := createUpdateCommand(cmdUpdateOrgs, "org", "")
 
 	// command flags
-	orgsCmd.Flags().StringVar(&orgFilterName, "name", "", "Filter orgs by name")
+	cmd.Flags().StringVar(&orgFilterName, "name", "", "Filter orgs by name")
 
 	// add sub commands
-	orgsCmd.AddCommand(orgsGetCmd)
-	orgsCmd.AddCommand(orgsUpdateCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(updateCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(orgsCmd)
+	return cmd
 }
 
 // cmdListOrgs returns a list of orgs

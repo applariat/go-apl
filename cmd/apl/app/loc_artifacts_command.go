@@ -5,61 +5,40 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	locArtifactFilterName               string
-	locArtifactFilterLocArtifactsType   string
-	locArtifactFilterBucket             string
-	locArtifactFilterCredentialID       string
-	locArtifactFilterCredentialType     string
-	locArtifactFilterSecretCredentialID string
-	locArtifactFilterRegistryURI        string
-	locArtifactFilterURL                string
+var locArtifactParams apl.LocArtifactParams
 
-	locArtifactCmd       = createListCommand(cmdListLocArtifacts, "loc-artifacts", "")
-	locArtifactGetCmd    = createGetCommand(cmdGetLocArtifacts, "loc-artifact", "")
-	locArtifactCreateCmd = createCreateCommand(cmdCreateLocArtifacts, "loc_artifact", "")
-	locArtifactUpdateCmd = createUpdateCommand(cmdUpdateLocArtifacts, "loc_artifact", "")
-	locArtifactDeleteCmd = createDeleteCommand(cmdDeleteLocArtifacts, "loc_artifact", "")
-)
+func NewLocArtifactsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListLocArtifacts, "loc-artifacts", "")
+	getCmd := createGetCommand(cmdGetLocArtifacts, "loc-artifact", "")
+	createCmd := createCreateCommand(cmdCreateLocArtifacts, "loc_artifact", "")
+	updateCmd := createUpdateCommand(cmdUpdateLocArtifacts, "loc_artifact", "")
+	deleteCmd := createDeleteCommand(cmdDeleteLocArtifacts, "loc_artifact", "")
 
 	// command flags
-	locArtifactCmd.Flags().StringVar(&locArtifactFilterName, "name", "", "Filter loc_artifacts by name")
-	locArtifactCmd.Flags().StringVar(&locArtifactFilterLocArtifactsType, "loc-artifacts-type", "", "Filter loc_artifacts by loc_artifacts_type")
-	locArtifactCmd.Flags().StringVar(&locArtifactFilterBucket, "bucket", "", "Filter loc_artifacts by bucket")
-	locArtifactCmd.Flags().StringVar(&locArtifactFilterCredentialID, "credential-id", "", "Filter loc_artifacts by credential_id")
-	locArtifactCmd.Flags().StringVar(&locArtifactFilterCredentialType, "credential-type", "", "Filter loc_artifacts by credential_type")
-	locArtifactCmd.Flags().StringVar(&locArtifactFilterSecretCredentialID, "secret-credential-id", "", "Filter loc_artifacts by secret_credential_id")
-	locArtifactCmd.Flags().StringVar(&locArtifactFilterRegistryURI, "registry-uri", "", "Filter loc_artifacts by registry_uri")
-	locArtifactCmd.Flags().StringVar(&locArtifactFilterURL, "url", "", "Filter loc_artifacts by url")
+	cmd.Flags().StringVar(&locArtifactParams.Name, "name", "", "Filter loc_artifacts by name")
+	cmd.Flags().StringVar(&locArtifactParams.LocArtifactsType, "loc-artifacts-type", "", "Filter loc_artifacts by loc_artifacts_type")
+	cmd.Flags().StringVar(&locArtifactParams.Bucket, "bucket", "", "Filter loc_artifacts by bucket")
+	cmd.Flags().StringVar(&locArtifactParams.CredentialID, "credential-id", "", "Filter loc_artifacts by credential_id")
+	cmd.Flags().StringVar(&locArtifactParams.CredentialType, "credential-type", "", "Filter loc_artifacts by credential_type")
+	cmd.Flags().StringVar(&locArtifactParams.SecretCredentialID, "secret-credential-id", "", "Filter loc_artifacts by secret_credential_id")
+	cmd.Flags().StringVar(&locArtifactParams.RegistryURI, "registry-uri", "", "Filter loc_artifacts by registry_uri")
+	cmd.Flags().StringVar(&locArtifactParams.URL, "url", "", "Filter loc_artifacts by url")
 
 	// add sub commands
-	locArtifactCmd.AddCommand(locArtifactGetCmd)
-	locArtifactCmd.AddCommand(locArtifactCreateCmd)
-	locArtifactCmd.AddCommand(locArtifactUpdateCmd)
-	locArtifactCmd.AddCommand(locArtifactDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(locArtifactCmd)
+	return cmd
 }
 
 // cmdListLocArtifacts returns a list of loc_artifacts
 func cmdListLocArtifacts(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.LocArtifactParams{
-		Name:               locArtifactFilterName,
-		LocArtifactsType:   locArtifactFilterLocArtifactsType,
-		Bucket:             locArtifactFilterBucket,
-		CredentialID:       locArtifactFilterCredentialID,
-		CredentialType:     locArtifactFilterCredentialType,
-		SecretCredentialID: locArtifactFilterSecretCredentialID,
-		RegistryURI:        locArtifactFilterRegistryURI,
-		URL:                locArtifactFilterURL,
-	}
-
-	output := runListCommand(params, aplSvc.LocArtifacts.List)
+	output := runListCommand(&locArtifactParams, aplSvc.LocArtifacts.List)
 
 	if output != nil {
 		fields := []string{"ID", "Name", "LocArtifactsType", "CreatedTime"}

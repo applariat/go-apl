@@ -5,53 +5,35 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	userFilterFirstName string
-	userFilterLastName  string
-	userFilterUserType  string
-	userFilterWorkRole  string
-	userFilterEmail     string
+var userParams apl.UserParams
 
-	usersCmd       = createListCommand(cmdListUsers, "users", "")
-	usersGetCmd    = createGetCommand(cmdGetUsers, "user", "")
-	usersCreateCmd = createCreateCommand(cmdCreateUsers, "user", "")
-	usersUpdateCmd = createUpdateCommand(cmdUpdateUsers, "user", "")
-	usersDeleteCmd = createDeleteCommand(cmdDeleteUsers, "user", "")
-)
-
-func init() {
+func NewUsersCommand() *cobra.Command {
+	cmd := createListCommand(cmdListUsers, "users", "")
+	getCmd := createGetCommand(cmdGetUsers, "user", "")
+	createCmd := createCreateCommand(cmdCreateUsers, "user", "")
+	updateCmd := createUpdateCommand(cmdUpdateUsers, "user", "")
+	deleteCmd := createDeleteCommand(cmdDeleteUsers, "user", "")
 
 	// command flags
-	usersCmd.Flags().StringVar(&userFilterFirstName, "first-name", "", "Filter users by first_name")
-	usersCmd.Flags().StringVar(&userFilterLastName, "last-name", "", "Filter users by last_name")
-	usersCmd.Flags().StringVar(&userFilterUserType, "user-type", "", "Filter users by user_type")
-	usersCmd.Flags().StringVar(&userFilterWorkRole, "work-role", "", "Filter users by work_role")
-	usersCmd.Flags().StringVar(&userFilterEmail, "email", "", "Filter users by email")
+	cmd.Flags().StringVar(&userParams.FirstName, "first-name", "", "Filter users by first_name")
+	cmd.Flags().StringVar(&userParams.LastName, "last-name", "", "Filter users by last_name")
+	cmd.Flags().StringVar(&userParams.UserType, "user-type", "", "Filter users by user_type")
+	cmd.Flags().StringVar(&userParams.WorkRole, "work-role", "", "Filter users by work_role")
+	cmd.Flags().StringVar(&userParams.Email, "email", "", "Filter users by email")
 
 	// add sub commands
-	usersCmd.AddCommand(usersGetCmd)
-	usersCmd.AddCommand(usersCreateCmd)
-	usersCmd.AddCommand(usersUpdateCmd)
-	usersCmd.AddCommand(usersDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(usersCmd)
+	return cmd
 }
 
 // cmdListUsers returns a list of users
 func cmdListUsers(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
-	params := &apl.UserParams{
-		FirstName: userFilterFirstName,
-		LastName:  userFilterLastName,
-		UserType:  userFilterUserType,
-		WorkRole:  userFilterWorkRole,
-		Email:     userFilterEmail,
-	}
-
-	output := runListCommand(params, aplSvc.Users.List)
-
+	output := runListCommand(&userParams, aplSvc.Users.List)
 	if output != nil {
 		fields := []string{"ID", "Email", "FirstName", "LastName", "UserType", "WorkRole", "CreatedTime"}
 		printTableResultsCustom(output.([]apl.User), fields)
@@ -61,9 +43,7 @@ func cmdListUsers(ccmd *cobra.Command, args []string) {
 // cmdGetUsers gets a specified user by user-id
 func cmdGetUsers(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
 	output := runGetCommand(args, aplSvc.Users.Get)
-
 	if output != nil {
 		fields := []string{"ID", "Email", "FirstName", "LastName", "UserType", "WorkRole", "CreatedTime"}
 		printTableResultsCustom(output.(apl.User), fields)

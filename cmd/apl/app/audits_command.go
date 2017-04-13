@@ -5,43 +5,30 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	auditFilterUserID       string
-	auditFilterResourceID   string
-	auditFilterAction       string
-	auditFilterResourceType string
+var auditParams apl.AuditParams
 
-	auditsCmd    = createListCommand(cmdListAudits, "audits", "")
-	auditsGetCmd = createGetCommand(cmdGetAudits, "audit", "")
-)
+func NewAuditsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListAudits, "audits", "")
+	getCmd := createGetCommand(cmdGetAudits, "audit", "")
 
 	// command flags
-	auditsCmd.Flags().StringVar(&auditFilterUserID, "user-id", "", "Filter audits by user-id")
-	auditsCmd.Flags().StringVar(&auditFilterResourceID, "resource-id", "", "Filter audits by resource-id")
-	auditsCmd.Flags().StringVar(&auditFilterAction, "action", "", "Filter audits by action")
-	auditsCmd.Flags().StringVar(&auditFilterResourceType, "resource-type", "", "Filter audits by resource-type")
+	cmd.Flags().StringVar(&auditParams.UserID, "user-id", "", "Filter audits by user-id")
+	cmd.Flags().StringVar(&auditParams.ResourceID, "resource-id", "", "Filter audits by resource-id")
+	cmd.Flags().StringVar(&auditParams.Action, "action", "", "Filter audits by action")
+	cmd.Flags().StringVar(&auditParams.ResourceType, "resource-type", "", "Filter audits by resource-type")
 
 	// add sub commands
-	auditsCmd.AddCommand(auditsGetCmd)
+	cmd.AddCommand(getCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(auditsCmd)
+	return cmd
 }
 
 // cmdListAudits returns a list of audits
 func cmdListAudits(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.AuditParams{
-		UserID:       auditFilterUserID,
-		ResourceID:   auditFilterResourceID,
-		Action:       auditFilterAction,
-		ResourceType: auditFilterResourceType,
-	}
-
-	output := runListCommand(params, aplSvc.Audits.List)
+	output := runListCommand(&auditParams, aplSvc.Audits.List)
 
 	if output != nil {
 		fields := []string{"ID", "Action", "ResourceID", "ResourceType"}
