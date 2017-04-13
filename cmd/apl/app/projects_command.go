@@ -5,40 +5,33 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	projectFilterName string
+var projectParams apl.ProjectParams
 
-	projectsCmd       = createListCommand(cmdListProjects, "projects", "")
-	projectsGetCmd    = createGetCommand(cmdGetProjects, "project", "")
-	projectsCreateCmd = createCreateCommand(cmdCreateProjects, "project", "")
-	projectsUpdateCmd = createUpdateCommand(cmdUpdateProjects, "project", "")
-	projectsDeleteCmd = createDeleteCommand(cmdDeleteProjects, "project", "")
-)
+func NewProjectsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListProjects, "projects", "")
+	getCmd := createGetCommand(cmdGetProjects, "project", "")
+	createCmd := createCreateCommand(cmdCreateProjects, "project", "")
+	updateCmd := createUpdateCommand(cmdUpdateProjects, "project", "")
+	deleteCmd := createDeleteCommand(cmdDeleteProjects, "project", "")
 
-	// command flags
-	projectsCmd.Flags().StringVar(&projectFilterName, "name", "", "Filter projects by name")
+		// command flags
+	cmd.Flags().StringVar(&projectParams.Name, "name", "", "Filter projects by name")
 
 	// add sub commands
-	projectsCmd.AddCommand(projectsGetCmd)
-	projectsCmd.AddCommand(projectsCreateCmd)
-	projectsCmd.AddCommand(projectsUpdateCmd)
-	projectsCmd.AddCommand(projectsDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(projectsCmd)
+	return cmd
 }
 
 // cmdListProjects returns a list of projects
 func cmdListProjects(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.ProjectParams{
-		Name: projectFilterName,
-	}
-
-	output := runListCommand(params, aplSvc.Projects.List)
+	output := runListCommand(&projectParams, aplSvc.Projects.List)
 
 	if output != nil {
 		fields := []string{"ID", "Name", "CreatedTime"}

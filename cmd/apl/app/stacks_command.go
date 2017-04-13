@@ -5,53 +5,32 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	stackFilterName          string
-	stackFilterVersionNumber int
-	stackFilterReleaseNumber int
+var stackParams apl.StackParams
 
-	stacksCmd       = createListCommand(cmdListStacks, "stacks", "")
-	stacksGetCmd    = createGetCommand(cmdGetStacks, "stack", "")
-	stacksCreateCmd = createCreateCommand(cmdCreateStacks, "stack", "")
-	stacksUpdateCmd = createUpdateCommand(cmdUpdateStacks, "stack", "")
-	stacksDeleteCmd = createDeleteCommand(cmdDeleteStacks, "stack", "")
-)
+func NewStacksCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListStacks, "stacks", "")
+	getCmd := createGetCommand(cmdGetStacks, "stack", "")
+	createCmd := createCreateCommand(cmdCreateStacks, "stack", "")
+	updateCmd := createUpdateCommand(cmdUpdateStacks, "stack", "")
+	deleteCmd := createDeleteCommand(cmdDeleteStacks, "stack", "")
 
 	// command flags
-	stacksCmd.Flags().StringVar(&stackFilterName, "name", "", "Filter stacks by name")
-	stacksCmd.Flags().IntVar(&stackFilterVersionNumber, "version-number", -1, "Filter stacks by version_number")
-	stacksCmd.Flags().IntVar(&stackFilterReleaseNumber, "release-number", -1, "Filter stacks by release_number")
+	cmd.Flags().StringVar(&stackParams.Name, "name", "", "Filter stacks by name")
 
 	// add sub commands
-	stacksCmd.AddCommand(stacksGetCmd)
-	stacksCmd.AddCommand(stacksCreateCmd)
-	stacksCmd.AddCommand(stacksUpdateCmd)
-	stacksCmd.AddCommand(stacksDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(stacksCmd)
+	return cmd
 }
 
 // cmdListStacks returns a list of stacks
 func cmdListStacks(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
-	params := &apl.StackParams{
-		Name: stackFilterName,
-	}
-
-	if stackFilterVersionNumber != -1 {
-		params.VersionNumber = stackFilterVersionNumber
-	}
-
-	if stackFilterReleaseNumber != -1 {
-		params.ReleaseNumber = stackFilterReleaseNumber
-	}
-
-	output := runListCommand(params, aplSvc.Stacks.List)
-
+	output := runListCommand(&stackParams, aplSvc.Stacks.List)
 	if output != nil {
 		fields := []string{"ID", "Name", "VersionNumber", "ReleaseNumber", "CreatedTime"}
 		printTableResultsCustom(output.([]apl.Stack), fields)
@@ -61,9 +40,7 @@ func cmdListStacks(ccmd *cobra.Command, args []string) {
 // cmdGetStacks gets a specified stack by stack-id
 func cmdGetStacks(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
 	output := runGetCommand(args, aplSvc.Stacks.Get)
-
 	if output != nil {
 		fields := []string{"ID", "Name", "VersionNumber", "ReleaseNumber", "CreatedTime"}
 		printTableResultsCustom(output.(apl.Stack), fields)

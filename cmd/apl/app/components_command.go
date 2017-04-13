@@ -5,37 +5,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	componentFilterName     string
-	componentFilterCategory string
+var componentParams apl.ComponentParams
 
-	componentsCmd    = createListCommand(cmdListComponents, "components", "")
-	componentsGetCmd = createGetCommand(cmdGetComponents, "component", "")
-)
+func NewComponentsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListComponents, "components", "")
+	getCmd := createGetCommand(cmdGetComponents, "component", "")
 
 	// command flags
-	componentsCmd.Flags().StringVar(&componentFilterName, "name", "", "Filter components by category")
-	componentsCmd.Flags().StringVar(&componentFilterCategory, "category", "", "Filter components by category")
+	cmd.Flags().StringVar(&componentParams.Name, "name", "", "Filter components by category")
+	cmd.Flags().StringVar(&componentParams.Category, "category", "", "Filter components by category")
 
 	// add sub commands
-	componentsCmd.AddCommand(componentsGetCmd)
+	cmd.AddCommand(getCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(componentsCmd)
+	return cmd
+
 }
 
 // cmdListComponents returns a list of components
 func cmdListComponents(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.ComponentParams{
-		Name:     componentFilterName,
-		Category: componentFilterCategory,
-	}
-
-	output := runListCommand(params, aplSvc.Components.List)
+	output := runListCommand(&componentParams, aplSvc.Components.List)
 
 	if output != nil {
 		fields := []string{"ID", "Name", "Category"}

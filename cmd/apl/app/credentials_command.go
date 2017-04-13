@@ -5,43 +5,34 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	credentialFilterName string
-	credentialFilterType string
+var credentialsParams apl.CredentialParams
 
-	credentialsCmd       = createListCommand(cmdListCredentials, "credentials", "")
-	credentialsGetCmd    = createGetCommand(cmdGetCredentials, "credential", "")
-	credentialsCreateCmd = createCreateCommand(cmdCreateCredentials, "credential", "")
-	credentialsUpdateCmd = createUpdateCommand(cmdUpdateCredentials, "credential", "")
-	credentialsDeleteCmd = createDeleteCommand(cmdDeleteCredentials, "credential", "")
-)
+func NewCredentialsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListCredentials, "credentials", "")
+	getCmd := createGetCommand(cmdGetCredentials, "credential", "")
+	createCmd := createCreateCommand(cmdCreateCredentials, "credential", "")
+	updateCmd := createUpdateCommand(cmdUpdateCredentials, "credential", "")
+	deleteCmd := createDeleteCommand(cmdDeleteCredentials, "credential", "")
 
 	// command flags
-	credentialsCmd.Flags().StringVar(&credentialFilterName, "name", "", "Filter credentials by name")
-	credentialsCmd.Flags().StringVar(&credentialFilterType, "credential-type", "", "Filter credentials by type")
+	cmd.Flags().StringVar(&credentialsParams.Name, "name", "", "Filter credentials by name")
+	cmd.Flags().StringVar(&credentialsParams.CredentialType, "credential-type", "", "Filter credentials by type")
 
 	// add sub commands
-	credentialsCmd.AddCommand(credentialsGetCmd)
-	credentialsCmd.AddCommand(credentialsCreateCmd)
-	credentialsCmd.AddCommand(credentialsUpdateCmd)
-	credentialsCmd.AddCommand(credentialsDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(credentialsCmd)
+	return cmd
 }
 
 // cmdListCredentials returns a list of credentials
 func cmdListCredentials(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.CredentialParams{
-		Name:           credentialFilterName,
-		CredentialType: credentialFilterType,
-	}
-
-	output := runListCommand(params, aplSvc.Credentials.List)
+	output := runListCommand(&credentialsParams, aplSvc.Credentials.List)
 
 	if output != nil {
 		fields := []string{"ID", "Name", "CredentialType"}

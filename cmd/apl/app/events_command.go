@@ -3,56 +3,34 @@ package app
 import (
 	"github.com/applariat/go-apl/pkg/apl"
 	"github.com/spf13/cobra"
-	"strconv"
 )
 
-var (
-	eventFilterName       string
-	eventFilterObjectType string
-	eventFilterSource     string
-	eventFilterActive     string
+var eventParams apl.EventParams
 
-	eventsCmd       = createListCommand(cmdListEvents, "events", "")
-	eventsGetCmd    = createGetCommand(cmdGetEvents, "event", "")
-	eventsCreateCmd = createCreateCommand(cmdCreateEvents, "event", "")
-)
+func NewEventsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListEvents, "events", "")
+	getCmd := createGetCommand(cmdGetEvents, "event", "")
+	createCmd := createCreateCommand(cmdCreateEvents, "event", "")
 
 	// command flags
-	eventsCmd.Flags().StringVar(&eventFilterObjectType, "object-type", "", "Filter events by object_type")
-	eventsCmd.Flags().StringVar(&eventFilterSource, "source", "", "Filter events by source")
-	eventsCmd.Flags().StringVar(&eventFilterName, "object-name", "", "Filter events by object_name")
+	cmd.Flags().StringVar(&eventParams.ObjectType, "object-type", "", "Filter events by object_type")
+	cmd.Flags().StringVar(&eventParams.Source, "source", "", "Filter events by source")
+	cmd.Flags().StringVar(&eventParams.ObjectName, "object-name", "", "Filter events by object_name")
+	//cmd.Flags().StringVar(&eventParams.Active, "active", "", "Filter events by active")
 
 	// add sub commands
-	eventsCmd.AddCommand(eventsGetCmd)
-	eventsCmd.AddCommand(eventsCreateCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(eventsCmd)
+	return cmd
 }
 
 // cmdListEvents returns a list of events
 func cmdListEvents(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.EventParams{
-		ObjectName: eventFilterName,
-		ObjectType: eventFilterObjectType,
-		Source:     eventFilterSource,
-	}
-
-	if eventFilterActive != "" {
-		if efa, err := strconv.ParseBool(eventFilterActive); err == nil {
-			params.Active = efa
-		} else {
-			ccmd.Usage()
-			return
-		}
-
-	}
-
-	output := runListCommand(params, aplSvc.Events.List)
+	output := runListCommand(&eventParams, aplSvc.Events.List)
 
 	if output != nil {
 		fields := []string{"ID", "ObjectName", "ObjectType", "Active"}

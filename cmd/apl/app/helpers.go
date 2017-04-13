@@ -248,3 +248,26 @@ func getReflectOutput(response []reflect.Value) (interface{}, *http.Response, er
 
 	return output, resp, err
 }
+
+// check arguments for only one string. Used for get/update/delete sub commands
+func checkCommandHasIDInArgs(args []string, label string) error {
+	l := len(args)
+	if l == 0 {
+		return fmt.Errorf("Missing %s id.", label)
+	}
+	if l > 1 {
+		return fmt.Errorf("Too many arguments provided.")
+	}
+	if args[0] == "" {
+		return fmt.Errorf("Missing %s id.", label)
+	}
+	return nil
+}
+
+// checkListCommandHasNoArgs makes sure there are no args for lists!
+func checkListCommandHasNoArgs(args []string) error {
+	if len(args) > 0 {
+		return fmt.Errorf("Non flag arguments are not permitted in list mode.")
+	}
+	return nil
+}

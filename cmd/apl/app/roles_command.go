@@ -5,45 +5,31 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	roleFilterName        string
-	roleFilterRole        string
-	roleFilterAccessLevel int
+var roleParams apl.RoleParams
 
-	rolesCmd       = createListCommand(cmdListRoles, "roles", "")
-	rolesGetCmd    = createGetCommand(cmdGetRoles, "role", "")
-	rolesUpdateCmd = createUpdateCommand(cmdUpdateRoles, "role", "")
-)
+func NewRolesCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListRoles, "roles", "")
+	getCmd := createGetCommand(cmdGetRoles, "role", "")
+	updateCmd := createUpdateCommand(cmdUpdateRoles, "role", "")
 
 	// command flags
-	rolesCmd.Flags().StringVar(&roleFilterName, "name", "", "Filter roles by name")
-	rolesCmd.Flags().StringVar(&roleFilterRole, "role", "", "Filter roles by role")
-	rolesCmd.Flags().IntVar(&roleFilterAccessLevel, "access-level", -1, "Filter deployments by access_level")
+	cmd.Flags().StringVar(&roleParams.Name, "name", "", "Filter roles by name")
+	cmd.Flags().StringVar(&roleParams.Role, "role", "", "Filter roles by role")
+	//cmd.Flags().IntVar(&roleParams.AccessLevel, "access-level", -1, "Filter deployments by access_level")
 
 	// add sub commands
-	rolesCmd.AddCommand(rolesGetCmd)
-	rolesCmd.AddCommand(rolesUpdateCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(updateCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(rolesCmd)
+	return cmd
 }
 
 // cmdListRoles returns a list of roles
 func cmdListRoles(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.RoleParams{
-		Name: roleFilterName,
-		Role: roleFilterRole,
-	}
-
-	if roleFilterAccessLevel != -1 {
-		params.AccessLevel = roleFilterAccessLevel
-	}
-
-	output := runListCommand(params, aplSvc.Roles.List)
+	output := runListCommand(&roleParams, aplSvc.Roles.List)
 
 	if output != nil {
 		fields := []string{"ID", "Name", "Role", "AccessLevel", "CreatedTime"}

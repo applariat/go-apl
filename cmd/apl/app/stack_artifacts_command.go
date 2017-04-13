@@ -5,62 +5,39 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	stackArtifactFilterName          string
-	stackArtifactFilterLocArtifactID string
-	stackArtifactFilterProjectID     string
-	stackArtifactFilterStackID       string
-	stackArtifactFilterType          string
-	stackArtifactFilterVersion       string
-	stackArtifactFilterArtifactName  string
-	stackArtifactFilterPackage       string
+var stackArtifactParams apl.StackArtifactParams
 
-	stackArtifactsCmd       = createListCommand(cmdListStackArtifacts, "stack-artifacts", "")
-	stackArtifactsGetCmd    = createGetCommand(cmdGetStackArtifacts, "stack-artifact", "")
-	stackArtifactsCreateCmd = createCreateCommand(cmdCreateStackArtifacts, "stack-artifact", "")
-	stackArtifactsUpdateCmd = createUpdateCommand(cmdUpdateStackArtifacts, "stack-artifact", "")
-	stackArtifactsDeleteCmd = createDeleteCommand(cmdDeleteStackArtifacts, "stack-artifact", "")
-)
+func NewStackArtifactsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListStackArtifacts, "stack-artifacts", "")
+	getCmd := createGetCommand(cmdGetStackArtifacts, "stack-artifact", "")
+	createCmd := createCreateCommand(cmdCreateStackArtifacts, "stack-artifact", "")
+	updateCmd := createUpdateCommand(cmdUpdateStackArtifacts, "stack-artifact", "")
+	deleteCmd := createDeleteCommand(cmdDeleteStackArtifacts, "stack-artifact", "")
 
 	// command flags
-	stackArtifactsCmd.Flags().StringVar(&stackArtifactFilterName, "name", "", "Filter stack-artifacts by name")
-	stackArtifactsCmd.Flags().StringVar(&stackArtifactFilterLocArtifactID, "loc-artifact-id", "", "Filter stack-artifacts by loc_artifact_id")
-	stackArtifactsCmd.Flags().StringVar(&stackArtifactFilterProjectID, "project-id", "", "Filter stack-artifacts by project_id")
-	stackArtifactsCmd.Flags().StringVar(&stackArtifactFilterStackID, "stack-id", "", "Filter stack-artifacts by stack_id")
-	stackArtifactsCmd.Flags().StringVar(&stackArtifactFilterType, "type", "", "Filter stack-artifacts by type")
-	stackArtifactsCmd.Flags().StringVar(&stackArtifactFilterVersion, "version", "", "Filter stack-artifacts by version")
-	stackArtifactsCmd.Flags().StringVar(&stackArtifactFilterArtifactName, "artifact-name", "", "Filter stack-artifacts by artifact_name")
-	stackArtifactsCmd.Flags().StringVar(&stackArtifactFilterPackage, "package", "", "Filter stack-artifacts by package")
+	cmd.Flags().StringVar(&stackArtifactParams.Name, "name", "", "Filter stack-artifacts by name")
+	cmd.Flags().StringVar(&stackArtifactParams.LocArtifactID, "loc-artifact-id", "", "Filter stack-artifacts by loc_artifact_id")
+	cmd.Flags().StringVar(&stackArtifactParams.ProjectID, "project-id", "", "Filter stack-artifacts by project_id")
+	cmd.Flags().StringVar(&stackArtifactParams.StackID, "stack-id", "", "Filter stack-artifacts by stack_id")
+	cmd.Flags().StringVar(&stackArtifactParams.Type, "type", "", "Filter stack-artifacts by type")
+	cmd.Flags().StringVar(&stackArtifactParams.Version, "version", "", "Filter stack-artifacts by version")
+	cmd.Flags().StringVar(&stackArtifactParams.ArtifactName, "artifact-name", "", "Filter stack-artifacts by artifact_name")
+	cmd.Flags().StringVar(&stackArtifactParams.Package, "package", "", "Filter stack-artifacts by package")
 
 	// add sub commands
-	stackArtifactsCmd.AddCommand(stackArtifactsGetCmd)
-	stackArtifactsCmd.AddCommand(stackArtifactsCreateCmd)
-	stackArtifactsCmd.AddCommand(stackArtifactsUpdateCmd)
-	stackArtifactsCmd.AddCommand(stackArtifactsDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(stackArtifactsCmd)
+	return cmd
 }
 
 // cmdListStackArtifacts returns a list of stackArtifacts
 func cmdListStackArtifacts(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
-	params := &apl.StackArtifactParams{
-		Name:          stackArtifactFilterName,
-		LocArtifactID: stackArtifactFilterLocArtifactID,
-		ProjectID:     stackArtifactFilterProjectID,
-		StackID:       stackArtifactFilterStackID,
-		Type:          stackArtifactFilterType,
-		Version:       stackArtifactFilterVersion,
-		ArtifactName:  stackArtifactFilterArtifactName,
-		Package:       stackArtifactFilterPackage,
-	}
-
-	output := runListCommand(params, aplSvc.StackArtifacts.List)
-
+	output := runListCommand(&stackArtifactParams, aplSvc.StackArtifacts.List)
 	if output != nil {
 		fields := []string{"ID", "Name", "ArtifactName", "Type", "Version", "Package", "CreatedTime"}
 		printTableResultsCustom(output.([]apl.StackArtifact), fields)
@@ -70,9 +47,7 @@ func cmdListStackArtifacts(ccmd *cobra.Command, args []string) {
 // cmdGetStackArtifacts gets a specified stackArtifact by stackArtifact-id
 func cmdGetStackArtifacts(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
 	output := runGetCommand(args, aplSvc.StackArtifacts.Get)
-
 	if output != nil {
 		fields := []string{"ID", "Name", "ArtifactName", "Type", "Version", "Package", "CreatedTime"}
 		printTableResultsCustom(output.(apl.StackArtifact), fields)

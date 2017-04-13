@@ -5,59 +5,38 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	releaseFilterName           string
-	releaseFilterVersion        string
-	releaseFilterStackID        string
-	releaseFilterStackVersionID string
-	releaseFilterProjectID      string
-	releaseFilterLocImageID     string
-	releaseFilterBuildStatus    string
+var releaseParams apl.ReleaseParams
 
-	releasesCmd       = createListCommand(cmdListReleases, "releases", "")
-	releasesGetCmd    = createGetCommand(cmdGetReleases, "release", "")
-	releasesCreateCmd = createCreateCommand(cmdCreateReleases, "release", "")
-	releasesDeleteCmd = createDeleteCommand(cmdDeleteReleases, "release", "")
-)
+func NewReleasesCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListReleases, "releases", "")
+	getCmd := createGetCommand(cmdGetReleases, "release", "")
+	createCmd := createCreateCommand(cmdCreateReleases, "release", "")
+	deleteCmd := createDeleteCommand(cmdDeleteReleases, "release", "")
 
 	// command flags
-	releasesCmd.Flags().StringVar(&releaseFilterName, "name", "", "Filter releases by name")
-	releasesCmd.Flags().StringVar(&releaseFilterVersion, "version", "", "Filter releases by version")
-	releasesCmd.Flags().StringVar(&releaseFilterStackID, "stack-id", "", "Filter releases by stack_id")
-	releasesCmd.Flags().StringVar(&releaseFilterStackVersionID, "stack-version-id", "", "Filter releases by stack_version_id")
-	releasesCmd.Flags().StringVar(&releaseFilterProjectID, "project-id", "", "Filter releases by project_id")
-	releasesCmd.Flags().StringVar(&releaseFilterLocImageID, "loc-image-id", "", "Filter releases by loc_image_id")
-	releasesCmd.Flags().StringVar(&releaseFilterBuildStatus, "build-status", "", "Filter releases by build_status")
+	cmd.Flags().StringVar(&releaseParams.Name, "name", "", "Filter releases by name")
+	cmd.Flags().StringVar(&releaseParams.Version, "version", "", "Filter releases by version")
+	cmd.Flags().StringVar(&releaseParams.StackID, "stack-id", "", "Filter releases by stack_id")
+	cmd.Flags().StringVar(&releaseParams.StackVersionID, "stack-version-id", "", "Filter releases by stack_version_id")
+	cmd.Flags().StringVar(&releaseParams.ProjectID, "project-id", "", "Filter releases by project_id")
+	cmd.Flags().StringVar(&releaseParams.LocImageID, "loc-image-id", "", "Filter releases by loc_image_id")
+	cmd.Flags().StringVar(&releaseParams.BuildStatus, "build-status", "", "Filter releases by build_status")
 
 	// add sub commands
-	releasesCmd.AddCommand(releasesGetCmd)
-	releasesCmd.AddCommand(releasesCreateCmd)
-	releasesCmd.AddCommand(releasesDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(releasesCmd)
+	return cmd
 }
 
 // cmdListReleases returns a list of releases
 func cmdListReleases(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
-	params := &apl.ReleaseParams{
-		Name:           releaseFilterName,
-		Version:        releaseFilterVersion,
-		StackID:        releaseFilterStackID,
-		StackVersionID: releaseFilterStackVersionID,
-		ProjectID:      releaseFilterProjectID,
-		LocImageID:     releaseFilterLocImageID,
-		BuildStatus:    releaseFilterBuildStatus,
-	}
-
-	output := runListCommand(params, aplSvc.Releases.List)
-
+	output := runListCommand(&releaseParams, aplSvc.Releases.List)
 	if output != nil {
-		fields := []string{"ID", "Version", "BuildStatus", "CreatedTime"}
+		fields := []string{"ID", "StackID", "Version", "CreatedTime"}
 		printTableResultsCustom(output.([]apl.Release), fields)
 	}
 }
@@ -65,11 +44,9 @@ func cmdListReleases(ccmd *cobra.Command, args []string) {
 // cmdGetReleases gets a specified release by release-id
 func cmdGetReleases(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
 	output := runGetCommand(args, aplSvc.Releases.Get)
-
 	if output != nil {
-		fields := []string{"ID", "Version", "BuildStatus", "CreatedTime"}
+		fields := []string{"ID", "StackID", "Version", "CreatedTime"}
 		printTableResultsCustom(output.(apl.Release), fields)
 	}
 }

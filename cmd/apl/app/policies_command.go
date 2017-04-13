@@ -5,52 +5,37 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	policiesFilterName             string
-	policiesFilterPolicyType       string
-	policiesFilterPolicyGroup      string
-	policiesFilterPolicyTemplateID string
-	policiesFilterReturn           string
+var policyParams apl.PolicyParams
 
-	policiessCmd       = createListCommand(cmdListPoliciess, "policies", "")
-	policiessGetCmd    = createGetCommand(cmdGetPoliciess, "policy", "")
-	policiessCreateCmd = createCreateCommand(cmdCreatePoliciess, "policy", "")
-	policiessUpdateCmd = createUpdateCommand(cmdUpdatePoliciess, "policy", "")
-	policiessDeleteCmd = createDeleteCommand(cmdDeletePoliciess, "policy", "")
-)
+func NewPoliciesCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListPolicies, "policies", "")
+	getCmd := createGetCommand(cmdGetPolicies, "policy", "")
+	createCmd := createCreateCommand(cmdCreatePolicies, "policy", "")
+	updateCmd := createUpdateCommand(cmdUpdatePolicies, "policy", "")
+	deleteCmd := createDeleteCommand(cmdDeletePolicies, "policy", "")
 
 	// command flags
-	policiessCmd.Flags().StringVar(&policiesFilterName, "name", "", "Filter policiess by name")
-	policiessCmd.Flags().StringVar(&policiesFilterPolicyType, "policy-type", "", "Filter policiess by policy_type")
-	policiessCmd.Flags().StringVar(&policiesFilterPolicyGroup, "policy-group", "", "Filter policiess by policy_group")
-	policiessCmd.Flags().StringVar(&policiesFilterPolicyTemplateID, "policy-template-id", "", "Filter policiess by policy_template_id")
-	policiessCmd.Flags().StringVar(&policiesFilterReturn, "return", "", "Filter policiess by return")
+	cmd.Flags().StringVar(&policyParams.Name, "name", "", "Filter policiess by name")
+	cmd.Flags().StringVar(&policyParams.PolicyType, "policy-type", "", "Filter policiess by policy_type")
+	cmd.Flags().StringVar(&policyParams.PolicyGroup, "policy-group", "", "Filter policiess by policy_group")
+	cmd.Flags().StringVar(&policyParams.PolicyTemplateID, "policy-template-id", "", "Filter policiess by policy_template_id")
+	cmd.Flags().StringVar(&policyParams.Return, "return", "", "Filter policiess by return")
 
 	// add sub commands
-	policiessCmd.AddCommand(policiessGetCmd)
-	policiessCmd.AddCommand(policiessCreateCmd)
-	policiessCmd.AddCommand(policiessUpdateCmd)
-	policiessCmd.AddCommand(policiessDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(policiessCmd)
+	return cmd
 }
 
-// cmdListPoliciess returns a list of policiess
-func cmdListPoliciess(ccmd *cobra.Command, args []string) {
+// cmdListPolicies returns a list of policies
+func cmdListPolicies(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.PolicyParams{
-		Name:             policiesFilterName,
-		PolicyType:       policiesFilterPolicyType,
-		PolicyGroup:      policiesFilterPolicyGroup,
-		PolicyTemplateID: policiesFilterPolicyTemplateID,
-		Return:           policiesFilterReturn,
-	}
-
-	output := runListCommand(params, aplSvc.Policies.List)
+	output := runListCommand(&policyParams, aplSvc.Policies.List)
 
 	if output != nil {
 		fields := []string{"ID", "Name", "PolicyType", "PolicyGroup", "CreatedTime"}
@@ -58,8 +43,8 @@ func cmdListPoliciess(ccmd *cobra.Command, args []string) {
 	}
 }
 
-// cmdGetPoliciess gets a specified policies by policies-id
-func cmdGetPoliciess(ccmd *cobra.Command, args []string) {
+// cmdGetPolicies gets a specified policies by policies-id
+func cmdGetPolicies(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
 	output := runGetCommand(args, aplSvc.Policies.Get)
@@ -70,19 +55,19 @@ func cmdGetPoliciess(ccmd *cobra.Command, args []string) {
 	}
 }
 
-func cmdCreatePoliciess(ccmd *cobra.Command, args []string) {
+func cmdCreatePolicies(ccmd *cobra.Command, args []string) {
 	aplSvs := apl.NewClient()
 	in := &apl.PolicyCreateInput{}
 	runCreateCommand(in, aplSvs.Policies.Create)
 }
 
-func cmdUpdatePoliciess(ccmd *cobra.Command, args []string) {
+func cmdUpdatePolicies(ccmd *cobra.Command, args []string) {
 	aplSvs := apl.NewClient()
 	in := &apl.PolicyUpdateInput{}
 	runUpdateCommand(args, in, aplSvs.Policies.Update)
 }
 
-func cmdDeletePoliciess(ccmd *cobra.Command, args []string) {
+func cmdDeletePolicies(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 	runDeleteCommand(args, aplSvc.Policies.Delete)
 }

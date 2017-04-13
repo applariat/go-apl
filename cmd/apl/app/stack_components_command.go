@@ -5,59 +5,39 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	stackComponentFilterName               string
-	stackComponentFilterComponentID        string
-	stackComponentFilterComponentVersionID string
-	stackComponentFilterStackID            string
-	stackComponentFilterStackVersionID     string
-	stackComponentFilterProjectID          string
+var stackComponentParams apl.StackComponentParams
 
-	stackComponentsCmd       = createListCommand(cmdListStackComponents, "stack-components", "")
-	stackComponentsGetCmd    = createGetCommand(cmdGetStackComponents, "stack-component", "")
-	stackComponentsCreateCmd = createCreateCommand(cmdCreateStackComponents, "stack-component", "")
-	stackComponentsUpdateCmd = createUpdateCommand(cmdUpdateStackComponents, "stack-component", "")
-	stackComponentsDeleteCmd = createDeleteCommand(cmdDeleteStackComponents, "stack-component", "")
-)
+func NewStackComponentsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListStackComponents, "stack-components", "")
+	getCmd := createGetCommand(cmdGetStackComponents, "stack-component", "")
+	createCmd := createCreateCommand(cmdCreateStackComponents, "stack-component", "")
+	updateCmd := createUpdateCommand(cmdUpdateStackComponents, "stack-component", "")
+	deleteCmd := createDeleteCommand(cmdDeleteStackComponents, "stack-component", "")
 
 	// command flags
-	stackComponentsCmd.Flags().StringVar(&stackComponentFilterName, "name", "", "Filter stack-components by name")
-	stackComponentsCmd.Flags().StringVar(&stackComponentFilterComponentID, "component-id", "", "Filter stack-components by component_id")
-	stackComponentsCmd.Flags().StringVar(&stackComponentFilterComponentVersionID, "component-version-id", "", "Filter stack-components by component_version_id")
-	stackComponentsCmd.Flags().StringVar(&stackComponentFilterStackID, "stack-id", "", "Filter stack-components by stack_id")
-	stackComponentsCmd.Flags().StringVar(&stackComponentFilterStackVersionID, "stack-version-id", "", "Filter stack-components by stack_version_id")
-	stackComponentsCmd.Flags().StringVar(&stackComponentFilterProjectID, "project-id", "", "Filter stack-components by project_id")
+	cmd.Flags().StringVar(&stackComponentParams.Name, "name", "", "Filter stack-components by name")
+	cmd.Flags().StringVar(&stackComponentParams.ComponentID, "component-id", "", "Filter stack-components by component_id")
+	cmd.Flags().StringVar(&stackComponentParams.ComponentVersionID, "component-version-id", "", "Filter stack-components by component_version_id")
+	cmd.Flags().StringVar(&stackComponentParams.StackID, "stack-id", "", "Filter stack-components by stack_id")
+	cmd.Flags().StringVar(&stackComponentParams.StackVersionID, "stack-version-id", "", "Filter stack-components by stack_version_id")
+	cmd.Flags().StringVar(&stackComponentParams.ProjectID, "project-id", "", "Filter stack-components by project_id")
 
 	// add sub commands
-	stackComponentsCmd.AddCommand(stackComponentsGetCmd)
-	stackComponentsCmd.AddCommand(stackComponentsCreateCmd)
-	stackComponentsCmd.AddCommand(stackComponentsUpdateCmd)
-	stackComponentsCmd.AddCommand(stackComponentsDeleteCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
+	cmd.AddCommand(updateCmd)
+	cmd.AddCommand(deleteCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(stackComponentsCmd)
+	return cmd
 }
 
 // cmdListStackComponents returns a list of stackComponents
 func cmdListStackComponents(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
-	params := &apl.StackComponentParams{
-		Name:               stackComponentFilterName,
-		ComponentID:        stackComponentFilterComponentID,
-		ComponentVersionID: stackComponentFilterComponentVersionID,
-		StackID:            stackComponentFilterStackID,
-		StackVersionID:     stackComponentFilterStackVersionID,
-		ProjectID:          stackComponentFilterProjectID,
-	}
-
-	output := runListCommand(params, aplSvc.StackComponents.List)
-
+	output := runListCommand(&stackComponentParams, aplSvc.StackComponents.List)
 	if output != nil {
 		fields := []string{"ID", "Name", "ComponentID", "ComponentVersionID", "CreatedTime"}
-
 		printTableResultsCustom(output.([]apl.StackComponent), fields)
 	}
 }
@@ -65,9 +45,7 @@ func cmdListStackComponents(ccmd *cobra.Command, args []string) {
 // cmdGetStackComponents gets a specified stackComponent by stackComponent-id
 func cmdGetStackComponents(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
-
 	output := runGetCommand(args, aplSvc.StackComponents.Get)
-
 	if output != nil {
 		fields := []string{"ID", "Name", "ComponentID", "ComponentVersionID", "CreatedTime"}
 		printTableResultsCustom(output.(apl.StackComponent), fields)

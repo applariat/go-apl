@@ -5,42 +5,32 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	policyResultFilterPolicyID         string
-	policyResultFilterPolicyScheduleID string
-	policyResultFilterProjectID        string
+var policyResultParams apl.PolicyResultParams
 
-	policyResultsCmd       = createListCommand(cmdListPolicyResults, "policy-results", "")
-	policyResultsGetCmd    = createGetCommand(cmdGetPolicyResults, "policy-result", "")
-	policyResultsCreateCmd = createCreateCommand(cmdCreatePolicyResults, "policy-result", "")
-)
+func NewPolicyResultsCommand() *cobra.Command {
 
-func init() {
+	cmd := createListCommand(cmdListPolicyResults, "policy-results", "")
+	getCmd := createGetCommand(cmdGetPolicyResults, "policy-result", "")
+	createCmd := createCreateCommand(cmdCreatePolicyResults, "policy-result", "")
+
 
 	// command flags
-	policyResultsCmd.Flags().StringVar(&policyResultFilterPolicyID, "policy-id", "", "Filter policy-results by policy_id")
-	policyResultsCmd.Flags().StringVar(&policyResultFilterPolicyScheduleID, "policy-schedule-id", "", "Filter policy-results by policy_schedule_id")
-	policyResultsCmd.Flags().StringVar(&policyResultFilterProjectID, "project-id", "", "Filter policy-results by project_id")
+	cmd.Flags().StringVar(&policyResultParams.PolicyID, "policy-id", "", "Filter policy-results by policy_id")
+	cmd.Flags().StringVar(&policyResultParams.PolicyScheduleID, "policy-schedule-id", "", "Filter policy-results by policy_schedule_id")
+	cmd.Flags().StringVar(&policyResultParams.ProjectID, "project-id", "", "Filter policy-results by project_id")
 
 	// add sub commands
-	policyResultsCmd.AddCommand(policyResultsGetCmd)
-	policyResultsCmd.AddCommand(policyResultsCreateCmd)
+	cmd.AddCommand(getCmd)
+	cmd.AddCommand(createCmd)
 
-	// Add this command to the main command
-	AppLariatCmd.AddCommand(policyResultsCmd)
+	return cmd
 }
 
 // cmdListPolicyResults returns a list of policyResults
 func cmdListPolicyResults(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	params := &apl.PolicyResultParams{
-		PolicyID:         policyResultFilterPolicyID,
-		PolicyScheduleID: policyResultFilterPolicyScheduleID,
-		ProjectID:        policyResultFilterProjectID,
-	}
-
-	output := runListCommand(params, aplSvc.PolicyResults.List)
+	output := runListCommand(&policyResultParams, aplSvc.PolicyResults.List)
 
 	if output != nil {
 		fields := []string{"ID", "PolicyID", "PolicyScheduleID", "ProjectID", "CreatedTime"}
