@@ -9,6 +9,7 @@ import (
 
 var genDocsOutputFolder string
 
+// NewGenerateDocumentationCommand Creates a cobra command for GenerateDocumentation
 func NewGenerateDocumentationCommand() *cobra.Command {
 
 	cmd := &cobra.Command{

@@ -13,6 +13,7 @@ type Config struct {
 	Password string
 }
 
+// APLConfig holds the configuration values used to connect to the API
 var APLConfig Config
 
 func init() {
@@ -23,7 +24,8 @@ func init() {
 	}
 }
 
-// ProcessConfigs ...
+// ProcessConfigs tries to load configs from the ~/.apl/config.[toml|json|yaml] file. Those values can be overridden
+// by the environment variables.
 func ProcessConfigs() error {
 
 	// Check to see if already processed

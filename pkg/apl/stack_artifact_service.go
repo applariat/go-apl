@@ -36,7 +36,7 @@ type StackArtifact struct {
 	Type            string `json:"type"`
 }
 
-// StackArtifactInput is used for the update/create of stack_artifacts
+// StackArtifactCreateInput is used for the create of stack_artifacts
 type StackArtifactCreateInput struct {
 	ID            string `json:"id,omitempty"`
 	LocArtifactID string `json:"loc_artifact_id"`
@@ -48,6 +48,7 @@ type StackArtifactCreateInput struct {
 	Version string `json:"version,omitempty"`
 }
 
+// StackArtifactUpdateInput is used to update stack artifacts
 type StackArtifactUpdateInput struct {
 	Name         string `json:"name,omitempty"`
 	ArtifactName string `json:"artifact_name,omitempty"`

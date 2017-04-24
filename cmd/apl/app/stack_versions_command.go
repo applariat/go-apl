@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// NewStackVersionsCommand Creates a cobra command for StackVersions
 func NewStackVersionsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListStackVersions, "stack-versions", "")

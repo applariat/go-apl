@@ -44,7 +44,7 @@ type Deployment struct {
 	CreatedByUser        interface{} `json:"created_by_user"`
 }
 
-// DeploymentInput is used for the update/create of deployments
+// DeploymentCreateInput is used for the create of deployments
 type DeploymentCreateInput struct {
 	ID              string      `json:"id,omitempty"`
 	Name            string      `json:"name"`
@@ -57,6 +57,7 @@ type DeploymentCreateInput struct {
 	Components      interface{} `json:"components,omitempty"`
 }
 
+// DeploymentUpdateInput used to update a deployment
 type DeploymentUpdateInput struct {
 	Name                 string `json:"name,omitempty"`
 	LeaseType            string `json:"lease_type,omitempty"`

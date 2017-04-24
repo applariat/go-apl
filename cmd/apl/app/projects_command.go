@@ -7,6 +7,7 @@ import (
 
 var projectParams apl.ProjectParams
 
+// NewProjectsCommand Creates a cobra command for Projects
 func NewProjectsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListProjects, "projects", "")

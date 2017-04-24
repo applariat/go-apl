@@ -7,6 +7,7 @@ import (
 
 var userParams apl.UserParams
 
+// NewUsersCommand Creates a cobra command for Users
 func NewUsersCommand() *cobra.Command {
 	cmd := createListCommand(cmdListUsers, "users", "")
 	getCmd := createGetCommand(cmdGetUsers, "user", "")

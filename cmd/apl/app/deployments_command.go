@@ -7,6 +7,7 @@ import (
 
 var deploymentParams apl.DeploymentParams
 
+// NewDeploymentsCommand Creates a cobra command for Deployments
 func NewDeploymentsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListDeployments, "deployments", "")

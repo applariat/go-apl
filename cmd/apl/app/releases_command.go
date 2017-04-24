@@ -7,6 +7,7 @@ import (
 
 var releaseParams apl.ReleaseParams
 
+// NewReleasesCommand Creates a cobra command for Releases
 func NewReleasesCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListReleases, "releases", "")

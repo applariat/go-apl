@@ -8,7 +8,8 @@ var (
 	printerType string
 	inputFile   string
 
-	// APLCmd ...
+	// AppLariatCmd The appLariat (apl) Command Line Interface is a unified tool to manage your appLariat service.
+	// You can control all appLariat services from the command line and automate them through scripts.
 	AppLariatCmd = &cobra.Command{
 		Use:   "apl",
 		Short: "apl",

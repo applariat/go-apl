@@ -118,9 +118,10 @@ func runListCommand(params interface{}, callMe interface{}) interface{} {
 	// We return output if it needs to be printed as a table
 	if shouldPrintTable() {
 		return output
-	} else {
-		printResults(output)
 	}
+
+	printResults(output)
+
 	return nil
 }
 
@@ -154,9 +155,10 @@ func runGetCommand(args []string, callMe interface{}) interface{} {
 	// We return output if it needs to be printed as a table
 	if shouldPrintTable() {
 		return output
-	} else {
-		printResults(output)
 	}
+
+	printResults(output)
+
 	return nil
 }
 
