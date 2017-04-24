@@ -6,6 +6,7 @@ import (
 
 var (
 	printerType string
+	inputFile   string
 
 	// APLCmd ...
 	AppLariatCmd = &cobra.Command{
@@ -15,11 +16,6 @@ var (
 		PersistentPreRunE: func(ccmd *cobra.Command, args []string) error {
 
 			err := checkPrinterType()
-			if err != nil {
-				return err
-			}
-
-			err = checkInputFileExists()
 			if err != nil {
 				return err
 			}

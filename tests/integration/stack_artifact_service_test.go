@@ -20,10 +20,8 @@ func TestStackArtifactService_Create(t *testing.T) {
 		Name:          "Chris Test Zip",
 		ArtifactName:  "Chris/chris.zip",
 		LocArtifactID: "la-gs-apl",
-		ProjectID:     "p-mobile-apps-apl",
 		StackID:       "aa409e87-70ef-4977-8588-10a618a1612f",
 		Version:       "1.1.1",
-		Package:       "archive",
 	}
 
 	out, _, err := aplClient.StackArtifacts.Create(in)

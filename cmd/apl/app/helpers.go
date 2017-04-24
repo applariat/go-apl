@@ -2,6 +2,8 @@ package app
 
 import (
 	"fmt"
+	"github.com/applariat/go-apl/pkg/apl"
+	"github.com/applariat/roper"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"
@@ -161,9 +163,9 @@ func runGetCommand(args []string, callMe interface{}) interface{} {
 // Helper to run the standard create command
 func runCreateCommand(input interface{}, callMe interface{}) {
 
-	err := inputFileToStruct(input)
+	err := roper.Unmarshal(inputFile, input)
 	if err != nil {
-		printResults(err)
+		printResults(apl.APLError{StatusCode: 400, Message: err.Error()})
 		return
 	}
 
@@ -185,9 +187,9 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 // Helper to run the standard update command
 func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 
-	err := inputFileToStruct(input)
+	err := roper.Unmarshal(inputFile, input)
 	if err != nil {
-		printResults(err)
+		printResults(apl.APLError{StatusCode: 400, Message: err.Error()})
 		return
 	}
 
@@ -233,6 +235,17 @@ func runDeleteCommand(args []string, callMe interface{}) {
 
 	printResults(output)
 
+}
+
+func checkInputFileDefined() error {
+	if inputFile == "" {
+		return fmt.Errorf("Input for create/update: json|yaml|-")
+	}
+	return nil
+}
+
+func addInputFileFlag(ccmd *cobra.Command) {
+	ccmd.PersistentFlags().StringVarP(&inputFile, "file", "f", "", "Input for create/update: json|yaml|-")
 }
 
 // Helper to cast response
