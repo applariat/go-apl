@@ -2,7 +2,6 @@ package app
 
 import (
 	"fmt"
-	"github.com/applariat/go-apl/pkg/apl"
 	"github.com/applariat/roper"
 	"github.com/spf13/cobra"
 	"net/http"
@@ -105,7 +104,7 @@ func runListCommand(params interface{}, callMe interface{}) interface{} {
 	response := reflect.ValueOf(callMe).Call(in)
 	output, _, err := getReflectOutput(response)
 	if err != nil {
-		printResults(err)
+		printError(err)
 		return nil
 	}
 
@@ -167,7 +166,7 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 
 	err := roper.Unmarshal(inputFile, input)
 	if err != nil {
-		printResults(apl.APLError{StatusCode: 400, Message: err.Error()})
+		printError(err)
 		return
 	}
 
@@ -179,7 +178,7 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 	response := reflect.ValueOf(callMe).Call(in)
 	output, _, err := getReflectOutput(response)
 	if err != nil {
-		printResults(err)
+		printError(err)
 		os.Exit(1)
 	}
 
@@ -191,7 +190,7 @@ func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 
 	err := roper.Unmarshal(inputFile, input)
 	if err != nil {
-		printResults(apl.APLError{StatusCode: 400, Message: err.Error()})
+		printError(err)
 		return
 	}
 
@@ -211,7 +210,7 @@ func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 	response := reflect.ValueOf(callMe).Call(in)
 	output, _, err := getReflectOutput(response)
 	if err != nil {
-		printResults(err)
+		printError(err)
 		os.Exit(1)
 	}
 
