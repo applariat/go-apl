@@ -22,28 +22,28 @@ func NewEventsService(sling *sling.Sling) *EventService {
 
 // Event represents a event row
 type Event struct {
-	ID              string `json:"id"`
-	EventType       string `json:"event_type"`
-	ObjectType      string `json:"object_type"`
-	ObjectName      string `json:"object_name"`
+	ID              string      `json:"id"`
+	EventType       string      `json:"event_type"`
+	ObjectType      string      `json:"object_type"`
+	ObjectName      string      `json:"object_name"`
 	UpdateData      interface{} `json:"update_data,omitempty"`
-	Source          string `json:"source"`
-	Message         string `json:"message"`
-	Active          bool   `json:"active"`
-	CreatedByUserID string `json:"created_by_user_id"`
-	CreatedTime     string `json:"created_time"`
-	LastModified    string `json:"last_modified"`
+	Source          string      `json:"source"`
+	Message         string      `json:"message"`
+	Active          bool        `json:"active"`
+	CreatedByUserID string      `json:"created_by_user_id"`
+	CreatedTime     string      `json:"created_time"`
+	LastModified    string      `json:"last_modified"`
 }
 
 // EventCreateInput is used for the create of events
 type EventCreateInput struct {
-	ID         string `json:"id,omitempty"`
-	EventType  string `json:"event_type"`
-	ObjectType string `json:"object_type"`
-	ObjectName string `json:"object_name"`
+	ID         string      `json:"id,omitempty"`
+	EventType  string      `json:"event_type"`
+	ObjectType string      `json:"object_type"`
+	ObjectName string      `json:"object_name"`
 	UpdateData interface{} `json:"update_data,omitempty"`
-	Source     string `json:"source"`
-	Message    string `json:"message"`
+	Source     string      `json:"source"`
+	Message    string      `json:"message"`
 }
 
 // EventParams filter parameters used in list operations
