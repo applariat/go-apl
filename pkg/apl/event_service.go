@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/dghubble/sling"
 	"net/http"
-	"github.com/aws/aws-sdk-go/service/machinelearning"
 )
 
 // EventService is the service object for event operations
