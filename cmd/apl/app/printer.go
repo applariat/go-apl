@@ -65,6 +65,16 @@ func printResults(data interface{}) {
 			return
 		}
 
+		// Print app.CLIError
+		if cliError, ok := data.(CLIError); ok {
+			data := [][]string{
+				[]string{cliError.Message},
+			}
+			header := []string{"CLI Error"}
+			printTableResults(data, header)
+			return
+		}
+
 		// Print apl.APLError
 		if aplError, ok := data.(apl.APIError); ok {
 			data := [][]string{

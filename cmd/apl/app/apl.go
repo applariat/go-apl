@@ -6,6 +6,7 @@ import (
 
 var (
 	printerType string
+	inputFile   string
 
 	// AppLariatCmd The appLariat (apl) Command Line Interface is a unified tool to manage your appLariat service.
 	// You can control all appLariat services from the command line and automate them through scripts.
@@ -16,11 +17,6 @@ var (
 		PersistentPreRunE: func(ccmd *cobra.Command, args []string) error {
 
 			err := checkPrinterType()
-			if err != nil {
-				return err
-			}
-
-			err = checkInputFileExists()
 			if err != nil {
 				return err
 			}
