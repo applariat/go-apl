@@ -104,7 +104,7 @@ func runListCommand(params interface{}, callMe interface{}) interface{} {
 	response := reflect.ValueOf(callMe).Call(in)
 	output, _, err := getReflectOutput(response)
 	if err != nil {
-		printError(err)
+		printResults(err)
 		return nil
 	}
 
@@ -166,7 +166,7 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 
 	err := roper.Unmarshal(inputFile, input)
 	if err != nil {
-		printError(err)
+		printResults(NewCLIError(err.Error()))
 		return
 	}
 
@@ -178,7 +178,7 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 	response := reflect.ValueOf(callMe).Call(in)
 	output, _, err := getReflectOutput(response)
 	if err != nil {
-		printError(err)
+		printResults(err)
 		os.Exit(1)
 	}
 
@@ -190,7 +190,7 @@ func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 
 	err := roper.Unmarshal(inputFile, input)
 	if err != nil {
-		printError(err)
+		printResults(NewCLIError(err.Error()))
 		return
 	}
 
@@ -210,7 +210,7 @@ func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 	response := reflect.ValueOf(callMe).Call(in)
 	output, _, err := getReflectOutput(response)
 	if err != nil {
-		printError(err)
+		printResults(err)
 		os.Exit(1)
 	}
 

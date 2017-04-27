@@ -30,22 +30,6 @@ func checkPrinterType() error {
 	return nil
 }
 
-func printError(err error) {
-	switch printerType {
-
-	case "json":
-		fmt.Printf("{\"error\": \"%s\"}\n", err.Error())
-	case "yaml":
-		fmt.Printf("error: \"%s\"\n", err.Error())
-	default:
-		data := [][]string{
-			[]string{err.Error()},
-		}
-		header := []string{"CLI Error"}
-		printTableResults(data, header)
-	}
-}
-
 // printResults formats and prints the results based on the output flag
 func printResults(data interface{}) {
 
@@ -78,6 +62,16 @@ func printResults(data interface{}) {
 	default:
 		if data == nil {
 			fmt.Println("No data found")
+			return
+		}
+
+		// Print app.CLIError
+		if cliError, ok := data.(CLIError); ok {
+			data := [][]string{
+				[]string{cliError.Message},
+			}
+			header := []string{"CLI Error"}
+			printTableResults(data, header)
 			return
 		}
 
