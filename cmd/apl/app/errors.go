@@ -4,7 +4,7 @@ import "fmt"
 
 // CLIError ...
 type CLIError struct {
-	Message    string `json:"message"`
+	Message string `json:"message"`
 }
 
 // Error ...

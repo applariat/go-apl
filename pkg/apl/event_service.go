@@ -26,6 +26,7 @@ type Event struct {
 	EventType       string `json:"event_type"`
 	ObjectType      string `json:"object_type"`
 	ObjectName      string `json:"object_name"`
+	UpdateData      string `json:"update_data,omitempty"`
 	Source          string `json:"source"`
 	Message         string `json:"message"`
 	Active          bool   `json:"active"`
@@ -40,6 +41,7 @@ type EventCreateInput struct {
 	EventType  string `json:"event_type"`
 	ObjectType string `json:"object_type"`
 	ObjectName string `json:"object_name"`
+	UpdateData string `json:"update_data,omitempty"`
 	Source     string `json:"source"`
 	Message    string `json:"message"`
 }
