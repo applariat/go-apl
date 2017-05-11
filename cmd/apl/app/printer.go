@@ -87,9 +87,20 @@ func printResults(data interface{}) {
 
 		// Print apl.CreateResult
 		if createResult, ok := data.(apl.CreateResult); ok {
-			result := createResult.Data.(string)
+			var result string
+			switch createResult.Data.(type) {
+			case string:
+				result = createResult.Data.(string)
+			default:
+				j, err := json.MarshalIndent(createResult.Data, "", "  ")
+				if err != nil {
+					fmt.Println(err)
+					return
+				}
+				result = string(j)
+			}
 			data := [][]string{[]string{result}}
-			header := []string{"New ID"}
+			header := []string{"Result"}
 			printTableResults(data, header)
 			return
 		}
