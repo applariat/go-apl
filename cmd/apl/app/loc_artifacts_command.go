@@ -12,9 +12,9 @@ func NewLocArtifactsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListLocArtifacts, "loc-artifacts", "")
 	getCmd := createGetCommand(cmdGetLocArtifacts, "loc-artifact", "")
-	createCmd := createCreateCommand(cmdCreateLocArtifacts, "loc_artifact", "")
-	updateCmd := createUpdateCommand(cmdUpdateLocArtifacts, "loc_artifact", "")
-	deleteCmd := createDeleteCommand(cmdDeleteLocArtifacts, "loc_artifact", "")
+	//createCmd := createCreateCommand(cmdCreateLocArtifacts, "loc_artifact", "")
+	//updateCmd := createUpdateCommand(cmdUpdateLocArtifacts, "loc_artifact", "")
+	//deleteCmd := createDeleteCommand(cmdDeleteLocArtifacts, "loc_artifact", "")
 
 	// command flags
 	cmd.Flags().StringVar(&locArtifactParams.Name, "name", "", "Filter loc_artifacts by name")
@@ -28,9 +28,9 @@ func NewLocArtifactsCommand() *cobra.Command {
 
 	// add sub commands
 	cmd.AddCommand(getCmd)
-	cmd.AddCommand(createCmd)
-	cmd.AddCommand(updateCmd)
-	cmd.AddCommand(deleteCmd)
+	//cmd.AddCommand(createCmd)
+	//cmd.AddCommand(updateCmd)
+	//cmd.AddCommand(deleteCmd)
 
 	return cmd
 }
@@ -59,19 +59,19 @@ func cmdGetLocArtifacts(ccmd *cobra.Command, args []string) {
 	}
 }
 
-func cmdCreateLocArtifacts(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
-	in := &apl.LocArtifactCreateInput{}
-	runCreateCommand(in, aplSvs.LocArtifacts.Create)
-}
-
-func cmdUpdateLocArtifacts(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
-	in := &apl.LocArtifactUpdateInput{}
-	runUpdateCommand(args, in, aplSvs.LocArtifacts.Update)
-}
-
-func cmdDeleteLocArtifacts(ccmd *cobra.Command, args []string) {
-	aplSvc := apl.NewClient()
-	runDeleteCommand(args, aplSvc.LocArtifacts.Delete)
-}
+//func cmdCreateLocArtifacts(ccmd *cobra.Command, args []string) {
+//	aplSvs := apl.NewClient()
+//	in := &apl.LocArtifactCreateInput{}
+//	runCreateCommand(in, aplSvs.LocArtifacts.Create)
+//}
+//
+//func cmdUpdateLocArtifacts(ccmd *cobra.Command, args []string) {
+//	aplSvs := apl.NewClient()
+//	in := &apl.LocArtifactUpdateInput{}
+//	runUpdateCommand(args, in, aplSvs.LocArtifacts.Update)
+//}
+//
+//func cmdDeleteLocArtifacts(ccmd *cobra.Command, args []string) {
+//	aplSvc := apl.NewClient()
+//	runDeleteCommand(args, aplSvc.LocArtifacts.Delete)
+//}

@@ -12,8 +12,8 @@ func NewLocDeploysCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListLocDeploys, "loc-deploys", "")
 	getCmd := createGetCommand(cmdGetLocDeploys, "loc-deploy", "")
-	createCmd := createCreateCommand(cmdCreateLocDeploys, "loc-deploy", "")
-	deleteCmd := createDeleteCommand(cmdDeleteLocDeploys, "loc-deploy", "")
+	//createCmd := createCreateCommand(cmdCreateLocDeploys, "loc-deploy", "")
+	//deleteCmd := createDeleteCommand(cmdDeleteLocDeploys, "loc-deploy", "")
 
 	// command flags
 	cmd.Flags().StringVar(&locDeployParams.Name, "name", "", "Filter loc_deploys by name")
@@ -23,8 +23,8 @@ func NewLocDeploysCommand() *cobra.Command {
 
 	// add sub commands
 	cmd.AddCommand(getCmd)
-	cmd.AddCommand(createCmd)
-	cmd.AddCommand(deleteCmd)
+	//cmd.AddCommand(createCmd)
+	//cmd.AddCommand(deleteCmd)
 
 	return cmd
 }
@@ -53,13 +53,13 @@ func cmdGetLocDeploys(ccmd *cobra.Command, args []string) {
 	}
 }
 
-func cmdCreateLocDeploys(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
-	in := &apl.LocDeployCreateInput{}
-	runCreateCommand(in, aplSvs.LocDeploys.Create)
-}
-
-func cmdDeleteLocDeploys(ccmd *cobra.Command, args []string) {
-	aplSvc := apl.NewClient()
-	runDeleteCommand(args, aplSvc.LocDeploys.Delete)
-}
+//func cmdCreateLocDeploys(ccmd *cobra.Command, args []string) {
+//	aplSvs := apl.NewClient()
+//	in := &apl.LocDeployCreateInput{}
+//	runCreateCommand(in, aplSvs.LocDeploys.Create)
+//}
+//
+//func cmdDeleteLocDeploys(ccmd *cobra.Command, args []string) {
+//	aplSvc := apl.NewClient()
+//	runDeleteCommand(args, aplSvc.LocDeploys.Delete)
+//}

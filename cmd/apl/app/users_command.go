@@ -11,9 +11,9 @@ var userParams apl.UserParams
 func NewUsersCommand() *cobra.Command {
 	cmd := createListCommand(cmdListUsers, "users", "")
 	getCmd := createGetCommand(cmdGetUsers, "user", "")
-	createCmd := createCreateCommand(cmdCreateUsers, "user", "")
-	updateCmd := createUpdateCommand(cmdUpdateUsers, "user", "")
-	deleteCmd := createDeleteCommand(cmdDeleteUsers, "user", "")
+	//createCmd := createCreateCommand(cmdCreateUsers, "user", "")
+	//updateCmd := createUpdateCommand(cmdUpdateUsers, "user", "")
+	//deleteCmd := createDeleteCommand(cmdDeleteUsers, "user", "")
 
 	// command flags
 	cmd.Flags().StringVar(&userParams.FirstName, "first-name", "", "Filter users by first_name")
@@ -24,9 +24,9 @@ func NewUsersCommand() *cobra.Command {
 
 	// add sub commands
 	cmd.AddCommand(getCmd)
-	cmd.AddCommand(createCmd)
-	cmd.AddCommand(updateCmd)
-	cmd.AddCommand(deleteCmd)
+	//cmd.AddCommand(createCmd)
+	//cmd.AddCommand(updateCmd)
+	//cmd.AddCommand(deleteCmd)
 
 	return cmd
 }
@@ -51,19 +51,19 @@ func cmdGetUsers(ccmd *cobra.Command, args []string) {
 	}
 }
 
-func cmdCreateUsers(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
-	in := &apl.UserCreateInput{}
-	runCreateCommand(in, aplSvs.Users.Create)
-}
-
-func cmdUpdateUsers(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
-	in := &apl.UserUpdateInput{}
-	runUpdateCommand(args, in, aplSvs.Users.Update)
-}
-
-func cmdDeleteUsers(ccmd *cobra.Command, args []string) {
-	aplSvc := apl.NewClient()
-	runDeleteCommand(args, aplSvc.Users.Delete)
-}
+//func cmdCreateUsers(ccmd *cobra.Command, args []string) {
+//	aplSvs := apl.NewClient()
+//	in := &apl.UserCreateInput{}
+//	runCreateCommand(in, aplSvs.Users.Create)
+//}
+//
+//func cmdUpdateUsers(ccmd *cobra.Command, args []string) {
+//	aplSvs := apl.NewClient()
+//	in := &apl.UserUpdateInput{}
+//	runUpdateCommand(args, in, aplSvs.Users.Update)
+//}
+//
+//func cmdDeleteUsers(ccmd *cobra.Command, args []string) {
+//	aplSvc := apl.NewClient()
+//	runDeleteCommand(args, aplSvc.Users.Delete)
+//}

@@ -12,18 +12,18 @@ func NewProjectsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListProjects, "projects", "")
 	getCmd := createGetCommand(cmdGetProjects, "project", "")
-	createCmd := createCreateCommand(cmdCreateProjects, "project", "")
-	updateCmd := createUpdateCommand(cmdUpdateProjects, "project", "")
-	deleteCmd := createDeleteCommand(cmdDeleteProjects, "project", "")
+	//createCmd := createCreateCommand(cmdCreateProjects, "project", "")
+	//updateCmd := createUpdateCommand(cmdUpdateProjects, "project", "")
+	//deleteCmd := createDeleteCommand(cmdDeleteProjects, "project", "")
 
 	// command flags
 	cmd.Flags().StringVar(&projectParams.Name, "name", "", "Filter projects by name")
 
 	// add sub commands
 	cmd.AddCommand(getCmd)
-	cmd.AddCommand(createCmd)
-	cmd.AddCommand(updateCmd)
-	cmd.AddCommand(deleteCmd)
+	//cmd.AddCommand(createCmd)
+	//cmd.AddCommand(updateCmd)
+	//cmd.AddCommand(deleteCmd)
 
 	return cmd
 }
@@ -52,19 +52,19 @@ func cmdGetProjects(ccmd *cobra.Command, args []string) {
 	}
 }
 
-func cmdCreateProjects(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
-	in := &apl.ProjectCreateInput{}
-	runCreateCommand(in, aplSvs.Projects.Create)
-}
-
-func cmdUpdateProjects(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
-	in := &apl.ProjectUpdateInput{}
-	runUpdateCommand(args, in, aplSvs.Projects.Update)
-}
-
-func cmdDeleteProjects(ccmd *cobra.Command, args []string) {
-	aplSvc := apl.NewClient()
-	runDeleteCommand(args, aplSvc.Projects.Delete)
-}
+//func cmdCreateProjects(ccmd *cobra.Command, args []string) {
+//	aplSvs := apl.NewClient()
+//	in := &apl.ProjectCreateInput{}
+//	runCreateCommand(in, aplSvs.Projects.Create)
+//}
+//
+//func cmdUpdateProjects(ccmd *cobra.Command, args []string) {
+//	aplSvs := apl.NewClient()
+//	in := &apl.ProjectUpdateInput{}
+//	runUpdateCommand(args, in, aplSvs.Projects.Update)
+//}
+//
+//func cmdDeleteProjects(ccmd *cobra.Command, args []string) {
+//	aplSvc := apl.NewClient()
+//	runDeleteCommand(args, aplSvc.Projects.Delete)
+//}
