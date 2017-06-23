@@ -35,7 +35,6 @@ func init() {
 
 	// Completely hidden
 	//AppLariatCmd.AddCommand(NewAuditsCommand())
-	//AppLariatCmd.AddCommand(NewOrgsCommand())
 	//AppLariatCmd.AddCommand(NewPoliciesCommand())
 	//AppLariatCmd.AddCommand(NewPolicyResultsCommand())
 	//AppLariatCmd.AddCommand(NewPolicySchedulesCommand())
@@ -47,6 +46,7 @@ func init() {
 	//AppLariatCmd.AddCommand(NewTypesCommand())
 
 	// Get only
+	AppLariatCmd.AddCommand(NewOrgsCommand())
 	AppLariatCmd.AddCommand(NewComponentsCommand())
 	AppLariatCmd.AddCommand(NewLocArtifactsCommand())
 	AppLariatCmd.AddCommand(NewLocDeploysCommand())

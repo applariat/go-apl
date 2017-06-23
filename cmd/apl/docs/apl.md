@@ -20,6 +20,7 @@ The appLariat (apl) Command Line Interface is a unified tool to manage your appL
 * [apl gen-docs](apl_gen-docs.md)	 - Generate markdown documentation
 * [apl loc-artifacts](apl_loc-artifacts.md)	 - manage loc-artifacts
 * [apl loc-deploys](apl_loc-deploys.md)	 - manage loc-deploys
+* [apl orgs](apl_orgs.md)	 - manage orgs
 * [apl projects](apl_projects.md)	 - manage projects
 * [apl releases](apl_releases.md)	 - manage releases
 * [apl stack-artifacts](apl_stack-artifacts.md)	 - manage stack-artifacts
