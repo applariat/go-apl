@@ -1,9 +1,20 @@
 # Change Log
 
-## [Unreleased](https://github.com/applariat/go-apl/tree/HEAD)
+## [v0.1.4](https://github.com/applariat/go-apl/tree/v0.1.4) (2017-04-27)
+[Full Changelog](https://github.com/applariat/go-apl/compare/v0.1.0...v0.1.4)
 
 **Merged pull requests:**
 
+- added update\_data to events service and fixed formatting on errors [\#13](https://github.com/applariat/go-apl/pull/13) ([cdornsife](https://github.com/cdornsife))
+- Removal of filereader.go and replaced with Roper library [\#12](https://github.com/applariat/go-apl/pull/12) ([cdornsife](https://github.com/cdornsife))
+- fixed golint issues, mostly comments [\#10](https://github.com/applariat/go-apl/pull/10) ([cdornsife](https://github.com/cdornsife))
+
+## [v0.1.0](https://github.com/applariat/go-apl/tree/v0.1.0) (2017-04-13)
+**Merged pull requests:**
+
+- added command create function and removed global vars for structs [\#9](https://github.com/applariat/go-apl/pull/9) ([cdornsife](https://github.com/cdornsife))
+- added exit codes for commands that have errors. fixed stack artifact … [\#8](https://github.com/applariat/go-apl/pull/8) ([cdornsife](https://github.com/cdornsife))
+- Restructured repo and moved cli code in [\#7](https://github.com/applariat/go-apl/pull/7) ([cdornsife](https://github.com/cdornsife))
 - adding glide vendoring [\#6](https://github.com/applariat/go-apl/pull/6) ([cdornsife](https://github.com/cdornsife))
 - moved Integration tests [\#5](https://github.com/applariat/go-apl/pull/5) ([cdornsife](https://github.com/cdornsife))
 - formatted with gofmt and travis.yml changes [\#4](https://github.com/applariat/go-apl/pull/4) ([cdornsife](https://github.com/cdornsife))

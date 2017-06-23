@@ -32,28 +32,36 @@ func init() {
 	AppLariatCmd.PersistentFlags().StringVarP(&printerType, "output", "o", "table", "Output format: json|yaml")
 
 	// Commands
-	AppLariatCmd.AddCommand(NewAuditsCommand())
+
+	// Completely hidden
+	//AppLariatCmd.AddCommand(NewAuditsCommand())
+	//AppLariatCmd.AddCommand(NewOrgsCommand())
+	//AppLariatCmd.AddCommand(NewPoliciesCommand())
+	//AppLariatCmd.AddCommand(NewPolicyResultsCommand())
+	//AppLariatCmd.AddCommand(NewPolicySchedulesCommand())
+	//AppLariatCmd.AddCommand(NewProjectRolesCommand())
+	//AppLariatCmd.AddCommand(NewCredentialsCommand())
+	//AppLariatCmd.AddCommand(NewWorkloadsCommand())
+	//AppLariatCmd.AddCommand(NewRolesCommand())
+	//AppLariatCmd.AddCommand(NewStackComponentsCommand())
+	//AppLariatCmd.AddCommand(NewTypesCommand())
+
+	// Get only
 	AppLariatCmd.AddCommand(NewComponentsCommand())
-	AppLariatCmd.AddCommand(NewCredentialsCommand())
-	AppLariatCmd.AddCommand(NewDeploymentsCommand())
-	AppLariatCmd.AddCommand(NewEventsCommand())
-	AppLariatCmd.AddCommand(NewGenerateDocumentationCommand())
 	AppLariatCmd.AddCommand(NewLocArtifactsCommand())
 	AppLariatCmd.AddCommand(NewLocDeploysCommand())
-	AppLariatCmd.AddCommand(NewOrgsCommand())
-	AppLariatCmd.AddCommand(NewPoliciesCommand())
-	AppLariatCmd.AddCommand(NewPolicyResultsCommand())
-	AppLariatCmd.AddCommand(NewPolicySchedulesCommand())
-	AppLariatCmd.AddCommand(NewProjectRolesCommand())
 	AppLariatCmd.AddCommand(NewProjectsCommand())
-	AppLariatCmd.AddCommand(NewReleasesCommand())
-	AppLariatCmd.AddCommand(NewRolesCommand())
-	AppLariatCmd.AddCommand(NewStackArtifactsCommand())
-	AppLariatCmd.AddCommand(NewStackComponentsCommand())
-	AppLariatCmd.AddCommand(NewStackVersionsCommand())
-	AppLariatCmd.AddCommand(NewStacksCommand())
-	AppLariatCmd.AddCommand(NewTypesCommand())
 	AppLariatCmd.AddCommand(NewUsersCommand())
-	AppLariatCmd.AddCommand(NewWorkloadsCommand())
+	AppLariatCmd.AddCommand(NewEventsCommand())
+
+	// More than Get
+	AppLariatCmd.AddCommand(NewDeploymentsCommand())
+	AppLariatCmd.AddCommand(NewReleasesCommand())
+	AppLariatCmd.AddCommand(NewStacksCommand())
+	AppLariatCmd.AddCommand(NewStackArtifactsCommand())
+	AppLariatCmd.AddCommand(NewStackVersionsCommand())
+
+	// Utility
+	AppLariatCmd.AddCommand(NewGenerateDocumentationCommand())
 
 }

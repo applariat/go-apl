@@ -12,7 +12,7 @@ func NewEventsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListEvents, "events", "")
 	getCmd := createGetCommand(cmdGetEvents, "event", "")
-	createCmd := createCreateCommand(cmdCreateEvents, "event", "")
+	//createCmd := createCreateCommand(cmdCreateEvents, "event", "")
 
 	// command flags
 	cmd.Flags().StringVar(&eventParams.ObjectType, "object-type", "", "Filter events by object_type")
@@ -22,7 +22,7 @@ func NewEventsCommand() *cobra.Command {
 
 	// add sub commands
 	cmd.AddCommand(getCmd)
-	cmd.AddCommand(createCmd)
+	//cmd.AddCommand(createCmd)
 
 	return cmd
 }
@@ -51,8 +51,8 @@ func cmdGetEvents(ccmd *cobra.Command, args []string) {
 	}
 }
 
-func cmdCreateEvents(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
-	in := &apl.EventCreateInput{}
-	runCreateCommand(in, aplSvs.Events.Create)
-}
+//func cmdCreateEvents(ccmd *cobra.Command, args []string) {
+//	aplSvs := apl.NewClient()
+//	in := &apl.EventCreateInput{}
+//	runCreateCommand(in, aplSvs.Events.Create)
+//}
