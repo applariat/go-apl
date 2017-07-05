@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"reflect"
+	"time"
 )
 
 // All of the commands are created and ran the same way.
@@ -284,4 +285,31 @@ func checkListCommandHasNoArgs(args []string) error {
 		return fmt.Errorf("Non flag arguments are not permitted in list mode.")
 	}
 	return nil
+}
+
+func timeDuration(d time.Duration) string {
+
+	s := int(d.Seconds())
+
+	if s < -1 {
+		return fmt.Sprintf("??")
+	} else if s < 0 {
+		return fmt.Sprintf("0s")
+	} else if s < 60 {
+		return fmt.Sprintf("%ds", s)
+	}
+
+	m := int(d.Minutes())
+	if m < 60 {
+		return fmt.Sprintf("%dm", m)
+	}
+
+	h := int(d.Hours())
+	if h < 24 {
+		return fmt.Sprintf("%dh", h)
+	} else if h < 24*365 {
+		return fmt.Sprintf("%dd", h/24)
+	}
+
+	return fmt.Sprintf("%dy", int(d.Hours()/24/365))
 }
