@@ -3,6 +3,8 @@ sudo: false
 matrix:
   include:
   - go: 1.7
+install:
+  - # Override, skips "go get". Project is vendored
 script:
   - diff -u <(echo -n) <(find . -type f -name '*.go' -not -path "./vendor/*" -exec gofmt -d {} \;)
   - go vet `go list ./... | grep -v '/vendor/'`
