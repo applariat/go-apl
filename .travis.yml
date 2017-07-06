@@ -3,9 +3,11 @@ sudo: false
 matrix:
   include:
   - go: 1.7
+install:
+  - # Override, skips "go get". Project is vendored
 script:
-  - diff -u <(echo -n) <(gofmt -d .)
-  - go tool vet .
+  - diff -u <(echo -n) <(find . -type f -name '*.go' -not -path "./vendor/*" -exec gofmt -d {} \;)
+  - go vet `go list ./... | grep -v '/vendor/'`
 before_deploy:
 - cd cmd/apl
 - GOARCH=amd64 GOOS=linux  CGO_ENABLED=0 go build -o apl main.go && tar czvf apl-${TRAVIS_TAG}-linux_amd64.tgz apl
