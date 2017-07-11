@@ -38,11 +38,12 @@ type StackArtifact struct {
 
 // StackArtifactCreateInput is used for the create of stack_artifacts
 type StackArtifactCreateInput struct {
-	ID            string `json:"id,omitempty"`
-	LocArtifactID string `json:"loc_artifact_id"`
-	StackID       string `json:"stack_id"`
-	Name          string `json:"name"`
-	ArtifactName  string `json:"artifact_name"`
+	ID                string `json:"id,omitempty"`
+	LocArtifactID     string `json:"loc_artifact_id"`
+	StackID           string `json:"stack_id"`
+	Name              string `json:"name"`
+	ArtifactName      string `json:"artifact_name"`
+	StackArtifactType string `json:"stack_artifact_type"`
 
 	// Version is optional, will be auto-generated
 	Version string `json:"version,omitempty"`
@@ -57,14 +58,14 @@ type StackArtifactUpdateInput struct {
 
 // StackArtifactParams filter parameters used in list operations
 type StackArtifactParams struct {
-	LocArtifactID string `url:"loc_artifact_id,omitempty"`
-	ProjectID     string `url:"project_id,omitempty"`
-	StackID       string `url:"stack_id,omitempty"`
-	Name          string `url:"name,omitempty"`
-	Type          string `url:"type,omitempty"`
-	Version       string `url:"version,omitempty"`
-	ArtifactName  string `url:"artifact_name,omitempty"`
-	Package       string `url:"package,omitempty"`
+	LocArtifactID     string `url:"loc_artifact_id,omitempty"`
+	ProjectID         string `url:"project_id,omitempty"`
+	StackID           string `url:"stack_id,omitempty"`
+	Name              string `url:"name,omitempty"`
+	StackArtifactType string `url:"stack_artifact_type,omitempty"`
+	Version           string `url:"version,omitempty"`
+	ArtifactName      string `url:"artifact_name,omitempty"`
+	Package           string `url:"package,omitempty"`
 }
 
 // List gets a list of stack_artifacts with optional filter params
