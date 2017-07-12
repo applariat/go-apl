@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"github.com/applariat/roper"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"
