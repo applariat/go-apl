@@ -16,12 +16,13 @@ var (
 func TestStackArtifactService_Create(t *testing.T) {
 
 	in := &apl.StackArtifactCreateInput{
-		ID:            testStackArtifactId,
-		Name:          "Chris Test Zip",
-		ArtifactName:  "Chris/chris.zip",
-		LocArtifactID: "la-gs-apl",
-		StackID:       "aa409e87-70ef-4977-8588-10a618a1612f",
-		Version:       "1.1.1",
+		ID:                testStackArtifactId,
+		Name:              "Chris Test Zip",
+		ArtifactName:      "Chris/chris.zip",
+		LocArtifactID:     "la-gs-apl",
+		StackID:           "aa409e87-70ef-4977-8588-10a618a1612f",
+		Version:           "1.1.1",
+		StackArtifactType: "code",
 	}
 
 	out, _, err := aplClient.StackArtifacts.Create(in)

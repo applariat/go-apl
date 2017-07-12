@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/applariat/roper"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"
@@ -165,7 +166,7 @@ func runGetCommand(args []string, callMe interface{}) interface{} {
 // Helper to run the standard create command
 func runCreateCommand(input interface{}, callMe interface{}) {
 
-	err := roper.Unmarshal(inputFile, input)
+	err := processInputFile(input)
 	if err != nil {
 		printResults(NewCLIError(err.Error()))
 		return
@@ -189,7 +190,7 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 // Helper to run the standard update command
 func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 
-	err := roper.Unmarshal(inputFile, input)
+	err := processInputFile(input)
 	if err != nil {
 		printResults(NewCLIError(err.Error()))
 		return
@@ -239,8 +240,12 @@ func runDeleteCommand(args []string, callMe interface{}) {
 
 }
 
+func isInputFileDefined() bool {
+	return inputFile != ""
+}
+
 func checkInputFileDefined() error {
-	if inputFile == "" {
+	if !isInputFileDefined() {
 		return fmt.Errorf("Input for create/update: json|yaml|-")
 	}
 	return nil
@@ -248,6 +253,14 @@ func checkInputFileDefined() error {
 
 func addInputFileFlag(ccmd *cobra.Command) {
 	ccmd.PersistentFlags().StringVarP(&inputFile, "file", "f", "", "Input for create/update: json|yaml|-")
+}
+
+func processInputFile(input interface{}) error {
+	// We check to see if inputFile flag is populated
+	if isInputFileDefined() {
+		return roper.Unmarshal(inputFile, input)
+	}
+	return nil
 }
 
 // Helper to cast response

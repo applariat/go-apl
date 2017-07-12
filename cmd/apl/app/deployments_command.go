@@ -2,38 +2,26 @@ package app
 
 import (
 	"fmt"
-	//"time"
 	"github.com/applariat/go-apl/pkg/apl"
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/pkg/api/v1"
 	"strconv"
-	//"k8s.io/kubernetes/pkg/printers"
 	"time"
 )
 
-var deploymentParams apl.DeploymentParams
+var (
+	deploymentParams apl.DeploymentParams
+
+	deploymentOverrideStackComponentID   string
+	deploymentOverrideComponentServiceID string
+	deploymentOverrideStackArtifactID    string
+	deploymentOverrideInstances          int
+)
 
 // NewDeploymentsCommand Creates a cobra command for Deployments
 func NewDeploymentsCommand() *cobra.Command {
 
 	cmd := createListCommand(cmdListDeployments, "deployments", "")
-	getCmd := createGetCommand(cmdGetDeployments, "deployment", "")
-	createCmd := createCreateCommand(cmdCreateDeployments, "deployment", "")
-	updateCmd := createUpdateCommand(cmdUpdateDeployments, "deployment", "")
-	deleteCmd := createDeleteCommand(cmdDeleteDeployments, "deployment", "")
-	podsCmd := &cobra.Command{
-		Use:   "pods [deployment-id]",
-		Short: fmt.Sprintf("get a list of pods"),
-		Long:  "",
-		Run:   cmdGetDeploymentPods,
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return checkCommandHasIDInArgs(args, "id")
-		},
-	}
-
-	// command flags
-	//cmd.Flags().IntVar(&deploymentParams.ReleaseVersion, "release-version", 0, "Filter deployments by release_version")
-
 	cmd.Flags().StringVar(&deploymentParams.Name, "name", "", "Filter deployments by name")
 	cmd.Flags().StringVar(&deploymentParams.StackVersionID, "stack-version-id", "", "Filter deployments by stack_version_id")
 	cmd.Flags().StringVar(&deploymentParams.ProjectID, "project-id", "", "Filter deployments by project_id")
@@ -43,12 +31,68 @@ func NewDeploymentsCommand() *cobra.Command {
 	cmd.Flags().StringVar(&deploymentParams.LeaseExpiration, "lease-expiration", "", "Filter deployments by lease_expiration")
 	cmd.Flags().StringVar(&deploymentParams.QosLevel, "qos-level", "", "Filter deployments by qos_level")
 
-	// add sub commands
+	// Get
+	getCmd := createGetCommand(cmdGetDeployments, "deployment", "")
 	cmd.AddCommand(getCmd)
+
+	// Create
+	createCmd := createCreateCommand(cmdCreateDeployments, "deployment", "")
 	cmd.AddCommand(createCmd)
+
+	// Update
+	updateCmd := createUpdateCommand(cmdUpdateDeployments, "deployment", "")
 	cmd.AddCommand(updateCmd)
+
+	// Delete
+	deleteCmd := createDeleteCommand(cmdDeleteDeployments, "deployment", "")
 	cmd.AddCommand(deleteCmd)
+
+	// Pods
+	podsCmd := &cobra.Command{
+		Use:   "pods [deployment-id]",
+		Short: fmt.Sprintf("get a list of pods"),
+		Long:  "",
+		Run:   cmdGetDeploymentPods,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return checkCommandHasIDInArgs(args, "deployment-id")
+		},
+	}
 	cmd.AddCommand(podsCmd)
+
+	// Override
+	overrideCmd := &cobra.Command{
+		Use:   "override",
+		Short: fmt.Sprintf("Override a component artifact"),
+		Long:  "",
+		Run:   cmdOverrideDeployments,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			var missingFlags []string
+
+			if deploymentOverrideStackComponentID == "" {
+				missingFlags = append(missingFlags, "--stack-component-id")
+			}
+
+			if deploymentOverrideComponentServiceID == "" {
+				missingFlags = append(missingFlags, "--component-service-id")
+			}
+
+			if deploymentOverrideStackArtifactID == "" {
+				missingFlags = append(missingFlags, "--stack-artifact-id")
+			}
+
+			if len(missingFlags) > 0 {
+				return fmt.Errorf("Missing required flags: %s", missingFlags)
+			}
+
+			return nil
+		},
+	}
+	overrideCmd.Flags().IntVar(&deploymentOverrideInstances, "instances", 1, "")
+	overrideCmd.Flags().StringVar(&deploymentOverrideStackComponentID, "stack-component-id", "", "")
+	overrideCmd.Flags().StringVar(&deploymentOverrideComponentServiceID, "component-service-id", "", "")
+	overrideCmd.Flags().StringVar(&deploymentOverrideStackArtifactID, "stack-artifact-id", "", "")
+
+	cmd.AddCommand(overrideCmd)
 
 	return cmd
 }
@@ -78,20 +122,59 @@ func cmdGetDeployments(ccmd *cobra.Command, args []string) {
 }
 
 func cmdCreateDeployments(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
+	aplSvc := apl.NewClient()
 	in := &apl.DeploymentCreateInput{}
-	runCreateCommand(in, aplSvs.Deployments.Create)
+	runCreateCommand(in, aplSvc.Deployments.Create)
 }
 
 func cmdUpdateDeployments(ccmd *cobra.Command, args []string) {
-	aplSvs := apl.NewClient()
+	aplSvc := apl.NewClient()
 	in := &apl.DeploymentUpdateInput{}
-	runUpdateCommand(args, in, aplSvs.Deployments.Update)
+	runUpdateCommand(args, in, aplSvc.Deployments.Update)
 }
 
 func cmdDeleteDeployments(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 	runDeleteCommand(args, aplSvc.Deployments.Delete)
+}
+
+// Override one component in deployment
+func cmdOverrideDeployments(ccmd *cobra.Command, args []string) {
+	aplSvc := apl.NewClient()
+
+	sa, _, err := aplSvc.StackArtifacts.Get(deploymentOverrideStackArtifactID)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var artifact apl.Artifact
+	switch sa.StackArtifactType {
+	case "code":
+		artifact.Code = deploymentOverrideStackArtifactID
+	default:
+		panic(fmt.Errorf("Unsupported StackArtifactType %s", sa.StackArtifactType))
+	}
+
+	in := &apl.DeploymentUpdateInput{
+		Components: []apl.DeploymentComponent{
+			{
+				StackComponentID: deploymentOverrideStackComponentID,
+				Services: []apl.Service{
+					{
+						ComponentServiceID: deploymentOverrideComponentServiceID,
+						Build: apl.Build{
+							Artifact: artifact,
+						},
+						Run: apl.Run{
+							Instances: deploymentOverrideInstances,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	runUpdateCommand(args, in, aplSvc.Deployments.Update)
 }
 
 func cmdGetDeploymentPods(ccmd *cobra.Command, args []string) {
