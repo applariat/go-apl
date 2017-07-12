@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/applariat/roper"
+	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"
@@ -189,7 +190,7 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 // Helper to run the standard update command
 func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 
-	err := roper.Unmarshal(inputFile, input)
+	err := processInputFile(input)
 	if err != nil {
 		printResults(NewCLIError(err.Error()))
 		return

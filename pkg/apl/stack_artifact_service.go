@@ -22,18 +22,18 @@ func NewStackArtifactsService(sling *sling.Sling) *StackArtifactService {
 
 // StackArtifact represents a stack_artifact row
 type StackArtifact struct {
-	ID              string `json:"id,omitempty"`
-	CreatedByUserID string `json:"created_by_user_id"`
-	ArtifactName    string `json:"artifact_name"`
-	Name            string `json:"name"`
-	Package         string `json:"package"`
-	StackID         string `json:"stack_id"`
-	LocArtifactID   string `json:"loc_artifact_id"`
-	LastModified    string `json:"last_modified"`
-	Version         string `json:"version"`
-	CreatedTime     string `json:"created_time"`
-	ProjectID       string `json:"project_id"`
-	Type            string `json:"type"`
+	ID                string `json:"id,omitempty"`
+	CreatedByUserID   string `json:"created_by_user_id"`
+	ArtifactName      string `json:"artifact_name"`
+	Name              string `json:"name"`
+	Package           string `json:"package"`
+	StackID           string `json:"stack_id"`
+	LocArtifactID     string `json:"loc_artifact_id"`
+	LastModified      string `json:"last_modified"`
+	Version           string `json:"version"`
+	CreatedTime       string `json:"created_time"`
+	ProjectID         string `json:"project_id"`
+	StackArtifactType string `json:"stack_artifact_type"`
 }
 
 // StackArtifactCreateInput is used for the create of stack_artifacts

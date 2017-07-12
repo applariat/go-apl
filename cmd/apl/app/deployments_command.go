@@ -3,7 +3,6 @@ package app
 import (
 	"fmt"
 	"github.com/applariat/go-apl/pkg/apl"
-	"github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
 	"k8s.io/client-go/pkg/api/v1"
 	"strconv"
@@ -13,13 +12,10 @@ import (
 var (
 	deploymentParams apl.DeploymentParams
 
-	deploymentOverrideName               string
-	deploymentOverrideReleaseID          string
-	deploymentOverrideLocDeployID        string
-	deploymentOverrideLeaseType          string
 	deploymentOverrideStackComponentID   string
 	deploymentOverrideComponentServiceID string
 	deploymentOverrideStackArtifactID    string
+	deploymentOverrideInstances          int
 )
 
 // NewDeploymentsCommand Creates a cobra command for Deployments
@@ -58,7 +54,7 @@ func NewDeploymentsCommand() *cobra.Command {
 		Long:  "",
 		Run:   cmdGetDeploymentPods,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return checkCommandHasIDInArgs(args, "id")
+			return checkCommandHasIDInArgs(args, "deployment-id")
 		},
 	}
 	cmd.AddCommand(podsCmd)
@@ -71,18 +67,6 @@ func NewDeploymentsCommand() *cobra.Command {
 		Run:   cmdOverrideDeployments,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			var missingFlags []string
-
-			if deploymentOverrideName == "" {
-				missingFlags = append(missingFlags, "--name")
-			}
-
-			if deploymentOverrideReleaseID == "" {
-				missingFlags = append(missingFlags, "--release-id")
-			}
-
-			if deploymentOverrideLocDeployID == "" {
-				missingFlags = append(missingFlags, "--loc-deploy-id")
-			}
 
 			if deploymentOverrideStackComponentID == "" {
 				missingFlags = append(missingFlags, "--stack-component-id")
@@ -103,11 +87,7 @@ func NewDeploymentsCommand() *cobra.Command {
 			return nil
 		},
 	}
-	overrideCmd.Flags().StringVar(&deploymentOverrideName, "name", "", "")
-	overrideCmd.Flags().StringVar(&deploymentOverrideReleaseID, "release-id", "", "")
-
-	overrideCmd.Flags().StringVar(&deploymentOverrideLocDeployID, "loc-deploy-id", "", "")
-	overrideCmd.Flags().StringVar(&deploymentOverrideLeaseType, "lease-type", "temporary", "")
+	overrideCmd.Flags().IntVar(&deploymentOverrideInstances, "instances", 1, "")
 	overrideCmd.Flags().StringVar(&deploymentOverrideStackComponentID, "stack-component-id", "", "")
 	overrideCmd.Flags().StringVar(&deploymentOverrideComponentServiceID, "component-service-id", "", "")
 	overrideCmd.Flags().StringVar(&deploymentOverrideStackArtifactID, "stack-artifact-id", "", "")
@@ -162,35 +142,31 @@ func cmdDeleteDeployments(ccmd *cobra.Command, args []string) {
 func cmdOverrideDeployments(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	type Override struct {
-		StackArtifactID string `json:"stack_artifact_id"`
+	sa, _, err := aplSvc.StackArtifacts.Get(deploymentOverrideStackArtifactID)
+	if err != nil {
+		panic(err.Error())
 	}
 
-	type Service struct {
-		ComponentServiceID string     `json:"component_service_id"`
-		Overrides          []Override `json:"overrides"`
+	var artifact apl.Artifact
+	switch sa.StackArtifactType {
+	case "code":
+		artifact.Code = deploymentOverrideStackArtifactID
+	default:
+		panic(fmt.Errorf("Unsupported StackArtifactType %s", sa.StackArtifactType))
 	}
 
-	type Components struct {
-		StackComponentID string    `json:"stack_component_id"`
-		Services         []Service `json:"services"`
-	}
-
-	in := &apl.DeploymentCreateInput{
-		Name:        deploymentOverrideName,
-		ReleaseID:   deploymentOverrideReleaseID,
-		LocDeployID: deploymentOverrideLocDeployID,
-		LeaseType:   deploymentOverrideLeaseType,
-		Components: []Components{
+	in := &apl.DeploymentUpdateInput{
+		Components: []apl.DeploymentComponent{
 			{
 				StackComponentID: deploymentOverrideStackComponentID,
-				Services: []Service{
+				Services: []apl.Service{
 					{
 						ComponentServiceID: deploymentOverrideComponentServiceID,
-						Overrides: []Override{
-							{
-								StackArtifactID: deploymentOverrideStackArtifactID,
-							},
+						Build: apl.Build{
+							Artifact: artifact,
+						},
+						Run: apl.Run{
+							Instances: deploymentOverrideInstances,
 						},
 					},
 				},
@@ -198,15 +174,7 @@ func cmdOverrideDeployments(ccmd *cobra.Command, args []string) {
 		},
 	}
 
-	//y, err := yaml.Marshal(in)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return
-	//}
-	//fmt.Println(string(y))
-	//return
-
-	runCreateCommand(in, aplSvc.Deployments.Create)
+	runUpdateCommand(args, in, aplSvc.Deployments.Update)
 }
 
 func cmdGetDeploymentPods(ccmd *cobra.Command, args []string) {

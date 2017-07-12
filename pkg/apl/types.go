@@ -59,6 +59,39 @@ type Releases struct {
 	MetaData `json:"meta_data"`
 } // `json:"releases"`
 
+// Artifact
+type Artifact struct {
+	Code    interface{} `json:"code,omitempty"`
+	Config  string `json:"config,omitempty"`
+	Image   string `json:"image,omitempty"`
+	Data    string `json:"data,omitempty"`
+	Builder string `json:"builder,omitempty"`
+} // `json:"artifacts"`
+
+// Build
+type Build struct {
+	Artifact  `json:"artifacts"`
+	BuildVars `json:"buildvars,omitempty"`
+} // `json:"build,omitempty"`
+
+// Service
+type Service struct {
+	ComponentServiceID string `json:"component_service_id"`
+	Build              `json:"build,omitempty"`
+	Run                `json:"run,omitempty"`
+}
+
+// BuildVars
+type BuildVars []map[string]string // `json:"buildvars,omitempty"`
+
+// EnvVars
+type EnvVars []map[string]string // `json:"envvars,omitempty"`
+
+// Run
+type Run struct {
+	Instances int `json:"instances,omitempty"`
+} // `json:"run,omitempty"`
+
 //// HealthProbe ...
 //type HealthProbe   struct {
 //	Delay   interface{} `json:"delay,omitempty"`

@@ -57,16 +57,24 @@ type DeploymentCreateInput struct {
 	Components      interface{} `json:"components,omitempty"`
 }
 
+// DeploymentCmdComponent components for command update
+type DeploymentComponent struct {
+	StackComponentID string    `json:"stack_component_id"`
+	Name string `json:"name,omitempty"`
+	Services         []Service `json:"services,omitempty"`
+}
+
 // DeploymentUpdateInput used to update a deployment
 type DeploymentUpdateInput struct {
-	Name                 string `json:"name,omitempty"`
-	LeaseType            string `json:"lease_type,omitempty"`
-	LeasePeriodDays      int    `json:"lease_period_days,omitempty"`
-	LeaseExpirationEpoch int64  `json:"lease_expiration_epoch,omitempty"`
-	WorkloadName         string `json:"workload_name,omitempty"`
-	LeaseExpiration      string `json:"lease_expiration,omitempty"`
-	QosLevel             string `json:"qos_level,omitempty"`
-	Command              string `json:"command,omitempty"`
+	Name                 string                `json:"name,omitempty"`
+	LeaseType            string                `json:"lease_type,omitempty"`
+	LeasePeriodDays      int                   `json:"lease_period_days,omitempty"`
+	LeaseExpirationEpoch int64                 `json:"lease_expiration_epoch,omitempty"`
+	WorkloadName         string                `json:"workload_name,omitempty"`
+	LeaseExpiration      string                `json:"lease_expiration,omitempty"`
+	QosLevel             string                `json:"qos_level,omitempty"`
+	Command              string                `json:"command,omitempty"`
+	Components           []DeploymentComponent `json:"components,omitempty"`
 }
 
 // DeploymentParams filter parameters used in list operations
