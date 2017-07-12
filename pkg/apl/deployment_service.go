@@ -60,7 +60,7 @@ type DeploymentCreateInput struct {
 // DeploymentCmdComponent components for command update
 type DeploymentComponent struct {
 	StackComponentID string    `json:"stack_component_id"`
-	Name string `json:"name,omitempty"`
+	Name             string    `json:"name,omitempty"`
 	Services         []Service `json:"services,omitempty"`
 }
 

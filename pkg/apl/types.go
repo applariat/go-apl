@@ -62,10 +62,10 @@ type Releases struct {
 // Artifact
 type Artifact struct {
 	Code    interface{} `json:"code,omitempty"`
-	Config  string `json:"config,omitempty"`
-	Image   string `json:"image,omitempty"`
-	Data    string `json:"data,omitempty"`
-	Builder string `json:"builder,omitempty"`
+	Config  string      `json:"config,omitempty"`
+	Image   string      `json:"image,omitempty"`
+	Data    string      `json:"data,omitempty"`
+	Builder string      `json:"builder,omitempty"`
 } // `json:"artifacts"`
 
 // Build
