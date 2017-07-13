@@ -151,6 +151,36 @@ func NewDeploymentsCommand() *cobra.Command {
 
 	cmd.AddCommand(overrideCmd)
 
+	// Scale Component
+	scaleComponentCmd := &cobra.Command{
+		Use:   "scale-component",
+		Short: fmt.Sprintf("Scale instances of a component"),
+		Long:  "",
+		Run:   cmdScaleComponentDeployments,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			var missingFlags []string
+
+			if deploymentStackComponentID == "" {
+				missingFlags = append(missingFlags, "--stack-component-id")
+			}
+
+			if deploymentComponentServiceID == "" {
+				missingFlags = append(missingFlags, "--component-service-id")
+			}
+
+			if len(missingFlags) > 0 {
+				return fmt.Errorf("Missing required flags: %s", missingFlags)
+			}
+
+			return nil
+		},
+	}
+	scaleComponentCmd.Flags().IntVar(&deploymentInstances, "instances", 1, "")
+	scaleComponentCmd.Flags().StringVar(&deploymentStackComponentID, "stack-component-id", "", "")
+	scaleComponentCmd.Flags().StringVar(&deploymentComponentServiceID, "component-service-id", "", "")
+
+	cmd.AddCommand(scaleComponentCmd)
+
 	return cmd
 }
 
@@ -230,6 +260,7 @@ func cmdOverrideDeployments(ccmd *cobra.Command, args []string) {
 	artifact := artifactFactory(aplSvc)
 
 	in := &apl.DeploymentUpdateInput{
+		Command: "override",
 		Components: []apl.DeploymentComponent{
 			{
 				StackComponentID: deploymentStackComponentID,
@@ -239,6 +270,29 @@ func cmdOverrideDeployments(ccmd *cobra.Command, args []string) {
 						Build: apl.Build{
 							Artifact: artifact,
 						},
+						Run: apl.Run{
+							Instances: deploymentInstances,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	runUpdateCommand(args, in, aplSvc.Deployments.Update)
+}
+
+func cmdScaleComponentDeployments(ccmd *cobra.Command, args []string) {
+	aplSvc := apl.NewClient()
+
+	in := &apl.DeploymentUpdateInput{
+		Command: "override",
+		Components: []apl.DeploymentComponent{
+			{
+				StackComponentID: deploymentStackComponentID,
+				Services: []apl.Service{
+					{
+						ComponentServiceID: deploymentComponentServiceID,
 						Run: apl.Run{
 							Instances: deploymentInstances,
 						},
