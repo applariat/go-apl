@@ -2,11 +2,13 @@ package app
 
 import (
 	"fmt"
+	"github.com/applariat/go-apl/pkg/apl"
 	"github.com/applariat/roper"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"
 	"reflect"
+	"regexp"
 	"time"
 )
 
@@ -324,4 +326,27 @@ func timeDuration(d time.Duration) string {
 	}
 
 	return fmt.Sprintf("%dy", int(d.Hours()/24/365))
+}
+
+// subdomainSafe replaces all illegal characters with a "-"
+func subdomainSafe(in string) string {
+	return regexp.MustCompile("[^A-Za-z0-9\\-]").ReplaceAllString(in, "-")
+}
+
+// artifactFactory fetches the type and builds the struct
+func artifactFactory(aplSvc *apl.Client) apl.Artifact {
+
+	sa, _, err := aplSvc.StackArtifacts.Get(deploymentStackArtifactID)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var artifact apl.Artifact
+	switch sa.StackArtifactType {
+	case "code":
+		artifact.Code = deploymentStackArtifactID
+	default:
+		panic(fmt.Errorf("Unsupported StackArtifactType %s", sa.StackArtifactType))
+	}
+	return artifact
 }

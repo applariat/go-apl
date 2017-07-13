@@ -206,3 +206,13 @@ func camelCaseToSpaces(input string) string {
 //	}
 //	return result
 //}
+
+// printYAML used for debug...
+func printYAML(data interface{}) {
+	y, err := yaml.Marshal(data)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(y))
+}
