@@ -1,26 +1,22 @@
-## apl deployments create
+## apl deployments override
 
-Create a deployment
+Override a component artifact
 
 ### Synopsis
 
 
-Create a deployment
+Override a component artifact
 
 ```
-apl deployments create [flags]
+apl deployments override [flags]
 ```
 
 ### Options
 
 ```
       --component-service-id string   
-  -h, --help                          help for create
+  -h, --help                          help for override
       --instances int                  (default 1)
-      --loc-deploy-id string          
-      --name string                   
-      --release-id string             
-      --service-name string           
       --stack-artifact-id string      
       --stack-component-id string     
 ```

@@ -10,12 +10,15 @@ import (
 )
 
 var (
-	deploymentParams apl.DeploymentParams
-
-	deploymentOverrideStackComponentID   string
-	deploymentOverrideComponentServiceID string
-	deploymentOverrideStackArtifactID    string
-	deploymentOverrideInstances          int
+	deploymentParams             apl.DeploymentParams
+	deploymentServiceName        string
+	deploymentReleaseID          string
+	deploymentLocDeployID        string
+	deploymentStackComponentID   string
+	deploymentComponentServiceID string
+	deploymentStackArtifactID    string
+	deploymentName               string
+	deploymentInstances          int
 )
 
 // NewDeploymentsCommand Creates a cobra command for Deployments
@@ -36,7 +39,61 @@ func NewDeploymentsCommand() *cobra.Command {
 	cmd.AddCommand(getCmd)
 
 	// Create
-	createCmd := createCreateCommand(cmdCreateDeployments, "deployment", "")
+	createCmd := &cobra.Command{
+		Use:   "create",
+		Short: fmt.Sprintf("Create a deployment"),
+		Long:  "",
+		Run:   cmdCreateDeployments,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			var missingFlags []string
+
+			if deploymentName == "" {
+				missingFlags = append(missingFlags, "--name")
+			} else {
+				// sanitize name, must be dns friendly
+				deploymentName = subdomainSafe(deploymentName)
+			}
+
+			if deploymentReleaseID == "" {
+				missingFlags = append(missingFlags, "--release-id")
+			}
+
+			if deploymentLocDeployID == "" {
+				missingFlags = append(missingFlags, "--loc-deploy-id")
+			}
+
+			if deploymentStackComponentID == "" {
+				missingFlags = append(missingFlags, "--stack-component-id")
+			}
+
+			if deploymentComponentServiceID == "" {
+				missingFlags = append(missingFlags, "--component-service-id")
+			}
+
+			if deploymentServiceName == "" {
+				missingFlags = append(missingFlags, "--service-name")
+			}
+
+			if deploymentStackArtifactID == "" {
+				missingFlags = append(missingFlags, "--stack-artifact-id")
+			}
+
+			if len(missingFlags) > 0 {
+				return fmt.Errorf("Missing required flags: %s", missingFlags)
+			}
+
+			return nil
+		},
+	}
+
+	createCmd.Flags().StringVar(&deploymentName, "name", "", "")
+	createCmd.Flags().StringVar(&deploymentReleaseID, "release-id", "", "")
+	createCmd.Flags().StringVar(&deploymentLocDeployID, "loc-deploy-id", "", "")
+	createCmd.Flags().StringVar(&deploymentStackComponentID, "stack-component-id", "", "")
+	createCmd.Flags().StringVar(&deploymentComponentServiceID, "component-service-id", "", "")
+	createCmd.Flags().StringVar(&deploymentServiceName, "service-name", "", "")
+	createCmd.Flags().StringVar(&deploymentStackArtifactID, "stack-artifact-id", "", "")
+	createCmd.Flags().IntVar(&deploymentInstances, "instances", 1, "")
 	cmd.AddCommand(createCmd)
 
 	// Update
@@ -68,15 +125,15 @@ func NewDeploymentsCommand() *cobra.Command {
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			var missingFlags []string
 
-			if deploymentOverrideStackComponentID == "" {
+			if deploymentStackComponentID == "" {
 				missingFlags = append(missingFlags, "--stack-component-id")
 			}
 
-			if deploymentOverrideComponentServiceID == "" {
+			if deploymentComponentServiceID == "" {
 				missingFlags = append(missingFlags, "--component-service-id")
 			}
 
-			if deploymentOverrideStackArtifactID == "" {
+			if deploymentStackArtifactID == "" {
 				missingFlags = append(missingFlags, "--stack-artifact-id")
 			}
 
@@ -87,12 +144,42 @@ func NewDeploymentsCommand() *cobra.Command {
 			return nil
 		},
 	}
-	overrideCmd.Flags().IntVar(&deploymentOverrideInstances, "instances", 1, "")
-	overrideCmd.Flags().StringVar(&deploymentOverrideStackComponentID, "stack-component-id", "", "")
-	overrideCmd.Flags().StringVar(&deploymentOverrideComponentServiceID, "component-service-id", "", "")
-	overrideCmd.Flags().StringVar(&deploymentOverrideStackArtifactID, "stack-artifact-id", "", "")
+	overrideCmd.Flags().IntVar(&deploymentInstances, "instances", 1, "")
+	overrideCmd.Flags().StringVar(&deploymentStackComponentID, "stack-component-id", "", "")
+	overrideCmd.Flags().StringVar(&deploymentComponentServiceID, "component-service-id", "", "")
+	overrideCmd.Flags().StringVar(&deploymentStackArtifactID, "stack-artifact-id", "", "")
 
 	cmd.AddCommand(overrideCmd)
+
+	// Scale Component
+	scaleComponentCmd := &cobra.Command{
+		Use:   "scale-component",
+		Short: fmt.Sprintf("Scale instances of a component"),
+		Long:  "",
+		Run:   cmdScaleComponentDeployments,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			var missingFlags []string
+
+			if deploymentStackComponentID == "" {
+				missingFlags = append(missingFlags, "--stack-component-id")
+			}
+
+			if deploymentComponentServiceID == "" {
+				missingFlags = append(missingFlags, "--component-service-id")
+			}
+
+			if len(missingFlags) > 0 {
+				return fmt.Errorf("Missing required flags: %s", missingFlags)
+			}
+
+			return nil
+		},
+	}
+	scaleComponentCmd.Flags().IntVar(&deploymentInstances, "instances", 1, "")
+	scaleComponentCmd.Flags().StringVar(&deploymentStackComponentID, "stack-component-id", "", "")
+	scaleComponentCmd.Flags().StringVar(&deploymentComponentServiceID, "component-service-id", "", "")
+
+	cmd.AddCommand(scaleComponentCmd)
 
 	return cmd
 }
@@ -123,7 +210,35 @@ func cmdGetDeployments(ccmd *cobra.Command, args []string) {
 
 func cmdCreateDeployments(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
+
+	// this function will use the file or command line args for input.
 	in := &apl.DeploymentCreateInput{}
+
+	if !isInputFileDefined() {
+		artifact := artifactFactory(aplSvc)
+		in = &apl.DeploymentCreateInput{
+			Name:        deploymentName,
+			LocDeployID: deploymentLocDeployID,
+			ReleaseID:   deploymentReleaseID,
+			Components: []apl.DeploymentComponent{
+				{
+					StackComponentID: deploymentStackComponentID,
+					Services: []apl.Service{
+						{
+							ComponentServiceID: deploymentComponentServiceID,
+							Name:               deploymentServiceName,
+							Overrides: apl.Overrides{
+								Build: apl.Build{
+									Artifact: artifact,
+								},
+							},
+						},
+					},
+				},
+			},
+		}
+	}
+
 	runCreateCommand(in, aplSvc.Deployments.Create)
 }
 
@@ -142,31 +257,44 @@ func cmdDeleteDeployments(ccmd *cobra.Command, args []string) {
 func cmdOverrideDeployments(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	sa, _, err := aplSvc.StackArtifacts.Get(deploymentOverrideStackArtifactID)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	var artifact apl.Artifact
-	switch sa.StackArtifactType {
-	case "code":
-		artifact.Code = deploymentOverrideStackArtifactID
-	default:
-		panic(fmt.Errorf("Unsupported StackArtifactType %s", sa.StackArtifactType))
-	}
+	artifact := artifactFactory(aplSvc)
 
 	in := &apl.DeploymentUpdateInput{
+		Command: "override",
 		Components: []apl.DeploymentComponent{
 			{
-				StackComponentID: deploymentOverrideStackComponentID,
+				StackComponentID: deploymentStackComponentID,
 				Services: []apl.Service{
 					{
-						ComponentServiceID: deploymentOverrideComponentServiceID,
+						ComponentServiceID: deploymentComponentServiceID,
 						Build: apl.Build{
 							Artifact: artifact,
 						},
 						Run: apl.Run{
-							Instances: deploymentOverrideInstances,
+							Instances: deploymentInstances,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	runUpdateCommand(args, in, aplSvc.Deployments.Update)
+}
+
+func cmdScaleComponentDeployments(ccmd *cobra.Command, args []string) {
+	aplSvc := apl.NewClient()
+
+	in := &apl.DeploymentUpdateInput{
+		Command: "override",
+		Components: []apl.DeploymentComponent{
+			{
+				StackComponentID: deploymentStackComponentID,
+				Services: []apl.Service{
+					{
+						ComponentServiceID: deploymentComponentServiceID,
+						Run: apl.Run{
+							Instances: deploymentInstances,
 						},
 					},
 				},

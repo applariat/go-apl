@@ -74,11 +74,18 @@ type Build struct {
 	BuildVars `json:"buildvars,omitempty"`
 } // `json:"build,omitempty"`
 
+// Overrides
+type Overrides struct {
+	Build `json:"build,omitempty"`
+} // `json:"overrides,omitempty"`
+
 // Service
 type Service struct {
-	ComponentServiceID string `json:"component_service_id"`
-	Build              `json:"build,omitempty"`
-	Run                `json:"run,omitempty"`
+	ComponentServiceID string      `json:"component_service_id"`
+	Name               string      `json:"name,omitempty"`
+	Build              interface{} `json:"build,omitempty"`
+	Run                interface{} `json:"run,omitempty"`
+	Overrides          interface{} `json:"overrides,omitempty"`
 }
 
 // BuildVars
