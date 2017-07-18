@@ -22,39 +22,35 @@ func NewDeploymentsService(sling *sling.Sling) *DeploymentService {
 
 // Deployment represents a deployment row
 type Deployment struct {
-	ID                   string      `json:"id"`
-	StackVersionID       string      `json:"stack_version_id"`
-	ProjectID            string      `json:"project_id"`
-	Name                 string      `json:"name"`
-	ReleaseVersion       int         `json:"release_version"`
-	LeaseType            string      `json:"lease_type,omitempty"`
-	LeasePeriodDays      int         `json:"lease_period_days,omitempty"`
-	LeaseExpirationEpoch int64       `json:"lease_expiration_epoch,omitempty"`
-	WorkloadID           string      `json:"workload_id,omitempty"`
-	WorkloadName         string      `json:"workload_name,omitempty"`
-	LeaseExpiration      string      `json:"lease_expiration,omitempty"`
-	QosLevel             string      `json:"qos_level,omitempty"`
-	StackVersion         interface{} `json:"stack_version,omitempty"`
-	Location             interface{} `json:"location,omitempty"`
-	Status               interface{} `json:"status,omitempty"`
-	Stack                interface{} `json:"stack,omitempty"`
-	Release              interface{} `json:"release,omitempty"`
-	CreatedTime          string      `json:"created_time"`
-	LastModified         string      `json:"last_modified"`
-	CreatedByUser        interface{} `json:"created_by_user"`
+	ID              string      `json:"id"`
+	StackVersionID  string      `json:"stack_version_id"`
+	ProjectID       string      `json:"project_id"`
+	Name            string      `json:"name"`
+	ReleaseVersion  int         `json:"release_version"`
+	WorkloadID      string      `json:"workload_id,omitempty"`
+	WorkloadType    string      `json:"workload_type,omitempty"`
+	LeaseExpiration string      `json:"lease_expiration,omitempty"`
+	Workload        interface{} `json:"workload,omitempty"`
+	StackVersion    interface{} `json:"stack_version,omitempty"`
+	Location        interface{} `json:"location,omitempty"`
+	Status          interface{} `json:"status,omitempty"`
+	Stack           interface{} `json:"stack,omitempty"`
+	Release         interface{} `json:"release,omitempty"`
+	CreatedTime     string      `json:"created_time"`
+	LastModified    string      `json:"last_modified"`
+	CreatedByUser   interface{} `json:"created_by_user"`
 }
 
 // DeploymentCreateInput is used for the create of deployments
 type DeploymentCreateInput struct {
-	ID              string      `json:"id,omitempty"`
-	Name            string      `json:"name"`
-	ReleaseID       string      `json:"release_id"`
-	LocDeployID     string      `json:"loc_deploy_id"`
-	LeaseType       string      `json:"lease_type,omitempty"`
-	LeasePeriodDays int         `json:"lease_period_days,omitempty"`
-	QosLevel        string      `json:"qos_level,omitempty"`
-	WorkloadID      string      `json:"workload_id,omitempty"`
-	Components      interface{} `json:"components,omitempty"`
+	ID           string      `json:"id,omitempty"`
+	Name         string      `json:"name"`
+	ReleaseID    string      `json:"release_id"`
+	LocDeployID  string      `json:"loc_deploy_id"`
+	WorkloadType string      `json:"workload_type,omitempty"`
+	WorkloadID   string      `json:"workload_id,omitempty"`
+	Workload     interface{} `json:"workload,omitempty"`
+	Components   interface{} `json:"components,omitempty"`
 }
 
 // DeploymentCmdComponent components for command update
@@ -66,30 +62,20 @@ type DeploymentComponent struct {
 
 // DeploymentUpdateInput used to update a deployment
 type DeploymentUpdateInput struct {
-	Name                 string                `json:"name,omitempty"`
-	LeaseType            string                `json:"lease_type,omitempty"`
-	LeasePeriodDays      int                   `json:"lease_period_days,omitempty"`
-	LeaseExpirationEpoch int64                 `json:"lease_expiration_epoch,omitempty"`
-	WorkloadName         string                `json:"workload_name,omitempty"`
-	LeaseExpiration      string                `json:"lease_expiration,omitempty"`
-	QosLevel             string                `json:"qos_level,omitempty"`
-	Command              string                `json:"command,omitempty"`
-	Components           []DeploymentComponent `json:"components,omitempty"`
+	Name         string                `json:"name,omitempty"`
+	Command      string                `json:"command,omitempty"`
+	WorkloadType string                `json:"workload_type,omitempty"`
+	Workload     interface{}           `json:"workload,omitempty"`
+	Components   []DeploymentComponent `json:"components,omitempty"`
 }
 
 // DeploymentParams filter parameters used in list operations
 type DeploymentParams struct {
-	Name                 string `url:"name,omitempty"`
-	StackVersionID       string `url:"stack_version_id,omitempty"`
-	ProjectID            string `url:"project_id,omitempty"`
-	WorkloadID           string `url:"workload_id,omitempty"`
-	ReleaseVersion       int    `url:"release_version,omitempty"`
-	LeaseType            string `url:"lease_type,omitempty"`
-	LeasePeriodDays      int    `url:"lease_period_days,omitempty"`
-	LeaseExpirationEpoch int64  `url:"lease_expiration_epoch,omitempty"`
-	WorkloadName         string `url:"workload_name,omitempty"`
-	LeaseExpiration      string `url:"lease_expiration,omitempty"`
-	QosLevel             string `url:"qos_level,omitempty"`
+	Name           string `url:"name,omitempty"`
+	StackVersionID string `url:"stack_version_id,omitempty"`
+	ProjectID      string `url:"project_id,omitempty"`
+	WorkloadID     string `url:"workload_id,omitempty"`
+	WorkloadType   string `url:"workload_type,omitempty"`
 }
 
 // List gets a list of deployments with optional filter params
