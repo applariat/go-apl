@@ -1,20 +1,26 @@
-.PHONY: build
-
-all: build
-
-SRC_DIRS := cmd pkg
-PKG := github.com/applariat/go-apl
-VERSION ?= unknown
 
 ALL_OS := linux darwin windows
+ALL_ARCH := amd64
+
+VERSION ?= unknown
+ARCH ?= amd64
+OS ?= linux
+
+all: all-build
+
+build-%:
+	@$(MAKE) --no-print-directory OS=$* build
+
+all-build: $(addprefix build-, $(ALL_OS))
+
+build: bin/apl-$(VERSION)-$(OS)_$(ARCH)
+
+bin/apl-$(VERSION)-$(OS)_$(ARCH): build-dirs
+	@echo "building: $@"
+	@VERSION=$(VERSION) OS=$(OS) ARCH=$(ARCH) ./build/build.sh
 
 check:
-	@./build/check.sh $(SRC_DIRS)
-
-build: $(addprefix build-, $(ALL_OS))
-
-build-%: build-dirs
-	PKG=$(PKG) VERSION=$(VERSION) OS=$* ARCH=amd64 ./build/build.sh
+	@./build/check.sh cmd pkg
 
 clean:
 	rm -rf bin
