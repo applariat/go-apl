@@ -4,11 +4,6 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if [ -z "${PKG}" ]; then
-    echo "PKG must be set"
-    exit 1
-fi
-
 if [ -z "${OS}" ]; then
     echo "OS must be set"
     exit 1
@@ -30,6 +25,6 @@ export GOOS="${OS}"
 
 BIN_NAME=bin/apl-${VERSION}-${OS}_${ARCH}
 
-go build -ldflags "-X ${PKG}/cmd/apl/app.VERSION=${VERSION}" -o ${BIN_NAME} cmd/apl/main.go
+go build -ldflags "-X github.com/applariat/go-apl/cmd/apl/app.VERSION=${VERSION}" -o ${BIN_NAME} cmd/apl/main.go
 
 tar -czf ${BIN_NAME}.tgz ${BIN_NAME}
