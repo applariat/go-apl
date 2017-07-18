@@ -29,10 +29,7 @@ func NewDeploymentsCommand() *cobra.Command {
 	cmd.Flags().StringVar(&deploymentParams.StackVersionID, "stack-version-id", "", "Filter deployments by stack_version_id")
 	cmd.Flags().StringVar(&deploymentParams.ProjectID, "project-id", "", "Filter deployments by project_id")
 	cmd.Flags().StringVar(&deploymentParams.WorkloadID, "workload-id", "", "Filter deployments by workload_id")
-	cmd.Flags().StringVar(&deploymentParams.LeaseType, "lease-type", "", "Filter deployments by lease_type")
-	cmd.Flags().StringVar(&deploymentParams.WorkloadName, "workload-name", "", "Filter deployments by workload_name")
-	cmd.Flags().StringVar(&deploymentParams.LeaseExpiration, "lease-expiration", "", "Filter deployments by lease_expiration")
-	cmd.Flags().StringVar(&deploymentParams.QosLevel, "qos-level", "", "Filter deployments by qos_level")
+	cmd.Flags().StringVar(&deploymentParams.WorkloadType, "workload-type", "", "Filter deployments by workload_type")
 
 	// Get
 	getCmd := createGetCommand(cmdGetDeployments, "deployment", "")
