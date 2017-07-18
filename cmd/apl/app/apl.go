@@ -63,5 +63,6 @@ func init() {
 
 	// Utility
 	AppLariatCmd.AddCommand(NewGenerateDocumentationCommand())
+	AppLariatCmd.AddCommand(NewVersionCommand())
 
 }
