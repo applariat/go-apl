@@ -1,5 +1,7 @@
 package apl
 
+import "k8s.io/kubernetes/test/e2e_node/services"
+
 // CreateResult is the PK of the row just created
 // Or it's a more complex struct of results.
 type CreateResult struct {
@@ -81,11 +83,10 @@ type Overrides struct {
 
 // Service
 type Service struct {
-	ComponentServiceID string      `json:"component_service_id"`
-	Name               string      `json:"name,omitempty"`
-	Build              interface{} `json:"build,omitempty"`
-	Run                interface{} `json:"run,omitempty"`
-	Overrides          interface{} `json:"overrides,omitempty"`
+	Name      string      `json:"name,omitempty"`
+	Build     interface{} `json:"build,omitempty"`
+	Run       interface{} `json:"run,omitempty"`
+	Overrides interface{} `json:"overrides,omitempty"`
 }
 
 // BuildVars

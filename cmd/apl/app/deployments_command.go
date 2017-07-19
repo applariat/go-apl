@@ -10,15 +10,14 @@ import (
 )
 
 var (
-	deploymentParams             apl.DeploymentParams
-	deploymentServiceName        string
-	deploymentReleaseID          string
-	deploymentLocDeployID        string
-	deploymentStackComponentID   string
-	deploymentComponentServiceID string
-	deploymentStackArtifactID    string
-	deploymentName               string
-	deploymentInstances          int
+	deploymentParams           apl.DeploymentParams
+	deploymentServiceName      string
+	deploymentReleaseID        string
+	deploymentLocDeployID      string
+	deploymentStackComponentID string
+	deploymentStackArtifactID  string
+	deploymentName             string
+	deploymentInstances        int
 )
 
 // NewDeploymentsCommand Creates a cobra command for Deployments
@@ -63,10 +62,6 @@ func NewDeploymentsCommand() *cobra.Command {
 				missingFlags = append(missingFlags, "--stack-component-id")
 			}
 
-			if deploymentComponentServiceID == "" {
-				missingFlags = append(missingFlags, "--component-service-id")
-			}
-
 			if deploymentServiceName == "" {
 				missingFlags = append(missingFlags, "--service-name")
 			}
@@ -87,7 +82,6 @@ func NewDeploymentsCommand() *cobra.Command {
 	createCmd.Flags().StringVar(&deploymentReleaseID, "release-id", "", "")
 	createCmd.Flags().StringVar(&deploymentLocDeployID, "loc-deploy-id", "", "")
 	createCmd.Flags().StringVar(&deploymentStackComponentID, "stack-component-id", "", "")
-	createCmd.Flags().StringVar(&deploymentComponentServiceID, "component-service-id", "", "")
 	createCmd.Flags().StringVar(&deploymentServiceName, "service-name", "", "")
 	createCmd.Flags().StringVar(&deploymentStackArtifactID, "stack-artifact-id", "", "")
 	createCmd.Flags().IntVar(&deploymentInstances, "instances", 1, "")
@@ -126,8 +120,8 @@ func NewDeploymentsCommand() *cobra.Command {
 				missingFlags = append(missingFlags, "--stack-component-id")
 			}
 
-			if deploymentComponentServiceID == "" {
-				missingFlags = append(missingFlags, "--component-service-id")
+			if deploymentServiceName == "" {
+				missingFlags = append(missingFlags, "--service-name")
 			}
 
 			if deploymentStackArtifactID == "" {
@@ -143,7 +137,7 @@ func NewDeploymentsCommand() *cobra.Command {
 	}
 	overrideCmd.Flags().IntVar(&deploymentInstances, "instances", 1, "")
 	overrideCmd.Flags().StringVar(&deploymentStackComponentID, "stack-component-id", "", "")
-	overrideCmd.Flags().StringVar(&deploymentComponentServiceID, "component-service-id", "", "")
+	overrideCmd.Flags().StringVar(&deploymentServiceName, "service-name", "", "")
 	overrideCmd.Flags().StringVar(&deploymentStackArtifactID, "stack-artifact-id", "", "")
 
 	cmd.AddCommand(overrideCmd)
@@ -161,8 +155,8 @@ func NewDeploymentsCommand() *cobra.Command {
 				missingFlags = append(missingFlags, "--stack-component-id")
 			}
 
-			if deploymentComponentServiceID == "" {
-				missingFlags = append(missingFlags, "--component-service-id")
+			if deploymentServiceName == "" {
+				missingFlags = append(missingFlags, "--service-name")
 			}
 
 			if len(missingFlags) > 0 {
@@ -174,7 +168,7 @@ func NewDeploymentsCommand() *cobra.Command {
 	}
 	scaleComponentCmd.Flags().IntVar(&deploymentInstances, "instances", 1, "")
 	scaleComponentCmd.Flags().StringVar(&deploymentStackComponentID, "stack-component-id", "", "")
-	scaleComponentCmd.Flags().StringVar(&deploymentComponentServiceID, "component-service-id", "", "")
+	scaleComponentCmd.Flags().StringVar(&deploymentServiceName, "component-service-id", "", "")
 
 	cmd.AddCommand(scaleComponentCmd)
 
@@ -222,8 +216,7 @@ func cmdCreateDeployments(ccmd *cobra.Command, args []string) {
 					StackComponentID: deploymentStackComponentID,
 					Services: []apl.Service{
 						{
-							ComponentServiceID: deploymentComponentServiceID,
-							Name:               deploymentServiceName,
+							Name: deploymentServiceName,
 							Overrides: apl.Overrides{
 								Build: apl.Build{
 									Artifact: artifact,
@@ -263,7 +256,7 @@ func cmdOverrideDeployments(ccmd *cobra.Command, args []string) {
 				StackComponentID: deploymentStackComponentID,
 				Services: []apl.Service{
 					{
-						ComponentServiceID: deploymentComponentServiceID,
+						Name: deploymentServiceName,
 						Build: apl.Build{
 							Artifact: artifact,
 						},
@@ -289,7 +282,7 @@ func cmdScaleComponentDeployments(ccmd *cobra.Command, args []string) {
 				StackComponentID: deploymentStackComponentID,
 				Services: []apl.Service{
 					{
-						ComponentServiceID: deploymentComponentServiceID,
+						Name: deploymentServiceName,
 						Run: apl.Run{
 							Instances: deploymentInstances,
 						},

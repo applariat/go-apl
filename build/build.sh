@@ -25,6 +25,6 @@ export GOOS="${OS}"
 
 BIN_NAME=apl-${VERSION}-${OS}_${ARCH}
 
-go build -ldflags "-X github.com/applariat/go-apl/cmd/apl/app.VERSION=${VERSION}" -o bin/${BIN_NAME} cmd/apl/main.go
+go build -ldflags "-X github.com/applariat/go-apl/cmd/apl/app.VERSION=${VERSION}" -o bin/apl cmd/apl/main.go
 
-tar -czf bin/${BIN_NAME}.tgz -C bin ${BIN_NAME}
+tar -czf bin/${BIN_NAME}.tgz -C bin apl
