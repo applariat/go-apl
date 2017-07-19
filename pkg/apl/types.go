@@ -1,7 +1,5 @@
 package apl
 
-import "k8s.io/kubernetes/test/e2e_node/services"
-
 // CreateResult is the PK of the row just created
 // Or it's a more complex struct of results.
 type CreateResult struct {
