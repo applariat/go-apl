@@ -334,9 +334,9 @@ func subdomainSafe(in string) string {
 }
 
 // artifactFactory fetches the type and builds the struct
-func artifactFactory(aplSvc *apl.Client) apl.Artifact {
+func artifactFactory(aplSvc *apl.Client, stackArtifactID string) apl.Artifact {
 
-	sa, _, err := aplSvc.StackArtifacts.Get(deploymentStackArtifactID)
+	sa, _, err := aplSvc.StackArtifacts.Get(stackArtifactID)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -344,7 +344,7 @@ func artifactFactory(aplSvc *apl.Client) apl.Artifact {
 	var artifact apl.Artifact
 	switch sa.StackArtifactType {
 	case "code":
-		artifact.Code = deploymentStackArtifactID
+		artifact.Code = stackArtifactID
 	default:
 		panic(fmt.Errorf("Unsupported StackArtifactType %s", sa.StackArtifactType))
 	}

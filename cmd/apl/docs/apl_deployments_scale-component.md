@@ -1,29 +1,23 @@
-## apl deployments create
+## apl deployments scale-component
 
-Create a deployment
+Scale instances of a component
 
 ### Synopsis
 
 
-Create a deployment
+Scale instances of a component
 
 ```
-apl deployments create [flags]
+apl deployments scale-component [flags]
 ```
 
 ### Options
 
 ```
       --component-service-id string   
-  -h, --help                          help for create
+  -h, --help                          help for scale-component
       --instances int                  (default 1)
-      --loc-deploy-id string          
-      --name string                   
-      --release-id string             
-      --service-name string           
-      --stack-artifact-id string      
       --stack-component-id string     
-      --workload-type string          
 ```
 
 ### Options inherited from parent commands

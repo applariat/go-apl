@@ -10,14 +10,16 @@ import (
 )
 
 var (
-	deploymentParams           apl.DeploymentParams
-	deploymentServiceName      string
-	deploymentReleaseID        string
-	deploymentLocDeployID      string
-	deploymentStackComponentID string
-	deploymentStackArtifactID  string
-	deploymentName             string
-	deploymentInstances        int
+	deploymentParams             apl.DeploymentParams
+	deploymentWorkloadType       string
+	deploymentServiceName        string
+	deploymentReleaseID          string
+	deploymentLocDeployID        string
+	deploymentStackComponentID   string
+	deploymentStackArtifactID    string
+	deploymentComponentServiceID string
+	deploymentName               string
+	deploymentInstances          int
 )
 
 // NewDeploymentsCommand Creates a cobra command for Deployments
@@ -79,9 +81,11 @@ func NewDeploymentsCommand() *cobra.Command {
 	}
 
 	createCmd.Flags().StringVar(&deploymentName, "name", "", "")
+	createCmd.Flags().StringVar(&deploymentWorkloadType, "workload-type", "", "")
 	createCmd.Flags().StringVar(&deploymentReleaseID, "release-id", "", "")
 	createCmd.Flags().StringVar(&deploymentLocDeployID, "loc-deploy-id", "", "")
 	createCmd.Flags().StringVar(&deploymentStackComponentID, "stack-component-id", "", "")
+	createCmd.Flags().StringVar(&deploymentComponentServiceID, "component-service-id", "", "")
 	createCmd.Flags().StringVar(&deploymentServiceName, "service-name", "", "")
 	createCmd.Flags().StringVar(&deploymentStackArtifactID, "stack-artifact-id", "", "")
 	createCmd.Flags().IntVar(&deploymentInstances, "instances", 1, "")
@@ -206,7 +210,7 @@ func cmdCreateDeployments(ccmd *cobra.Command, args []string) {
 	in := &apl.DeploymentCreateInput{}
 
 	if !isInputFileDefined() {
-		artifact := artifactFactory(aplSvc)
+		artifact := artifactFactory(aplSvc, deploymentStackArtifactID)
 		in = &apl.DeploymentCreateInput{
 			Name:        deploymentName,
 			LocDeployID: deploymentLocDeployID,
@@ -216,7 +220,8 @@ func cmdCreateDeployments(ccmd *cobra.Command, args []string) {
 					StackComponentID: deploymentStackComponentID,
 					Services: []apl.Service{
 						{
-							Name: deploymentServiceName,
+							ComponentServiceID: deploymentComponentServiceID,
+							Name:               deploymentServiceName,
 							Overrides: apl.Overrides{
 								Build: apl.Build{
 									Artifact: artifact,
@@ -226,6 +231,10 @@ func cmdCreateDeployments(ccmd *cobra.Command, args []string) {
 					},
 				},
 			},
+		}
+
+		if deploymentWorkloadType != "" {
+			in.WorkloadType = deploymentWorkloadType
 		}
 	}
 
@@ -247,7 +256,7 @@ func cmdDeleteDeployments(ccmd *cobra.Command, args []string) {
 func cmdOverrideDeployments(ccmd *cobra.Command, args []string) {
 	aplSvc := apl.NewClient()
 
-	artifact := artifactFactory(aplSvc)
+	artifact := artifactFactory(aplSvc, deploymentStackArtifactID)
 
 	in := &apl.DeploymentUpdateInput{
 		Command: "override",

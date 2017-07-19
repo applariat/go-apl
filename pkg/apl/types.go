@@ -81,10 +81,12 @@ type Overrides struct {
 
 // Service
 type Service struct {
-	Name      string      `json:"name,omitempty"`
-	Build     interface{} `json:"build,omitempty"`
-	Run       interface{} `json:"run,omitempty"`
-	Overrides interface{} `json:"overrides,omitempty"`
+	// TODO: remove ComponentServiceID. Deprecated
+	ComponentServiceID string      `json:"component_service_id,omitempty"`
+	Name               string      `json:"name,omitempty"`
+	Build              interface{} `json:"build,omitempty"`
+	Run                interface{} `json:"run,omitempty"`
+	Overrides          interface{} `json:"overrides,omitempty"`
 }
 
 // BuildVars
