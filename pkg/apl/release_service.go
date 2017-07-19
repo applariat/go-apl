@@ -30,7 +30,7 @@ type Release struct {
 	LocImageID     string      `json:"loc_image_id,omitempty"`
 	BuildStatus    string      `json:"build_status,omitempty"`
 	Components     interface{} `json:"components"`
-	MetaData	   interface{} `json:"meta_data,omitempty"`
+	MetaData       interface{} `json:"meta_data,omitempty"`
 
 	LastModified  string `json:"last_modified"`
 	CreatedTime   string `json:"created_time"`
@@ -47,7 +47,7 @@ type ReleaseCreateInput struct {
 	LocImageID     string      `json:"loc_image_id,omitempty"`
 	BuildStatus    string      `json:"build_status,omitempty"`
 	Components     interface{} `json:"components"`
-	MetaData	   interface{} `json:"meta_data,omitempty"`
+	MetaData       interface{} `json:"meta_data,omitempty"`
 }
 
 // ReleaseParams filter parameters used in list operations
