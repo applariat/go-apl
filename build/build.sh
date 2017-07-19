@@ -23,8 +23,8 @@ export CGO_ENABLED=0
 export GOARCH="${ARCH}"
 export GOOS="${OS}"
 
-BIN_NAME=bin/apl-${VERSION}-${OS}_${ARCH}
+BIN_NAME=apl-${VERSION}-${OS}_${ARCH}
 
-go build -ldflags "-X github.com/applariat/go-apl/cmd/apl/app.VERSION=${VERSION}" -o ${BIN_NAME} cmd/apl/main.go
+go build -ldflags "-X github.com/applariat/go-apl/cmd/apl/app.VERSION=${VERSION}" -o bin/${BIN_NAME} cmd/apl/main.go
 
-tar -czf ${BIN_NAME}.tgz ${BIN_NAME}
+tar -czf bin/${BIN_NAME}.tgz -C bin ${BIN_NAME}
