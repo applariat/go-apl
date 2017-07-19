@@ -40,15 +40,52 @@ type Release struct {
 // ReleaseCreateInput is used for the create of releases
 type ReleaseCreateInput struct {
 	ID             string      `json:"id,omitempty"`
-	Version        int         `json:"version"`
+	Version        int         `json:"version,omitempty"`
 	StackID        string      `json:"stack_id"`
 	StackVersionID string      `json:"stack_version_id"`
-	ProjectID      string      `json:"project_id"`
+	ProjectID      string      `json:"project_id,omitempty"`
 	LocImageID     string      `json:"loc_image_id,omitempty"`
 	BuildStatus    string      `json:"build_status,omitempty"`
 	Components     interface{} `json:"components"`
 	MetaData       interface{} `json:"meta_data,omitempty"`
 }
+
+//// ReleaseArtifact
+//type ReleaseArtifact struct {
+//	Code struct {
+//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
+//	} `json:"code,omitempty"`
+//	Config struct {
+//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
+//	} `json:"config,omitempty"`
+//	Image struct {
+//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
+//	} `json:"image,omitempty"`
+//	Data struct {
+//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
+//	} `json:"data,omitempty"`
+//	Builder struct {
+//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
+//	} `json:"builder,omitempty"`
+//} // `json:"artifacts"`
+//
+//// ReleaseArtifacts
+//type ReleaseArtifacts struct {
+//	ReleaseArtifact `json:"artifacts"`
+//}
+//
+//// ReleaseComponentService
+//type ReleaseComponentService struct {
+//	Name             string `json:"name,omitempty"`
+//	ReleaseArtifacts `json:"release,omitempty"`
+//}
+//
+//// DeploymentCmdComponent components for command update
+//type ReleaseComponent struct {
+//	StackComponentID string                    `json:"stack_component_id,omitempty"`
+//	Name             string                    `json:"name,omitempty"`
+//	Services         []ReleaseComponentService `json:"services,omitempty"`
+//}
 
 // ReleaseParams filter parameters used in list operations
 type ReleaseParams struct {
