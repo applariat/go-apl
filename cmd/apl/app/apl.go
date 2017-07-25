@@ -7,7 +7,7 @@ import (
 var (
 	printerType string
 	inputFile   string
-	dryRunFlag      bool
+	dryRunFlag  bool
 
 	// AppLariatCmd The appLariat (apl) Command Line Interface is a unified tool to manage your appLariat service.
 	// You can control all appLariat services from the command line and automate them through scripts.
