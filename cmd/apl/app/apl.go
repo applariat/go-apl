@@ -7,6 +7,7 @@ import (
 var (
 	printerType string
 	inputFile   string
+	dryRunFlag      bool
 
 	// AppLariatCmd The appLariat (apl) Command Line Interface is a unified tool to manage your appLariat service.
 	// You can control all appLariat services from the command line and automate them through scripts.
@@ -30,6 +31,7 @@ func init() {
 
 	// persistent flags, globals
 	AppLariatCmd.PersistentFlags().StringVarP(&printerType, "output", "o", "table", "Output format: json|yaml")
+	AppLariatCmd.PersistentFlags().BoolVarP(&dryRunFlag, "dry-run", "d", false, "Dry run")
 
 	// Commands
 

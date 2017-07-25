@@ -2,14 +2,14 @@ package app
 
 import (
 	"fmt"
-	"github.com/applariat/go-apl/pkg/apl"
-	"github.com/applariat/roper"
-	"github.com/spf13/cobra"
 	"net/http"
 	"os"
 	"reflect"
 	"regexp"
 	"time"
+
+	"github.com/applariat/roper"
+	"github.com/spf13/cobra"
 )
 
 // All of the commands are created and ran the same way.
@@ -173,6 +173,8 @@ func runCreateCommand(input interface{}, callMe interface{}) {
 		return
 	}
 
+	dryRun(input)
+
 	in := []reflect.Value{}
 	if input != nil {
 		in = []reflect.Value{reflect.ValueOf(input)}
@@ -196,6 +198,8 @@ func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 		printResults(NewCLIError(err.Error()))
 		return
 	}
+
+	dryRun(input)
 
 	var id string
 	if len(args) != 0 {
@@ -229,6 +233,8 @@ func runDeleteCommand(args []string, callMe interface{}) {
 	}
 
 	in := []reflect.Value{reflect.ValueOf(id)}
+
+	dryRun(in)
 
 	response := reflect.ValueOf(callMe).Call(in)
 	output, _, err := getReflectOutput(response)
@@ -333,20 +339,12 @@ func subdomainSafe(in string) string {
 	return regexp.MustCompile("[^A-Za-z0-9\\-]").ReplaceAllString(in, "-")
 }
 
-// artifactFactory fetches the type and builds the struct
-func artifactFactory(aplSvc *apl.Client, stackArtifactID string) apl.Artifact {
-
-	sa, _, err := aplSvc.StackArtifacts.Get(stackArtifactID)
-	if err != nil {
-		panic(err.Error())
+// dryRun is opinionated. yaml output only
+func dryRun(data interface{}) {
+	if dryRunFlag {
+		fmt.Println("# ---DRY-RUN---")
+		printerType = "yaml"
+		printResults(data)
+		os.Exit(0)
 	}
-
-	var artifact apl.Artifact
-	switch sa.StackArtifactType {
-	case "code":
-		artifact.Code = stackArtifactID
-	default:
-		panic(fmt.Errorf("Unsupported StackArtifactType %s", sa.StackArtifactType))
-	}
-	return artifact
 }
