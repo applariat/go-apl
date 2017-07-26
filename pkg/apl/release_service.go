@@ -50,42 +50,30 @@ type ReleaseCreateInput struct {
 	MetaData       interface{} `json:"meta_data,omitempty"`
 }
 
-//// ReleaseArtifact
-//type ReleaseArtifact struct {
-//	Code struct {
-//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
-//	} `json:"code,omitempty"`
-//	Config struct {
-//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
-//	} `json:"config,omitempty"`
-//	Image struct {
-//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
-//	} `json:"image,omitempty"`
-//	Data struct {
-//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
-//	} `json:"data,omitempty"`
-//	Builder struct {
-//		StackArtifactID string `json:"stack_artifact_id,omitempty"`
-//	} `json:"builder,omitempty"`
-//} // `json:"artifacts"`
-//
-//// ReleaseArtifacts
-//type ReleaseArtifacts struct {
-//	ReleaseArtifact `json:"artifacts"`
-//}
-//
-//// ReleaseComponentService
-//type ReleaseComponentService struct {
-//	Name             string `json:"name,omitempty"`
-//	ReleaseArtifacts `json:"release,omitempty"`
-//}
-//
-//// DeploymentCmdComponent components for command update
-//type ReleaseComponent struct {
-//	StackComponentID string                    `json:"stack_component_id,omitempty"`
-//	Name             string                    `json:"name,omitempty"`
-//	Services         []ReleaseComponentService `json:"services,omitempty"`
-//}
+type ReleaseOverrideArtifactBase struct {
+	StackArtifactID string `json:"stack_artifact_id,omitempty"`
+}
+
+type ReleaseOverrideArtifact struct {
+	Builder *ReleaseOverrideArtifactBase `json:"builder,omitempty"`
+	Code    *ReleaseOverrideArtifactBase `json:"code,omitempty"`
+	Image   *ReleaseOverrideArtifactBase `json:"image,omitempty"`
+} // `json:"artifacts"`
+
+type ReleaseOverrideRelease struct {
+	Artifacts ReleaseOverrideArtifact `json:"artifacts,omitempty"`
+} // `json:"release"`
+
+type ReleaseOverrideService struct {
+	Name    string                 `json:"name"`
+	Release ReleaseOverrideRelease `json:"release"`
+} // `json:"services"`
+
+type ReleaseOverrideComponent struct {
+	Name             string                   `json:"name"`
+	StackComponentID string                   `json:"stack_component_id"`
+	Services         []ReleaseOverrideService `json:"services"`
+} // `json:"components"`
 
 // ReleaseParams filter parameters used in list operations
 type ReleaseParams struct {
