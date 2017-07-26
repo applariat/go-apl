@@ -46,9 +46,10 @@ func NewDeploymentsCreateCommand() *cobra.Command {
 				missingFlags = append(missingFlags, "--loc-deploy-id")
 			}
 
-			if len(componentsMap.Values) < 1 {
-				missingFlags = append(missingFlags, "--component")
-			}
+			// Should this be required? I don't think so.
+			//if len(componentsMap.Values) < 1 {
+			//	missingFlags = append(missingFlags, "--component")
+			//}
 
 			if len(missingFlags) > 0 {
 				return fmt.Errorf("Missing required flags: %s", missingFlags)
