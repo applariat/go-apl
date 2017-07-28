@@ -9,15 +9,20 @@ import (
 // NewDeploymentsOverridesCommand
 func NewDeploymentsOverridesCommand() *cobra.Command {
 
-	var componentsMap ComponentStringMap
+	var (
+		componentsMap ComponentStringMap
+	)
 
 	cmd := &cobra.Command{
-		Use:   "override",
+		Use:   "override [ID]",
 		Short: fmt.Sprintf("Override a component artifact"),
 		Long:  "",
 
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-
+			err := checkCommandHasIDInArgs(args, "credential")
+			if err != nil {
+				return err
+			}
 			// If there is a file, no other checking is needed
 			if isInputFileDefined() {
 				return nil
