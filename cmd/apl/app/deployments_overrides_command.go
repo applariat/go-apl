@@ -19,7 +19,7 @@ func NewDeploymentsOverridesCommand() *cobra.Command {
 		Long:  "",
 
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			err := checkCommandHasIDInArgs(args, "credential")
+			err := checkCommandHasIDInArgs(args, "deployment")
 			if err != nil {
 				return err
 			}
