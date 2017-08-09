@@ -1,13 +1,17 @@
 # appLariat (apl) Command Line Interface
 
-The appLariat Command Line Interface (CLI) is a unified tool to manage your appLariat service. You can control all appLariat services from the command line and automate them through scripts.
+The appLariat Command Line Interface (CLI) is a unified tool to manage your appLariat service. You can control your appLariat services from the command line and automate them through scripts.
 
 
 ## Installing the apl CLI
 
-* Download the binary from the [releases page](https://github.com/applariat/go-apl/releases).
-* Extract the apl-VERSION-ARCH.tgz. `tar xzvf apl-VERSION-ARCH.tgz`
-* Move the apl binary to somewhere on your $PATH. `sudo mv apl /usr/local/bin`
+Download the apl.sh script from [https://github.com/applariat/go-apl](https://github.com/applariat/go-apl)
+
+The script performs the following
+* Downloads the binary from the [releases page](https://github.com/applariat/go-apl/releases).
+* Downloads some helper scripts we have created as examples of using the CLI
+* Extracts the binary and moves it to /usr/local/bin
+* Creates the apl access config file
 
 
 ## Configuration via Config File
@@ -98,7 +102,7 @@ All commands will print out an abbreviated table of fields. To get the full reco
 
 Examples:
 ```
-apl roles --role ops --output json
-apl roles --role ops --output yaml
-apl roles -o json
+apl releases --version 1 --output json
+apl stacks --name wordpress --output yaml
+apl deployments -o json
 ```
