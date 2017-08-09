@@ -4,17 +4,19 @@ matrix:
   include:
   - go: 1.7
 install:
-  - # Override, skips "go get". Project is vendored
+- # Override, skips "go get". Project is vendored
 script:
-  - make check
+- make check
 before_deploy:
 - VERSION=${TRAVIS_TAG} make
 deploy:
   provider: releases
   api_key:
-    secure: I8sXKvIn2IOQG5HV6DSBVat6lSEUSJ7tCBk8H/8+kjVyeS4Bl3Es96y2VEHJGuCwABGeUBkpaPLKxIS3IqhKQhorvg/Qj0ELG3OshC+QWFbHi4MGQ/NrgD3u3n1UMpfGkZDB2+Gs9W/xjMVO7FQ/obrg6/ucKcYU5iFIQcbvoM5BC5SBeEKfutuJNx+VZcTXbh2g7L2vX70VaiZwdKJNCqHEJ+Ezk5RzeUPUVw6BtH2KcZ/DK7mOljsc0yBaI1BznVEoeVhd6saPNOn3p4wRCTFZU1NWPlIlu+9phzJD+C3MlKFSJ8SeOJy9HFNUKXwsjcl2jh+kbzPl50jADWtIgNL5zgit2lxHzK8dJBloAuN763I4trhHF4kPH0VQL6fHwwrY9mI6+H45dAkevGZwO4pBIfi9t68yzexXFXMIuhqS9D56nBUmUUilVUJk5PkNiFKsacH+Sb4yiyGKdovHoHLG2UhFTp4w6SirKPyd3WAlhQ3EVI+Zjc3PhqPvQODpsEP1qQ/lWhSJYl87GXsYmmd+ZAxRGh3qQtO8wtzzT8fXw1Cp+qnxs7ZsoZjLUYCEfdDQX/UXi1YDUUBpgdeBndz34oj5T7/+eg/iVv+rzrFNK5slIou73yQD4h4hQL3qGjFjPlr1Ec9V6Tf5Xh9CWLSqVro/7as1XzOWk3shkS4=
+    secure: K9wmGfxBsycA2DhxZriRQzyT7UDeYGNZ7/3h1/U0bvXc7tlLrBZO7Kqxe9VZHFdZ3jr47loLxRs7h+I2SJXYrWzNjwrEgbfqRFNvxkBTeABrP7HqUn2Mst8vEO1aH3zCgr2zi1BT7kGE5HK7UB//67fXf3/zbwXfdYkaOZV3D7bnebj8zPmNj/vvUfcJNxn6fzeE4JPffuf/67WXe1XEscZ7egWe2s+z5p5nVf7NOGGovzqQ+SZ3xpQTIyjqGnWLQDCbRRx6KNZCGhanJJMjwIPDyAlWY+coXo9+AUgM2THiGED2u58L5DMpcAt4s8ZIIsAKsz9PAk9W/BmQ0zgMpOTYu5skxy/J8P7r5eD49jJ89M0RBc6ZHxLL5n2mHwJwgM56wJxHutU9kBE4JP8FA/krfvDQyqaxu0pOI1BQgRkBDKb1aF7muMtCjrB5CGNaOUfOsNMT6UugGB7zFdcwqwb7244nEF+gB2LjxQzx6vnTh8AUXAKxLb3X/MxJ+26IBu+QxYWvJtZVCB7/Mr2fn0pwgIOEgjiQX1BC7CTYtwbqLKzZDVenKWKyqmh4WL/zx5LBoVBGQRbQMVHdlRAt16XWGhDKFXpdcCm/gjMlPRgNxwXmaJ6DbAq4JAgdXJ45M778NNAo2m65zXx+cJdb53V6hb+d5FmRwxYE4tju+hw=
   file_glob: true
-  file: bin/*.tgz
+  file: 
+    - bin/*.tgz
+    - apl_install.sh
   skip_cleanup: true
   on:
     repo: applariat/go-apl
