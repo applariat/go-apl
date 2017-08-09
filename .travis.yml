@@ -14,7 +14,9 @@ deploy:
   api_key:
     secure: I8sXKvIn2IOQG5HV6DSBVat6lSEUSJ7tCBk8H/8+kjVyeS4Bl3Es96y2VEHJGuCwABGeUBkpaPLKxIS3IqhKQhorvg/Qj0ELG3OshC+QWFbHi4MGQ/NrgD3u3n1UMpfGkZDB2+Gs9W/xjMVO7FQ/obrg6/ucKcYU5iFIQcbvoM5BC5SBeEKfutuJNx+VZcTXbh2g7L2vX70VaiZwdKJNCqHEJ+Ezk5RzeUPUVw6BtH2KcZ/DK7mOljsc0yBaI1BznVEoeVhd6saPNOn3p4wRCTFZU1NWPlIlu+9phzJD+C3MlKFSJ8SeOJy9HFNUKXwsjcl2jh+kbzPl50jADWtIgNL5zgit2lxHzK8dJBloAuN763I4trhHF4kPH0VQL6fHwwrY9mI6+H45dAkevGZwO4pBIfi9t68yzexXFXMIuhqS9D56nBUmUUilVUJk5PkNiFKsacH+Sb4yiyGKdovHoHLG2UhFTp4w6SirKPyd3WAlhQ3EVI+Zjc3PhqPvQODpsEP1qQ/lWhSJYl87GXsYmmd+ZAxRGh3qQtO8wtzzT8fXw1Cp+qnxs7ZsoZjLUYCEfdDQX/UXi1YDUUBpgdeBndz34oj5T7/+eg/iVv+rzrFNK5slIou73yQD4h4hQL3qGjFjPlr1Ec9V6Tf5Xh9CWLSqVro/7as1XzOWk3shkS4=
   file_glob: true
-  file: bin/*.tgz
+  file: 
+    - bin/*.tgz
+    - apl_install.sh
   skip_cleanup: true
   on:
     repo: applariat/go-apl

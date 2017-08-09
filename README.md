@@ -6,23 +6,27 @@ workflows into appLariat.  appLariat has been designed to provide simple and con
 delivery of applications to hybrid cloud environments, leveraging containers and Kubernetes.
 Ideal for providing continous delivery and deployment at any stage of development and any size project team.  
 
-This is an early stage and is currently focused on the CRUD functions related to appLariat 
-release and deployment resources. We will continue to improve the features and ease of use.
+The CLI is a work in progress and is currently focused on the CRUD functions related to appLariat 
+release and deployment resources. We will continue to improve the features and ease of use. The scripts 
+directory contains a set of sample scripts designed to help you get started using the CLI.
 
 We are working on proper user documentation for both the API Client and the CLI.
 
-The scripts directory contains a set of sample scripts designed to help you get started using the CLI.
-
 ## Installing the apl CLI
 
-Download the apl.sh script from [https://github.com/applariat/go-apl](https://github.com/applariat/go-apl)
+Download the latest archive for your architecture from [releases](https://github.com/applariat/go-apl/releases)
 
-The script performs the following
-* Downloads the binary from the [releases page](https://github.com/applariat/go-apl/releases).
-* Downloads some helper scripts we have created as examples of using the CLI
-* Extracts the binary and moves it to /usr/local/bin
+For MacOS and Linux run the following command:
+`tar -xzf apl-*.tar.gz; ./apl_install.sh`
+
+The apl_install.sh script performs the following:
+* Checks to confirm latest version
+* Moves binary to /usr/local/bin
 * Creates the apl access config file
 
+For Windows:
+* Extract the contents of the tar bundle
+* Move the apl binary into your PATH
 
 ## Configuration via Config File
 
