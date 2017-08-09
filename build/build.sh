@@ -27,4 +27,8 @@ BIN_NAME=apl-${VERSION}-${OS}_${ARCH}
 
 go build -ldflags "-X github.com/applariat/go-apl/cmd/apl/app.VERSION=${VERSION}" -o bin/apl cmd/apl/main.go
 
-tar -czf bin/${BIN_NAME}.tgz -C bin apl
+if [[ ${OS} == windows ]]; then
+	tar -czf bin/${BIN_NAME}.tgz -C bin apl
+else
+	tar -czf bin/${BIN_NAME}.tgz bin/apl scripts apl_install.sh
+fi
