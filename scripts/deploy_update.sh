@@ -90,7 +90,7 @@ if [[ $INTERACTIVE == true ]]; then
 	DEPLOYMENT_NAME=$deploy
 	DEPLOY_REC=$(echo ${DEPLOY_LIST} | jq -r --arg dname $DEPLOYMENT_NAME '.[] | select(.name == $dname)')
 	DEPLOYMENT_ID=$(echo ${DEPLOY_REC} | jq -r '.id')
-	echo $DEPLOYMENT_ID
+	#echo $DEPLOYMENT_ID
 	echo "Looking up components for ${DEPLOYMENT_NAME}"
 	clist=( `echo ${DEPLOY_REC} | jq -r '.release.components[].name'` )
 	echo
@@ -185,11 +185,11 @@ cat >update.yaml <<EOL
 command: override
 components:
 - stack_component_id: ${STACK_COMPONENT_ID}
-services:
-- name: ${COMP_SERVICE_NAME}
-  build:
-	artifacts:
-	  code: ${STACK_ARTIFACT_ID}
+  services:
+  - name: ${COMP_SERVICE_NAME}
+    build:
+      artifacts:
+        code: ${STACK_ARTIFACT_ID}
 EOL
 
 
@@ -202,23 +202,25 @@ APL_DEPLOY_OVERRIDE=$(${OVERRIDE_COMMAND})
 echo
 if [[ $(echo $APL_DEPLOY_OVERRIDE | jq -r '. | has("message")') == "true" ]]; then
      echo $APL_DEPLOY_OVERRIDE | jq -r '.message'
-     exit 1
+elif [[ $(echo $APL_DEPLOY_OVERRIDE | jq -r '. | has("unchanged")') == "true" ]]; then
+     echo "Component Update Pending"
 else
-   echo "RESULT: $APL_DEPLOY_CREATE"
-   #exit 1
+   echo "RESULT: $APL_DEPLOY_OVERRIDE"
+   exit 1
 fi
 #echo $DEPLOYMENT_ID
 
-echo "Deployment ID: $APL_DEPLOYMENT_ID"
+echo "Deployment ID: $DEPLOYMENT_ID"
 echo "Waiting for the override to complete"
+sleep 30
 #state=$(apl deployments get $APL_DEPLOYMENT_ID -o json | jq -r '.status.state')
 while [[ $(apl deployments get $DEPLOYMENT_ID -o json | jq -r --arg cn $COMPONENT_NAME '.status.components[] | select(.name == $cn) | .state') != "running" ]]; do
   echo "Component is updating"
-  sleep 30
+  sleep 10
 done
 echo "Deployment override completed with the following info:"
 echo
-apl deployments get $DEPLOYMENT_ID -o json | 
+apl deployments get $DEPLOYMENT_ID -o json | \
 jq '.status | { name: .namespace, state: .state, description: .description, services: .components[].services[]}'
 
 end=`date +%s`
