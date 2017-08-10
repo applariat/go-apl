@@ -1,6 +1,6 @@
 #!/bin/bash
-usage="$(basename "$0")  --Shell caller for install_cli.sh, prompts for apl username and password"
-echo "Running the appLariat CLI installer"
+usage="$(basename "$0")  --Installing the apl CLI, prompts for apl username and password"
+echo "Running $usage"
 
 #Determine Linux or OSX
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -16,23 +16,14 @@ SCRIPT_DIR="$HOME/apl_scripts"
 CONFIG_DIR="$HOME/.apl"
 CONFIG_FILE="config.toml"
 
-DOWNLOAD_URL=$(curl -s ${FIND_LATEST} | grep browser_download_url | grep ${OS_TYPE} | head -n 1 | cut -d '"' -f 4)
-APL_CLI_VERSION=$(echo $DOWNLOAD_URL | awk -F"/" '{print $(NF - 1)}')
-APL_FILE=$(echo $DOWNLOAD_URL | awk -F"/" '{print $NF}')
+#DOWNLOAD_URL=$(curl -s ${FIND_LATEST} | grep browser_download_url | grep ${OS_TYPE} | head -n 1 | cut -d '"' -f 4)
+#APL_CLI_VERSION=$(echo $DOWNLOAD_URL | awk -F"/" '{print $(NF - 1)}')
+#APL_FILE=$(echo $DOWNLOAD_URL | awk -F"/" '{print $NF}')
 
-if [ ! -f "bin/apl" ]  || [ ! -d scripts ]; then
-	if [ ! -f ${APL_FILE} ] || [ ! -f ${APL_FILE} ]; then
-    	echo "Downloading cli package ${APL_FILE}"
-    	wget_out=$(wget -q $DOWNLOAD_URL)
-    	if [ $? -ne 0 ]; then
-       		echo "Unable to download latest package, make sure you have wget or"
-       		echo "manually download from https://github.com/applariat/go-apl/releases"
-       		exit 1
-    	fi
-    fi
-    tar zxf ${APL_FILE}  --exclude=$(basename "$0")
+if [ ! -f bin/apl ]  || [ ! -d scripts ]; then
+	echo "Must run the script from the local directory, exiting"
+	exit 1
 fi
-
 
 #Place bundle files
 echo "Moving apl to /usr/local/bin"
