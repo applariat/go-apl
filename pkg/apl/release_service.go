@@ -32,8 +32,8 @@ type Release struct {
 	Components     interface{} `json:"components"`
 	MetaData       interface{} `json:"meta_data,omitempty"`
 
-	LastModified  string `json:"last_modified"`
-	CreatedTime   string `json:"created_time"`
+	LastModified  string      `json:"last_modified"`
+	CreatedTime   string      `json:"created_time"`
 	CreatedByUser interface{} `json:"created_by_user"`
 }
 
@@ -58,8 +58,8 @@ type ReleaseOverrideArtifact struct {
 	Builder *ReleaseOverrideArtifactBase `json:"builder,omitempty"`
 	Code    *ReleaseOverrideArtifactBase `json:"code,omitempty"`
 	Image   *ReleaseOverrideArtifactBase `json:"image,omitempty"`
-	Data   *ReleaseOverrideArtifactBase `json:"data,omitempty"`
-	Config   *ReleaseOverrideArtifactBase `json:"config,omitempty"`
+	Data    *ReleaseOverrideArtifactBase `json:"data,omitempty"`
+	Config  *ReleaseOverrideArtifactBase `json:"config,omitempty"`
 } // `json:"artifacts"`
 
 type ReleaseOverrideRelease struct {
