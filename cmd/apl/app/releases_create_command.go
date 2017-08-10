@@ -94,7 +94,7 @@ func NewReleasesCreateCommand() *cobra.Command {
 			runCreateCommand(in, aplSvc.Releases.Create)
 		},
 	}
-
+	addInputFileFlag(cmd)
 	cmd.Flags().StringVar(&releaseName, "name", "", "")
 	cmd.Flags().StringVar(&releaseStackID, "stack-id", "", "")
 	cmd.Flags().StringVar(&releaseStackVersionID, "stack-version-id", "", "")

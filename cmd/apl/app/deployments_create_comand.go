@@ -116,7 +116,7 @@ func NewDeploymentsCreateCommand() *cobra.Command {
 	cmd.Flags().StringVar(&locDeployID, "loc-deploy-id", "", "")
 	cmd.Flags().Var(&componentsMap, "component", componentsMap.Usage())
 
-	cmd.Flags().IntVar(&instances, "instances", 1, "")
+	//cmd.Flags().IntVar(&instances, "instances", 1, "")
 
 	return cmd
 }

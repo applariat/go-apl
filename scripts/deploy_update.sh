@@ -169,17 +169,31 @@ else
 	exit 1
 fi
 
+#Error in CLI for this structure
 #Construct the component string for the override
-artifacts=$(echo ${COMP_REC} | jq -c '.services[0].build.artifacts')
-comp=(StackComponentID=${STACK_COMPONENT_ID})
-comp+=(ServiceName=${COMP_SERVICE_NAME})
-comp+=(StackArtifactID=${STACK_ARTIFACT_ID})
-artifacts=$(echo ${artifacts} | jq -c --arg art ${ARTIFACT_TYPE} 'with_entries(select(.key != $art))')
-comp+=( `echo ${artifacts} | jq -r 'map_values("StackArtifactID=" + .) |to_entries|.[].value'` )
+#artifacts=$(echo ${COMP_REC} | jq -c '.services[0].build.artifacts')
+#comp=(StackComponentID=${STACK_COMPONENT_ID})
+#comp+=(ServiceName=${COMP_SERVICE_NAME})
+#comp+=(StackArtifactID=${STACK_ARTIFACT_ID})
+#artifacts=$(echo ${artifacts} | jq -c --arg art ${ARTIFACT_TYPE} 'with_entries(select(.key != $art))')
+#comp+=( `echo ${artifacts} | jq -r 'map_values("StackArtifactID=" + .) |to_entries|.[].value'` )
 
-comp=$(IFS=, ; echo "${comp[*]}")
+#comp=$(IFS=, ; echo "${comp[*]}")
 
-OVERRIDE_COMMAND="apl deployments override $DEPLOYMENT_ID --component $comp -o json"  
+#using file based override
+cat >update.yaml <<EOL
+command: override
+components:
+- stack_component_id: ${STACK_COMPONENT_ID}
+services:
+- name: ${COMP_SERVICE_NAME}
+  build:
+	artifacts:
+	  code: ${STACK_ARTIFACT_ID}
+EOL
+
+
+OVERRIDE_COMMAND="apl deployments override $DEPLOYMENT_ID -f update.yaml -o json"  
 
 echo "Submitting the override:"
 echo "$OVERRIDE_COMMAND"

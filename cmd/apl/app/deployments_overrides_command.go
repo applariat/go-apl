@@ -83,7 +83,7 @@ func NewDeploymentsOverridesCommand() *cobra.Command {
 			runUpdateCommand(args, in, aplSvc.Deployments.Update)
 		},
 	}
-
+	addInputFileFlag(cmd)
 	cmd.Flags().Var(&componentsMap, "component", componentsMap.Usage())
 	return cmd
 }
