@@ -18,6 +18,10 @@ Download the latest archive for your architecture from [releases](https://github
 
 For MacOS and Linux run the following command:
 `tar -xzf apl-*.tar.gz; ./apl_install.sh`
+ 
+ or
+ 
+ `wget -q https://github.com/applariat/go-apl/releases/download/v0.2.1/apl_install.sh; bash ./apl_install.sh`
 
 The apl_install.sh script performs the following:
 * Checks to confirm latest version

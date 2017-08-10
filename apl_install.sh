@@ -16,24 +16,34 @@ SCRIPT_DIR="$HOME/apl_scripts"
 CONFIG_DIR="$HOME/.apl"
 CONFIG_FILE="config.toml"
 
-DOWNLOAD_URL=$(wget -qO- ${FIND_LATEST} | grep browser_download_url | grep ${OS_TYPE} | head -n 1 | cut -d '"' -f 4)
+DOWNLOAD_URL=$(curl -s ${FIND_LATEST} | grep browser_download_url | grep ${OS_TYPE} | head -n 1 | cut -d '"' -f 4)
 APL_CLI_VERSION=$(echo $DOWNLOAD_URL | awk -F"/" '{print $(NF - 1)}')
 APL_FILE=$(echo $DOWNLOAD_URL | awk -F"/" '{print $NF}')
 
-if [ ! -f ${APL_FILE} ]; then
-    echo "Downloading cli package ${APL_FILE}"
-    wget -q $DOWNLOAD_URL
+if [ ! -f "bin/apl" ]  || [ ! -d scripts ]; then
+	if [ ! -f ${APL_FILE} ] || [ ! -f ${APL_FILE} ]; then
+    	echo "Downloading cli package ${APL_FILE}"
+    	wget_out=$(wget -q $DOWNLOAD_URL)
+    	if [ $? -ne 0 ]; then
+       		echo "Unable to download latest package, make sure you have wget or"
+       		echo "manually download from https://github.com/applariat/go-apl/releases"
+       		exit 1
+    	fi
+    fi
+    tar zxf ${APL_FILE}  --exclude=$(basename "$0")
 fi
 
-if [ ! -f "bin/apl" ]  || [ ! -d scripts ]; then
-	tar zxf ${APL_FILE}  --exclude=$(basename "$0")
-fi
+
 #Place bundle files
 echo "Moving apl to /usr/local/bin"
 mv -f bin/apl $CMD_DIR
 rm -rf bin 
-if [ ! -d "$CONFIG_DIR" ]; then
+if [ ! -d "$SCRIPT_DIR" ]; then
+	echo
+    echo "Moving the sample scripts to ${SCRIPT_DIR}"
     mv ./scripts ${SCRIPT_DIR}
+else
+    SCRIPT_DIR="$PWD/scripts"
 fi
 
 #Configuring APL CLI
@@ -46,15 +56,18 @@ echo
 read -p "Do you want to configure access to appLariat now [y/n]?: " config
 
 if [[ $config = "y" ]]; then	
+    echo
     echo "Let's gather the info we need to configure apl"
     echo
 	read -p "Type in your appLariat username: " user
 	echo
 	read -p "Type in your appLariat password: " pass
-    
+    echo
     echo "Setting APL API value: $APL_API"
     echo "Setting APL User/Password: $user : *********"
+    echo
 else
+	echo
 	echo "To manually configure access update the file ${CONFIG_DIR}/${CONFIG_FILE}
 	and provide values for svc_username and svc_password"
 	user=""
@@ -80,7 +93,8 @@ echo "See the helper scripts downloaded to ${SCRIPT_DIR} for examples"
 echo "Run apl -h to see command options"
 #apl -h
 
-#Cleaning up
+#Try to Clean up
+
 rm -f ${APL_FILE}
 rm -f apl-*.tgz
 

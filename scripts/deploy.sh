@@ -10,15 +10,15 @@ Where:
     -r str     -release version (required unless using -i or -e)
     -n str     -deployment name (optional, defaults to app_name-<random string>
     -w [1..6]  -workload level (optional, defaults to development)
-    -o         -override a component
-    -c str     -component name
-    -l str     -artifact location name
-    -a str	   -artifact to use in override
-    -e 		   -use environment variables for resource ids
+    -o         -override a component (optional)
+    -c str     -component name (required with -o option)
+    -a str	   -artifact to use in override (required with -o option)
+    -e 		   -use environment variables for input, all other flags ignored
+    			variables written in $HOME/.apl/resources/appenv.sh (optional)
     
 Pre-requistes:
-	apl CLI   -run to install:
-	jq        -run to install: 
+	apl CLI (v0.2.0+)
+	jq  (1.5+)         -run to install: 
 "
 
 # Script vars
@@ -27,13 +27,10 @@ CMD_DIR="/usr/local/bin"
 CONFIG_DIR="$HOME/.apl"
 CONFIG_FILE="config.toml"
 RESOURCE_DIR="$HOME/.apl/resources"
-LOC_DEPLOY_FILE="loc_deploy.json"
-LOC_ART_FILE="loc_art.json"
-STACKS_FILE="stacks.json"
-ENV_FILE="aplenv.sh"
-INTERACTIVE=0
-OVERRIDE=0
-ENV=0
+ENV_FILE="appenv.sh"
+INTERACTIVE=false
+OVERRIDE=false
+ENV=false
 
 STACK_NAME=""
 RELEASE=""
@@ -69,11 +66,11 @@ while getopts ":s:r:n:w:c:l:a:oieh" opt; do
       ;;
     i)
       echo "Using Interactive"
-      INTERACTIVE=1
+      INTERACTIVE=true
       ;;
     o)
       echo "Overriding a component"
-      OVERRIDE=1
+      OVERRIDE=true
       ;;
     c)
       COMPONENT_NAME=$OPTARG
@@ -86,7 +83,7 @@ while getopts ":s:r:n:w:c:l:a:oieh" opt; do
       ;;
     e)
       echo "Setting deployment fields from environment variables"
-      ENV=1
+      ENV=true
       ;;
     h)
       echo
@@ -109,7 +106,7 @@ while getopts ":s:r:n:w:c:l:a:oieh" opt; do
 done
 
 #First Collect Info
-if [[ $ENV -eq 1 ]]; then
+if [[ $ENV == true ]]; then
    if [ -f ${RESOURCE_DIR}/${ENV_FILE} ]; then
        #make sure the env vars are set
        . ${RESOURCE_DIR}/${ENV_FILE}
@@ -124,7 +121,7 @@ if [[ $ENV -eq 1 ]]; then
    RELEASE_ID=${APL_RELEASE_ID:?Missing required env var}
    STACK_ID=${APL_STACK_ID:?Missing required env var}
    WORKLOAD=${APL_WORKLOAD:-1}
-   if [[ $OVERRIDE -eq 1 ]]; then
+   if [[ $OVERRIDE == true ]]; then
        LOC_ARTIFACT_ID=${APL_LOC_ARTIFACT_ID:?Missing required env var}
    	   STACK_COMPONENT_ID=${APL_STACK_COMPONENT_ID:?Missing required env var}
    	   COMPONENT_NAME=${APL_STACK_COMPONENT_NAME:?Missing required env var}
@@ -134,62 +131,85 @@ if [[ $ENV -eq 1 ]]; then
    fi
    set +e
 else
-  #TO DO: run configuration
-  echo "Wait, need to query some data from applariat"
-  qstart=`date +%s`
+  echo "Checking connection to applariat"
+  #qstart=`date +%s`
   LOC_DEPLOY_LIST=$(apl loc-deploys -o json)
-  STACK_LIST=$(apl stacks -o json)
-  RELEASE_LIST=$(apl releases -o json)
-  if [[ $OVERRIDE -eq 1 ]]; then
-    LOC_ARTIFACT_LIST=$(apl loc-artifacts -o json)
+  if [[ $(echo $LOC_DEPLOY_LIST | jq -r '.[] | has("name")') != true  ]]; then
+	echo "There was a problem connecting to appLariat"
+    exit 1
   fi
-  qend=`date +%s`
-  runtime=$((qend-qstart))
-  echo "apl query took $runtime sec"
+  
+  #STACK_LIST=$(apl stacks -o json)
+  #RELEASE_LIST=$(apl releases -o json)
+  #if [[ $OVERRIDE -eq 1 ]]; then
+    #LOC_ARTIFACT_LIST=$(apl loc-artifacts -o json)
+  #fi
+  #qend=`date +%s`
+  #runtime=$((qend-qstart))
+  #echo "apl query took $runtime sec"
 fi
 
 #set Deploy location id
-if [[ $ENV -eq 0 ]] || [ -z $LOC_DEPLOY_ID ]; then
-  LOC_DEPLOY_ID=$(echo $LOC_DEPLOY_LIST | jq -r '.[].id')
+if [[ $ENV == false ]] || [ -z $LOC_DEPLOY_ID ]; then
+  LOC_DEPLOY_ID=$(echo $LOC_DEPLOY_LIST | jq -r '.[0].id')
   echo "Using Deployment Location $(echo $LOC_DEPLOY_LIST | jq -r '.[].name')"   
 fi
 
 #Run Interactive Mode
 ######################
-if [[ $INTERACTIVE -eq 1 ]]; then
+if [[ $INTERACTIVE == true ]]; then
   echo "Starting interactive mode"
+  echo "Looking up available applications"
+  STACK_LIST=$(apl stacks -o json)
   slist=( `echo ${STACK_LIST} | jq -rc '.[].name'` )
+  echo
   echo "Available apps: ${slist[@]}"
   echo
-  read -p "Type in the app to deploy: " app
+  read -p "Enter the app to deploy: " app
   STACK_NAME=$app
   STACK_ID=$(echo ${STACK_LIST} | jq -rc --arg sname $app '.[] | select(.name == $sname) | .id')
-  rlist=( `echo ${RELEASE_LIST} | jq -rc --arg sid $STACK_ID '.[] | select(.stack_id == $sid) | .version'` )
+  #echo $STACK_ID
+  echo "Looking up releases for ${STACK_NAME}"
+  RELEASE_LIST=$(apl releases --stack-id $STACK_ID -o json)
+  rlist=( `echo ${RELEASE_LIST} | jq -r '.[] | .version'` )
+  echo
   echo "Available release versions: ${rlist[@]}"
   echo
-  read -p "Type in the release version to deploy: " ver
+  read -p "Enter the release version to deploy: " ver
   RELEASE=$ver
-  RELEASE_ID=$(echo ${RELEASE_LIST} | \
-    jq -rc --arg sid ${STACK_ID} --argjson rel $RELEASE '.[] | select(.stack_id == $sid and .version == $rel) | .id')
-  echo $RELEASE_ID
-  read -p "Type in the name of your deploy [$STACK_NAME-$RELEASE-$DEP_TAG]: " dname
+  RELEASE_REC=$(echo ${RELEASE_LIST} | jq -rc --argjson rel $RELEASE '.[] | select( .version == $rel)')
+  RELEASE_ID=$(echo ${RELEASE_REC} | jq -r '.id')
+  echo #$RELEASE_ID
+  read -p "Enter the name of your deploy [$STACK_NAME-$RELEASE-$DEP_TAG]: " dname
   DEPLOY_NAME=${dname:-${STACK_NAME}-${RELEASE}-${DEP_TAG}}
-  read -p "Type in value from 1 - 6 for the workload level [1]: " wl
+  echo
+  read -p "Enter a value from 1(Development) - 6(Production) for the workload level [1]: " wl
   WORKLOAD="level${wl:-1}"
-  if [[ $OVERRIDE -eq 1 ]]; then
-       clist=( `echo ${RELEASE_LIST} | 
-       jq -rc --arg rid $RELEASE_ID '.[] | select(.id == $rid) | .components[].services[0].name'` )
-       echo "Available components: ${clist[@]}"
-       echo
-       read -p "Type in the component to override: " comp
-       COMPONENT_NAME=$comp
-       lalist=( `echo ${LOC_ARTIFACT_LIST} | jq -rc '.[].name'` )
-  	   echo "Available Artifact Locations: ${lalist[@]}"
-  	   echo
-       read -p "Type in the artifact location for the new artifact: " la
-       LOC_ARTIFACT_NAME=$la
-       read -p "Type in the artifact name for the new artifact: " aname
-       ARTIFACT_NAME=$aname
+  if [[ $OVERRIDE == true ]]; then
+    clist=( `echo ${RELEASE_REC} | jq -r '.components[].name'` )
+    echo
+    echo "Available components: ${clist[@]}"
+    echo
+    read -p "Type in the component to override: " comp
+    COMPONENT_NAME=$comp
+    #cobj=$(echo ${RELEASE_LIST} | \
+    #jq -rc --arg rid $RELEASE_ID --arg cn $COMPONENT_NAME '.[] | select(.id == $rid) | .components[] | select(.name == $cn)')
+    #lalist=( `echo ${LOC_ARTIFACT_LIST} | jq -rc '.[].name'` )
+    sa_id=$(echo ${RELEASE_REC} | jq -r --arg cn $COMPONENT_NAME '.components[] | 
+    select(.name == $cn) | .services[0].build.artifacts |  if has("code") then .code elif has("builder") then .builder else .image end')
+    #echo $sa_id
+    SA_REC=$(apl stack-artifacts get $sa_id -o json)
+    #echo
+  	#echo "Available Artifact Locations: ${lalist[@]}"
+  	#echo
+    #read -p "Type in the artifact location for the new artifact: " la
+    #LOC_ARTIFACT_NAME=$la
+    LOC_ARTIFACT_ID=$(echo ${SA_REC} | jq -r '.loc_artifact_id')
+    echo
+  	echo "Current Stack Artifact: $(echo ${SA_REC} | jq -r '.artifact_name' )"
+    echo
+    read -p "Enter the artifact name for the new artifact: " aname
+    ARTIFACT_NAME=$aname
   fi
   
   echo "Values Entered: "
@@ -197,9 +217,9 @@ if [[ $INTERACTIVE -eq 1 ]]; then
   echo "	Release Version: $RELEASE"
   echo "	Deployment Name: $DEPLOY_NAME"
   echo "	Workload Type: $WORKLOAD"
-  if [[ $OVERRIDE -eq 1 ]]; then
+  if [[ $OVERRIDE == true ]]; then
     echo "	Component Name: $COMPONENT_NAME"
-    echo "	Artifact Location Name: $LOC_ARTIFACT_NAME"
+    #echo "	Artifact Location Name: $LOC_ARTIFACT_NAME"
     echo "	Artifact Name: $ARTIFACT_NAME"
   fi
 fi
@@ -214,30 +234,38 @@ if [ -z $STACK_NAME ] || [ -z $RELEASE ]; then
 	exit 1
 fi
 
+#Non-interactive query based on passed in information
+if [ -z $STACK_ID ]; then
+	STACK_REC=$(apl stacks --name $STACK_NAME -o json)
+	STACK_ID=$(echo ${STACK_REC} | jq -rc '.[0].id')
+	#echo $STACK_ID
+fi
 #Time to pull together all of the information
 #Get Release Info
 if [ -z $RELEASE_ID ]; then
-    STACK_ID=$(echo ${STACK_LIST} | jq -rc --arg sname $STACK_NAME '.[] | select(.name == $sname) | .id')
-    RELEASE_ID=$(echo ${RELEASE_LIST} | \
-      jq -rc --arg sid ${STACK_ID} --argjson rel $RELEASE '.[] | select(.stack_id == $sid and .version == $rel) | .id')
+    RELEASE_REC=$(apl releases --stack-id $STACK_ID -o json | jq -c --argjson rel $RELEASE '.[] | select(.version == $rel)')
+    RELEASE_ID=$(echo ${RELEASE_REC} | jq -r '.id')
     #echo $RELEASE_ID
 fi
 
-if [[ $ENV -eq 0 ]] && [[ $OVERRIDE -eq 1 ]]; then
+if [[ $ENV == false ]] && [[ $OVERRIDE == true ]]; then
     #Get stack component id
-    RELEASE_REC=$(apl releases get $RELEASE_ID -o json)
     STACK_COMPONENT_ID=$(echo ${RELEASE_REC} | 
       jq -rc --arg cname $COMPONENT_NAME '.components[] | select(.name == $cname) | .stack_component_id')
     COMP_SERVICE_NAME=$(echo ${RELEASE_REC} | 
       jq -rc --arg cname $COMPONENT_NAME '.components[] | select(.name == $cname) | .services[0].name')
     #echo $STACK_COMPONENT_ID
     #Get the artifact type for the component
-    ARTIFACT_TYPE=$(echo ${RELEASE_REC} | 
-      jq -rc --arg cn $COMPONENT_NAME '.components[] | select(.name == $cn) | .services[0].build.artifacts | keys | 
-      if contains(["code"]) then "code" elif contains(["builder"]) then "builder" else "image" end')
-    echo $ARTIFACT_TYPE
-    LOC_ARTIFACT_ID=$(echo ${LOC_ARTIFACT_LIST} | 
-         jq -rc --arg laname $LOC_ARTIFACT_NAME '.[] | select(.name == $laname) | .id')
+    ARTIFACT_TYPE=$(echo ${RELEASE_REC} | \
+      jq -r --arg cn $COMPONENT_NAME '.components[] | select(.name == $cn) | .services[0].build.artifacts |  
+      if has("code") then "code" elif has("builder") then "builder" else "image" end')
+    #if [ -z LOC_ARTIFACT_ID ]; then
+		sa_id=$(echo ${RELEASE_REC} | \
+		  jq -r --arg cn $COMPONENT_NAME '.components[] | select(.name == $cn) | .services[0].build.artifacts |  
+		  if has("code") then .code elif has("builder") then .builder else .image end')
+		LOC_ARTIFACT_ID=$(apl stack-artifacts get $sa_id -o json | jq -r '.loc_artifact_id')
+		#echo $LOC_ARTIFACT_ID
+	#fi
 fi
    
 #Verify and set deployment name
@@ -245,18 +273,24 @@ if [ -z $DEPLOY_NAME ]; then
     DEPLOY_NAME=$STACK_NAME-$RELEASE-$DEP_TAG
     echo "No Deployment name provided using default - $DEPLOY_NAME"
 else
-    if [[ $(apl deployments --name mywp-vdbgmx -o json | jq '. | length') -ne 0 ]]; then
+    if [[ $(apl deployments --name $DEPLOY_NAME -o json | jq '. | length') != 0 ]]; then
        echo "Deployment with that name already exists, exiting"
        exit 1
     fi
+    echo
     echo "Using deployment name - $DEPLOY_NAME"
 fi
 
 #Create a environment file for later use
-echo
-echo "Adding ids to an environment file ${RESOURCE_DIR}/${ENV_FILE} for later use, run this script with the -e option"
-echo
-cat >${RESOURCE_DIR}/${ENV_FILE} <<EOL
+if [[ $ENV == false ]]; then
+	echo
+	echo "Adding ids to an environment file ${RESOURCE_DIR}/${ENV_FILE}, run this script with the -e option to recreate this deployment"
+	echo
+	if [ ! -d ${RESOURCE_DIR} ]; then
+		mkdir -p ${RESOURCE_DIR}
+	fi
+
+	cat >${RESOURCE_DIR}/${ENV_FILE} <<EOL
 export APL_STACK_NAME=$STACK_NAME
 export APL_RELEASE_VER=$RELEASE
 export APL_LOC_DEPLOY_ID=$LOC_DEPLOY_ID
@@ -270,9 +304,10 @@ export APL_ARTIFACT_NAME=$ARTIFACT_NAME
 export APL_ARTIFACT_TYPE=$ARTIFACT_TYPE
 export APL_WORKLOAD=$WORKLOAD
 EOL
+fi
 
 #Submit the deployment
-if [[ $OVERRIDE -eq 0 ]]; then
+if [[ $OVERRIDE == false ]]; then
     DEPLOY_COMMAND="apl deployments create --loc-deploy-id $LOC_DEPLOY_ID --release-id $RELEASE_ID --name $DEPLOY_NAME --workload-type $WORKLOAD -o json"
 else
     #A little more work to do with the override
