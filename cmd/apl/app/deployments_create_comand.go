@@ -10,11 +10,11 @@ import (
 func NewDeploymentsCreateCommand() *cobra.Command {
 
 	var (
-		name          string
-		releaseID     string
-		locDeployID   string
-		workloadType  string
-		instances     int
+		name         string
+		releaseID    string
+		locDeployID  string
+		workloadType string
+		//instances     int
 		componentsMap ComponentStringMap
 	)
 
