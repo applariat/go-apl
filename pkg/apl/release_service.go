@@ -34,7 +34,7 @@ type Release struct {
 
 	LastModified  string `json:"last_modified"`
 	CreatedTime   string `json:"created_time"`
-	CreatedByUser `json:"created_by_user"`
+	CreatedByUser interface{} `json:"created_by_user"`
 }
 
 // ReleaseCreateInput is used for the create of releases
@@ -58,6 +58,8 @@ type ReleaseOverrideArtifact struct {
 	Builder *ReleaseOverrideArtifactBase `json:"builder,omitempty"`
 	Code    *ReleaseOverrideArtifactBase `json:"code,omitempty"`
 	Image   *ReleaseOverrideArtifactBase `json:"image,omitempty"`
+	Data   *ReleaseOverrideArtifactBase `json:"data,omitempty"`
+	Config   *ReleaseOverrideArtifactBase `json:"config,omitempty"`
 } // `json:"artifacts"`
 
 type ReleaseOverrideRelease struct {
