@@ -24,7 +24,7 @@ func NewDeploymentsScaleCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			
+
 			var missingFlags []string
 
 			if stackComponentID == "" {
