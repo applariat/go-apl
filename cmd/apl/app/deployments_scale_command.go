@@ -15,11 +15,16 @@ func NewDeploymentsScaleCommand() *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "scale-component",
+		Use:   "scale-component [ID]",
 		Short: fmt.Sprintf("Scale instances of a component"),
 		Long:  "",
 
 		PreRunE: func(cmd *cobra.Command, args []string) error {
+			err := checkCommandHasIDInArgs(args, "deployment")
+			if err != nil {
+				return err
+			}
+			
 			var missingFlags []string
 
 			if stackComponentID == "" {
@@ -62,7 +67,7 @@ func NewDeploymentsScaleCommand() *cobra.Command {
 	}
 	cmd.Flags().IntVar(&instances, "instances", 1, "")
 	cmd.Flags().StringVar(&stackComponentID, "stack-component-id", "", "")
-	cmd.Flags().StringVar(&serviceName, "component-service-id", "", "")
+	cmd.Flags().StringVar(&serviceName, "service-name", "", "")
 
 	return cmd
 }

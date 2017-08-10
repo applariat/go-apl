@@ -104,6 +104,8 @@ func deploymentArtifactFactory(aplSvc *apl.Client, stackArtifactIDs []string) ap
 			artifact.Code = saID
 		case "image":
 			artifact.Image = saID
+		case "builder":
+			artifact.Builder = saID
 		case "config":
 			artifact.Config = saID
 		case "data":

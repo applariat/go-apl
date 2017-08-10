@@ -127,6 +127,11 @@ func releaseArtifactFactory(aplSvc *apl.Client, stackArtifactIDs []string) apl.R
 			artifact.Image = base
 		case "builder":
 			artifact.Builder = base
+		case "config":
+			artifact.Config = base
+		case "data":
+			artifact.Data = base
+
 		default:
 			panic(fmt.Errorf("Unsupported StackArtifactType %s", sa.StackArtifactType))
 		}
