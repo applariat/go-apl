@@ -27,7 +27,7 @@ CMD_DIR="/usr/local/bin"
 CONFIG_DIR="$HOME/.apl"
 CONFIG_FILE="config.toml"
 RESOURCE_DIR="$HOME/.apl/resources"
-ENV_FILE="appenv.sh"
+ENV_FILE="app_vars"
 INTERACTIVE=false
 OVERRIDE=false
 ENV=false
@@ -44,6 +44,12 @@ DEP_TAG=$(date |md5 | head -c6)
 #Check the users environment
 command -v apl >/dev/null 2>&1 || { echo >&2 "This script requires apl CLI, install it first;  Aborting."; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo >&2 "This script requires jq tool, install it first;  Aborting."; exit 1; }
+
+if [ $# -eq 0 ]; then
+	echo "No arguments provided"
+	echo "Usage: $usage" >&2
+	exit 1
+fi
 
 #Command Line Variables - see usage
 while getopts ":s:r:n:w:c:l:a:oieh" opt; do
@@ -259,13 +265,14 @@ if [[ $ENV == false ]] && [[ $OVERRIDE == true ]]; then
     ARTIFACT_TYPE=$(echo ${RELEASE_REC} | \
       jq -r --arg cn $COMPONENT_NAME '.components[] | select(.name == $cn) | .services[0].build.artifacts |  
       if has("code") then "code" elif has("builder") then "builder" else "image" end')
-    #if [ -z LOC_ARTIFACT_ID ]; then
+    #skip if interactive, we already set it.
+    if [ -z ${LOC_ARTIFACT_ID} ]; then
 		sa_id=$(echo ${RELEASE_REC} | \
 		  jq -r --arg cn $COMPONENT_NAME '.components[] | select(.name == $cn) | .services[0].build.artifacts |  
 		  if has("code") then .code elif has("builder") then .builder else .image end')
 		LOC_ARTIFACT_ID=$(apl stack-artifacts get $sa_id -o json | jq -r '.loc_artifact_id')
 		#echo $LOC_ARTIFACT_ID
-	#fi
+	fi
 fi
    
 #Verify and set deployment name
@@ -291,6 +298,7 @@ if [[ $ENV == false ]]; then
 	fi
 
 	cat >${RESOURCE_DIR}/${ENV_FILE} <<EOL
+#!/bin/bash
 export APL_STACK_NAME=$STACK_NAME
 export APL_RELEASE_VER=$RELEASE
 export APL_LOC_DEPLOY_ID=$LOC_DEPLOY_ID

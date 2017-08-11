@@ -1,6 +1,6 @@
 #!/bin/bash
 start=`date +%s`
-usage="$(basename "$0") [-h] [-i] [-n str] [-c str] [-a str]
+usage="$(basename "$0") [-h] [-i] [-n str] [-c str] [-a str] [-b]
 -- Use appLariat CLI to override an artifact on a running deployment
 
 Where:
@@ -8,7 +8,8 @@ Where:
     -i		   -interactive prompts for input
     -n str     -deployment name (required unless -i)
     -c str     -component name (required unless -i)
-    -a str	   -artifact to use in override (required unless -i)
+    -a str	   -artifact to use in override (required unless -i or -b)
+    -b		   -force applariat to rebuild and update using the existing artifact (only applies to components with a build configuration)
     
 Pre-requistes:
 	apl CLI (v0.2.0+)
@@ -16,15 +17,10 @@ Pre-requistes:
 "
 
 # Script vars
-CMD_DIR="/usr/local/bin"
-CONFIG_DIR="$HOME/.apl"
-CONFIG_FILE="config.toml"
 RESOURCE_DIR="$HOME/.apl/resources"
-LOC_DEPLOY_FILE="loc_deploy.json"
-LOC_ART_FILE="loc_art.json"
-STACKS_FILE="stacks.json"
-ENV_FILE="appenv.sh"
 INTERACTIVE=false
+REBUILD=false
+REBUILD_TAG=$(date |md5 | head -c6)
 
 DEPLOYMENT_NAME=""
 COMPONENT_NAME=""
@@ -34,8 +30,14 @@ ARTIFACT_NAME=""
 command -v apl >/dev/null 2>&1 || { echo >&2 "This script requires apl CLI, install it first;  Aborting."; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo >&2 "This script requires jq tool, install it first;  Aborting."; exit 1; }
 
+if [ $# -eq 0 ]; then
+	echo "No arguments provided"
+	echo "Usage: $usage" >&2
+	exit 1
+fi
+
 #Command Line Variables - see usage
-while getopts ":n:c:a:ih" opt; do
+while getopts ":n:c:a:ibh" opt; do
   case $opt in
     i)
       INTERACTIVE=true
@@ -48,6 +50,9 @@ while getopts ":n:c:a:ih" opt; do
       ;;
     a)
       ARTIFACT_NAME=$OPTARG
+      ;;
+    b)
+      REBUILD=true
       ;;
     h)
       echo
@@ -101,30 +106,42 @@ if [[ $INTERACTIVE == true ]]; then
 	sa_id=$(echo ${DEPLOY_REC} | jq -r --arg cn $COMPONENT_NAME '.release.components[] | 
 	select(.name == $cn) | .services[0].build.artifacts |  if has("code") then .code elif has("builder") then .builder else .image end')
 	SA_REC=$(apl stack-artifacts get $sa_id -o json)
-	LOC_ARTIFACT_ID=$(echo ${SA_REC} | jq -r '.loc_artifact_id')
-	echo
-	echo "Current Stack Artifact: $(echo ${SA_REC} | jq -r '.artifact_name' )"
-	echo
-	read -p "Enter the artifact name for the new artifact: " aname
-	ARTIFACT_NAME=$aname
-  
-	echo "Values Entered: "
-	echo "	Deployment Name: $DEPLOYMENT_NAME"
-	echo "	Component Name: $COMPONENT_NAME"
-	echo "	Artifact Name: $ARTIFACT_NAME"
+	sa_name=$(echo ${SA_REC} | jq -r '.artifact_name' )
+	if [[ $REBUILD = false ]]; then
+		LOC_ARTIFACT_ID=$(echo ${SA_REC} | jq -r '.loc_artifact_id')
+		echo
+		echo "Current Stack Artifact: "
+		echo
+		read -p "Enter the artifact name for the new artifact: " aname
+		ARTIFACT_NAME=$aname
+		
+		echo "Values Entered: "
+		echo "	Deployment Name: $DEPLOYMENT_NAME"
+		echo "	Component Name: $COMPONENT_NAME"
+		echo "	Artifact Name: $ARTIFACT_NAME"
+	else
+  		ARTIFACT_NAME=$sa_name
+		echo "Values Entered: "
+		echo "	Deployment Name: $DEPLOYMENT_NAME"
+		echo "	Component Name: $COMPONENT_NAME"
+		echo "	Rebuild Artifact: $ARTIFACT_NAME"
+	fi
 fi
 ################
 #End of Interactive
 
 #Check for Required Fields
-if [ -z $DEPLOYMENT_NAME ] || [ -z $COMPONENT_NAME ] || [ -z $ARTIFACT_NAME ]; then
-	echo "Deployment Name and component name and artifact name required, 
-	use -n <name> -c <component name> -a <artifact name> or -i for interactive, exiting"
-	echo
+if [ -z $DEPLOYMENT_NAME ] || [ -z $COMPONENT_NAME ]; then
+	if [ -z $ARTIFACT_NAME ] && [[ $REBUILD = false ]]; then
+		echo "Required inputs: deployment name, component name and artifact name" 
+		echo
+	else
+		echo "Required inputs: deployment name and component name"
+		echo
+	fi
 	echo "Usage: $usage" >&2
 	exit 1
 fi
-
 
 #Non-interactive query based on passed in information
 if [[ $INTERACTIVE == false ]]; then
@@ -133,43 +150,51 @@ if [[ $INTERACTIVE == false ]]; then
 	DEPLOYMENT_ID=$(echo ${DEPLOY_REC} | jq -rc '.id')
 fi
 
-#Get stack component id
+#Collect some needed info
 STACK_ID=$(echo ${DEPLOY_REC} | jq -r '.stack.id')
 #echo $STACK_ID
 COMP_REC=$(echo ${DEPLOY_REC} | \
   jq -c --arg cname $COMPONENT_NAME '.release.components[] | select(.name == $cname)')
 STACK_COMPONENT_ID=$(echo ${COMP_REC} | jq -r '.stack_component_id')
-COMP_SERVICE_NAME=$(echo ${COMP_REC} | jq -r '.services[0].name')
 #echo $STACK_COMPONENT_ID
-#Get the artifact type for the component
-ARTIFACT_TYPE=$(echo ${COMP_REC} | jq -r '.services[0].build.artifacts |  
-  if has("code") then "code" elif has("builder") then "builder" else "image" end')
-#if [ -z LOC_ARTIFACT_ID ]; then
-	sa_id=$(echo ${COMP_REC} | jq -r '.services[0].build.artifacts |  
-	  if has("code") then .code elif has("builder") then .builder else .image end')
-	LOC_ARTIFACT_ID=$(apl stack-artifacts get $sa_id -o json | jq -r '.loc_artifact_id')
-	#echo $LOC_ARTIFACT_ID
-#fi
-   
-
-#Submit the override
-#First register the new artifact
-SA_CMD="apl stack-artifacts create --stack-id $STACK_ID --loc-artifact-id ${LOC_ARTIFACT_ID} --name ${ARTIFACT_NAME} --stack-artifact-type ${ARTIFACT_TYPE} --artifact-name ${ARTIFACT_NAME} -o json"
-echo "Adding Artifact"
-SA_CREATE=$(${SA_CMD})
-
-if [[ $? -ne 0 ]]; then
-	echo $SA_CREATE
-	exit 1
-elif [[ $(echo $SA_CREATE | jq -r '. | has("data")') == "true" ]]; then
-	STACK_ARTIFACT_ID=$(echo $SA_CREATE | jq -r '.data')
-	#echo $STACK_ARTIFACT_ID
-else
-	echo "ERROR: ${SA_CREATE}"
-	exit 1
+COMP_SERVICE_NAME=$(echo ${COMP_REC} | jq -r '.services[0].name')
+if [[ ${REBUILD} == true ]]; then
+	said=$(echo ${COMP_REC} | jq -r '.services[0].build.artifacts |  
+		if has("code") then .code elif has("builder") then .builder else .image end')
+	STACK_ARTIFACT_ID=$said
 fi
 
-#Error in CLI for this structure
+#Skip this step if -b flag, because we already set it
+if [ -z ${STACK_ARTIFACT_ID} ]; then
+	#Get the artifact type for the component
+	ARTIFACT_TYPE=$(echo ${COMP_REC} | jq -r '.services[0].build.artifacts |  
+	  if has("code") then "code" elif has("builder") then "builder" else "image" end')
+	#Skip this if -i, because we already set it
+	if [ -z ${LOC_ARTIFACT_ID} ]; then
+		sa_id=$(echo ${COMP_REC} | jq -r '.services[0].build.artifacts |  
+		  if has("code") then .code elif has("builder") then .builder else .image end')
+		LOC_ARTIFACT_ID=$(apl stack-artifacts get $sa_id -o json | jq -r '.loc_artifact_id')
+		#echo $LOC_ARTIFACT_ID
+	fi
+   
+	#Now register the new artifact
+	SA_CMD="apl stack-artifacts create --stack-id $STACK_ID --loc-artifact-id ${LOC_ARTIFACT_ID} --name ${ARTIFACT_NAME} --stack-artifact-type ${ARTIFACT_TYPE} --artifact-name ${ARTIFACT_NAME} -o json"
+	echo "Adding Artifact"
+	SA_CREATE=$(${SA_CMD})
+
+	if [[ $? -ne 0 ]]; then
+		echo $SA_CREATE
+		exit 1
+	elif [[ $(echo $SA_CREATE | jq -r '. | has("data")') == "true" ]]; then
+		STACK_ARTIFACT_ID=$(echo $SA_CREATE | jq -r '.data')
+		#echo $STACK_ARTIFACT_ID
+	else
+		echo "ERROR: ${SA_CREATE}"
+		exit 1
+	fi
+fi
+
+#ERROR in CLI for this option
 #Construct the component string for the override
 #artifacts=$(echo ${COMP_REC} | jq -c '.services[0].build.artifacts')
 #comp=(StackComponentID=${STACK_COMPONENT_ID})
@@ -177,7 +202,6 @@ fi
 #comp+=(StackArtifactID=${STACK_ARTIFACT_ID})
 #artifacts=$(echo ${artifacts} | jq -c --arg art ${ARTIFACT_TYPE} 'with_entries(select(.key != $art))')
 #comp+=( `echo ${artifacts} | jq -r 'map_values("StackArtifactID=" + .) |to_entries|.[].value'` )
-
 #comp=$(IFS=, ; echo "${comp[*]}")
 
 #using file based override
@@ -190,15 +214,22 @@ components:
     build:
       artifacts:
         code: ${STACK_ARTIFACT_ID}
+      buildvars:
+      - value: ${REBUILD_TAG}
+        key: REBUILD_NUM
 EOL
 
-
+#Submit the override
 OVERRIDE_COMMAND="apl deployments override $DEPLOYMENT_ID -f update.yaml -o json"  
 
 echo "Submitting the override:"
 echo "$OVERRIDE_COMMAND"
 
 APL_DEPLOY_OVERRIDE=$(${OVERRIDE_COMMAND})
+
+#remove the temp file
+rm -f update.yaml
+
 echo
 if [[ $(echo $APL_DEPLOY_OVERRIDE | jq -r '. | has("message")') == "true" ]]; then
      echo $APL_DEPLOY_OVERRIDE | jq -r '.message'
@@ -216,7 +247,7 @@ sleep 30
 #state=$(apl deployments get $APL_DEPLOYMENT_ID -o json | jq -r '.status.state')
 while [[ $(apl deployments get $DEPLOYMENT_ID -o json | jq -r --arg cn $COMPONENT_NAME '.status.components[] | select(.name == $cn) | .state') != "running" ]]; do
   echo "Component is updating"
-  sleep 10
+  sleep 15
 done
 echo "Deployment override completed with the following info:"
 echo
@@ -226,4 +257,4 @@ jq '.status | { name: .namespace, state: .state, description: .description, serv
 end=`date +%s`
 runtime=$((end-start))
 echo
-echo "APL Override Successfully"
+echo "APL Override Successful"
