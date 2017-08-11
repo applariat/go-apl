@@ -50,9 +50,9 @@ if [[ $config = "y" ]]; then
     echo
     echo "Let's gather the info we need to configure apl"
     echo
-	read -p "Type in your appLariat username: " user
+	read -r -p "Type in your appLariat username: " user
 	echo
-	read -p "Type in your appLariat password: " pass
+	read -r -s -p "Type in your appLariat password: " pass
     echo
     echo "Setting APL API value: $APL_API"
     echo "Setting APL User/Password: $user : *********"
