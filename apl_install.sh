@@ -40,10 +40,15 @@ echo "Moving scripts to ${SCRIPT_DIR}"
 mkdir -p ${SCRIPT_DIR}
 mv ./scripts/* ${SCRIPT_DIR}
 rm -rf ./scripts
-#check users path
 message=""
-if [[ ":$PATH:" == *":${SCRIPT_DIR}:"* ]]; then
-	echo "Found ${SCRIPT_DIR} in users path"
+#Configuring APL CLI
+echo "Configuring APL CLI"
+if [ ! -d "$CONFIG_DIR" ]; then
+    mkdir -p $CONFIG_DIR
+fi
+
+if [[ -f ${CONFIG_DIR}/${APL_ENV} ]]; then
+	echo "Found existing ${APL_ENV} file"
 else
 	echo "Creating an applariat environment file"
 	cat >${CONFIG_DIR}/${APL_ENV} <<EOL
@@ -54,32 +59,27 @@ export APL_LOC_DEPLOY_ID=$LOC_DEPLOY_ID
 EOL
 	
 	if [[ "$OS_TYPE" == "darwin" ]]; then
-		echo "Adding applariat environment .bash_profile"
+		echo "Adding applariat environment to .bash_profile"
 		cat >>${HOME}/.bash_profile <<EOL2
 # added by applariat CLI installer
 if [ -f ${CONFIG_DIR}/${APL_ENV} ]; then
-	source ${CONFIG_DIR}/${APL_ENV}
+    source ${CONFIG_DIR}/${APL_ENV}
 fi
 EOL2
-    message="Run source ~/.bash_profile to update your path"
+        message="Run source ~/.bash_profile to update your path"
 	else
-		echo "Adding applariat environment .bashrc"
+		echo "Adding applariat environment to .bashrc"
 		cat >>${HOME}/.bashrc <<EOL2
 # added by applariat CLI installer
 if [ -f ${CONFIG_DIR}/${APL_ENV} ]; then
-	source ${CONFIG_DIR}/${APL_ENV}
+    source ${CONFIG_DIR}/${APL_ENV}
 fi
 EOL2
-	message="Run source ~/.bashrc to update your path"
+	    message="Run source ~/.bashrc to update your path"
 	fi
 
 fi
 
-#Configuring APL CLI
-echo "Configuring APL CLI"
-if [ ! -d "$CONFIG_DIR" ]; then
-    mkdir -p $CONFIG_DIR
-fi
 config="n"
 echo
 read -p "Do you want to configure access to appLariat now [y/n]?: " config
@@ -127,6 +127,7 @@ echo "Run apl -h to see command options"
 #Try to Clean up
 #rm -f ${APL_FILE}
 
-echo "APL CLI Installation Complete $message"
+echo
+echo "APL CLI Installation Complete, $message"
 
 

@@ -83,13 +83,13 @@ if [[ $INTERACTIVE == true ]]; then
 	echo "Starting interactive mode"
 	echo "Looking up available deployments"
 	DEPLOY_LIST=$(apl deployments -o json)
-	if [[ $(echo $DEPLOY_LIST | jq -r '.[0] | has("name")') != true  ]]; then
-		echo "There was a problem connecting to appLariat"
-		exit 1
+	if [[ $(echo $DEPLOY_LIST | jq -r '. | length') == 0  ]]; then
+		echo "Didn't find any deployments to update, exiting"
+		exit
 	fi
-	dlist=( `echo ${DEPLOY_LIST} | jq -rc '.[].name'` )
+	dlist=( `echo ${DEPLOY_LIST} | jq -r '.[].name'` )
 	echo
-	echo "Available apps: ${dlist[@]}"
+	echo "Available deployments: ${dlist[@]}"
 	echo
 	read -p "Enter the deployment to update: " deploy
 	DEPLOYMENT_NAME=$deploy
