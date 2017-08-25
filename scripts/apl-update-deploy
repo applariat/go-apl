@@ -205,6 +205,7 @@ fi
 #comp=$(IFS=, ; echo "${comp[*]}")
 
 #using file based override
+if [[ ${ARTIFACT_TYPE} == "code" || ${ARTIFACT_TYPE} == "builder" ]]; then
 cat >update.yaml <<EOL
 command: override
 components:
@@ -213,11 +214,24 @@ components:
   - name: ${COMP_SERVICE_NAME}
     build:
       artifacts:
-        code: ${STACK_ARTIFACT_ID}
+        ${ARTIFACT_TYPE}: ${STACK_ARTIFACT_ID}
       buildvars:
       - value: ${REBUILD_TAG}
         key: REBUILD_NUM
 EOL
+else
+cat >update.yaml <<EOL
+command: override
+components:
+- stack_component_id: ${STACK_COMPONENT_ID}
+  services:
+  - name: ${COMP_SERVICE_NAME}
+    build:
+      artifacts:
+        ${ARTIFACT_TYPE}: ${STACK_ARTIFACT_ID}
+EOL
+fi
+
 
 #Submit the override
 OVERRIDE_COMMAND="apl deployments override $DEPLOYMENT_ID -f update.yaml -o json"  
