@@ -37,12 +37,12 @@ type Stack struct {
 
 // StackCreateInput is used for the create of stacks
 type StackCreateInput struct {
-	ID             string      `json:"id,omitempty"`
-    Name           string      `json:"name"`
-    MetaData       interface{} `json:"meta_data"`
-    ProjectID      string      `json:"project_id"`
-    UseVersion     int         `json:"use_version"`
-    Components     interface{} `json:"components"`
+	ID         string      `json:"id,omitempty"`
+	Name       string      `json:"name"`
+	MetaData   interface{} `json:"meta_data"`
+	ProjectID  string      `json:"project_id"`
+	UseVersion int         `json:"use_version"`
+	Components interface{} `json:"components"`
 }
 
 // StackUpdateInput is used for the update of stacks
