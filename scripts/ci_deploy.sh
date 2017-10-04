@@ -2,9 +2,9 @@
 #Description: This script is intended to be used with CI systems to create deployments in appLariat
 #Usage: Add this script to your project and then configure your CI tool to execute it
 #Variables that should be set as part of CI settings
-#APL_API
-#APL_SERVICE_USER
-#APL_SERVICE_PASS
+#APL_API - https://api.applariat.io/v1
+#APL_SERVICE_USER - applariat user with a minimum level or release management
+#APL_SERVICE_PASS - password for applariat user
 start=`date +%s`
 set -e # Exit with nonzero exit code if anything fails
 
@@ -21,13 +21,15 @@ else
 fi
 FIND_LATEST="https://api.github.com/repos/applariat/go-apl/releases/latest"
 DOWNLOAD_URL=$(wget -qO- ${FIND_LATEST} | grep browser_download_url | grep ${OS_TYPE} | head -n 1 | cut -d '"' -f 4)
-APL_CLI_VERSION=$(echo $DOWNLOAD_URL | awk -F"/" '{print $(NF - 1)}')
-APL_FILE=$(echo $DOWNLOAD_URL | awk -F"/" '{print $NF}')
+APL_CLI_VER=$(echo "$DOWNLOAD_URL" | cut -d '/' -f 8)
+APL_FILE=$(echo $DOWNLOAD_URL | cut -d '/' -f 9)
 
 #Project variables
 CREATE_RELEASE=${CREATE_RELEASE:-false}
+CREATE_DEPLOYMENT_BRANCH=${CREATE_DEPLOYMENT_BRANCH:-master}
+REPO_ACCT=${REPO_ACCT:-applariat}
 REPO_NAME=${REPO_NAME:-acme-air} 
-REPO_PATH="https://github.com/applariat/${REPO_NAME}/archive"
+REPO_PATH="https://github.com/${REPO_ACCT}/${REPO_NAME}/archive"
 
 #APL Platform variables
 #Required as env variable inputs from CI
@@ -41,6 +43,7 @@ APL_STACK_NAME=${APL_STACK_NAME:?Missing required env var} #The machine name of 
 APL_RELEASE_VERSION=${APL_RELEASE_VERSION:?Missing required env var} #The integer version of the release
 APL_COMPONENT_NAME=${APL_COMPONENT_NAME:?Missing required env var} #The name given for the component to be updated in appLariat
 
+
 set +e
 
 #We will look up the necessary info based on envvars
@@ -53,20 +56,27 @@ set +e
 #APL_COMP_SERVICE_NAME=""
 #APL_ARTIFACT_TYPE=""
 
+APL_NAME_PREFIX=${JOB_BRANCH}
 
 echo "Starting the appLariat ci_deploy.sh"
 echo "JOB_BRANCH: $JOB_BRANCH"
 echo "JOB_TAG: $JOB_TAG"
 echo "JOB_COMMIT: $JOB_COMMIT"
 
+if [[ ${JOB_BRANCH} != $CREATE_DEPLOYMENT_BRANCH ]] && [ -z ${JOB_TAG} ]; then
+	echo
+	echo "Only deploying to appLariat when tagged or on commits to $CREATE_DEPLOYMENT_BRANCH, exiting"
+	exit
+fi
+
 if [ ! -z "$JOB_TAG" ]; then
-    APL_ARTIFACT_NAME="staging-${JOB_TAG}"
+    APL_ARTIFACT_NAME="${APL_NAME_PREFIX}-${JOB_TAG}"
     CODE_LOC=${JOB_TAG}
     WORKLOAD_TYPE=level5
     CREATE_RELEASE=true
 else
     JOB_COMMIT=`echo $JOB_COMMIT |cut -c 1-12`
-    APL_ARTIFACT_NAME="qa-${JOB_COMMIT}"
+    APL_ARTIFACT_NAME="${APL_NAME_PREFIX}-${JOB_COMMIT}"
     CODE_LOC=${JOB_COMMIT}
     WORKLOAD_TYPE=level2
 fi
@@ -78,20 +88,16 @@ DEPLOYMENT_NAME=${APL_ARTIFACT_NAME}
 
 #Check the environment
 #Install apl command
-#if ! [ `command -v apl` ]; then
-  APL_FILE=apl-${APL_CLI_VER}-linux_amd64.tgz
-  if [[ "$OSTYPE" == "darwin"* ]]; then
-    APL_FILE=apl-${APL_CLI_VER}-darwin_amd64.tgz
-  fi
+if [ ! -f ./apl ]; then
   echo
-  echo "Downloading cli: https://github.com/applariat/go-apl/releases/download/${APL_CLI_VER}/${APL_FILE}"
-  wget -q https://github.com/applariat/go-apl/releases/download/${APL_CLI_VER}/${APL_FILE}
+  echo "Downloading cli: $DOWNLOAD_URL"
+  wget -q $DOWNLOAD_URL
   tar zxf ${APL_FILE}
   mv bin/apl .
   echo "Running APL Version - $(./apl version)"
-#fi
+fi
 #Confirm jq is available
-#if ! [ `command -v jq` ]; then
+if  [ ! -f ./jq ]; then
     #Let's install jq
     echo "This script requires jq 1.5 tool, installing"
     JQ_TOOL=jq-linux64
@@ -110,15 +116,17 @@ DEPLOYMENT_NAME=${APL_ARTIFACT_NAME}
       echo "Error: There was a problem with the download of ${JQ_TOOL}, exiting"
 	  exit 1
     fi
-#fi
+fi
 #End of Environment checks
 
 #Lookup APL PLATFORM ids
 if [ -z $APL_LOC_DEPLOY_ID ]; then
   APL_LOC_DEPLOY_ID=$(./apl loc-deploys -o json | ./jq -r '.[0].id')
+  echo "Using Default Deployment Location with id $APL_LOC_DEPLOY_ID"
 fi
 if [ ! -z ${APL_LOC_ARTIFACT_NAME} ]; then
   APL_LOC_ARTIFACT_ID=$(./apl loc-artifacts --name $APL_LOC_ARTIFACT_NAME -o json | ./jq -r '.[0].id')
+  echo "Using Artifact Location with $APL_LOC_ARTIFACT_NAME and id: $APL_LOC_ARTIFACT_ID"
 fi
 
 #Just in case make sure to convert stack display name to machine name
@@ -126,6 +134,7 @@ APL_STACK_NAME=$(echo ${APL_STACK_NAME} | tr -d ' ' | tr '[:upper:]' '[:lower:]'
 #Lookup APL Stack info
 if [ -z $APL_STACK_ID ]; then
   APL_STACK_ID=$(./apl stacks --name $APL_STACK_NAME -o json | ./jq -r '.[0].id')
+  echo "Found $APL_STACK_NAME with id: $APL_STACK_ID"
 fi
 #We have to lookup several items from the release record, so we will load the records and then parse
 RELEASE_LIST=$(./apl releases --stack-id $APL_STACK_ID -o json)
@@ -144,6 +153,7 @@ if [ -z $APL_RELEASE_ID ]; then
     #echo $APL_STACK_VERSION_ID
     APL_STACK_COMPONENT_REC=$(echo ${RELEASE_REC} | \
       ./jq -r --arg cname $APL_COMPONENT_NAME '.components[] | select(.name == $cname)')
+    #echo "$APL_STACK_COMPONENT_REC"
     APL_STACK_COMPONENT_ID=$(echo ${APL_STACK_COMPONENT_REC} | \
       ./jq -r '.stack_component_id')
     #echo $APL_STACK_COMPONENT_ID
@@ -154,12 +164,15 @@ if [ -z $APL_RELEASE_ID ]; then
     APL_ARTIFACT_TYPE=$(echo ${APL_STACK_COMPONENT_REC} | \
       ./jq -r '.services[0].build.artifacts | keys |
       if contains(["code"]) then "code" elif contains(["builder"]) then "builder" else "image" end')
-    #echo $APL_ARTIFACT_TYPE
+    #echo "Artifact type is $APL_ARTIFACT_TYPE"
     if [ -z ${APL_LOC_ARTIFACT_ID} ]; then
         CUR_STACK_ARTIFACT_ID=$(echo ${APL_STACK_COMPONENT_REC} | \
-          ./jq -r .services[0].build.artifacts |  if has("code") then .code elif has("builder") then .builder else .image end')
-        SA_REC=$(./apl stack-artifacts get CUR_STACK_ARTIFACT_ID -o json)
+          ./jq -r '.services[0].build.artifacts | if has("code") then .code elif has("builder") then .builder else .image end')
+        #echo $CUR_STACK_ARTIFACT_ID
+        SA_REC=$(./apl stack-artifacts get $CUR_STACK_ARTIFACT_ID -o json)
+        #echo $SA_REC
         APL_LOC_ARTIFACT_ID=$(echo ${SA_REC} | ./jq -r '.loc_artifact_id')
+        echo "Using Current Artifact Location with id: $APL_LOC_ARTIFACT_ID"
     fi
 fi
    
