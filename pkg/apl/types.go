@@ -81,7 +81,6 @@ type Overrides struct {
 
 // Service
 type Service struct {
-	// TODO: remove ComponentServiceID. Deprecated
 	ComponentServiceID string      `json:"component_service_id,omitempty"`
 	Name               string      `json:"name,omitempty"`
 	Build              interface{} `json:"build,omitempty"`

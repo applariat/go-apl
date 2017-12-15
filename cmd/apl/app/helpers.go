@@ -91,7 +91,7 @@ func createDeleteCommand(cb func(ccmd *cobra.Command, args []string), label stri
 		Long:  desc,
 		Run:   cb,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			return checkCommandHasIDInArgs(args, "credential")
+			return checkCommandHasIDInArgs(args, label)
 		},
 	}
 }

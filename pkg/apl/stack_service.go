@@ -24,7 +24,7 @@ func NewStacksService(sling *sling.Sling) *StackService {
 type Stack struct {
 	ID             string      `json:"id,omitempty"`
 	Name           string      `json:"name"`
-	VersionNumber  int         `json:"version_number,omitempty"`
+	//VersionNumber  int         `json:"version_number,omitempty"`
 	ReleaseNumber  int         `json:"release_number,omitempty"`
 	Project        interface{} `json:"project"`
 	StackVersions  interface{} `json:"stack_versions"`

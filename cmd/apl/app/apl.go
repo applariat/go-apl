@@ -42,7 +42,7 @@ func init() {
 	//AppLariatCmd.AddCommand(NewPolicySchedulesCommand())
 	//AppLariatCmd.AddCommand(NewProjectRolesCommand())
 	//AppLariatCmd.AddCommand(NewCredentialsCommand())
-	//AppLariatCmd.AddCommand(NewWorkloadsCommand())
+	AppLariatCmd.AddCommand(NewWorkloadsCommand())
 	//AppLariatCmd.AddCommand(NewRolesCommand())
 	//AppLariatCmd.AddCommand(NewStackComponentsCommand())
 	//AppLariatCmd.AddCommand(NewTypesCommand())

@@ -29,10 +29,12 @@ type Event struct {
 	UpdateData      interface{} `json:"update_data,omitempty"`
 	Source          string      `json:"source"`
 	Message         string      `json:"message"`
+	Reason          string      `json:"reason,omitempty"`
 	Active          bool        `json:"active"`
 	CreatedByUserID string      `json:"created_by_user_id"`
 	CreatedTime     string      `json:"created_time"`
 	LastModified    string      `json:"last_modified"`
+	ObjectParent    string      `json:"object_parent"`
 }
 
 // EventCreateInput is used for the create of events

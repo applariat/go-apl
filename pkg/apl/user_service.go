@@ -25,6 +25,8 @@ type User struct {
 	ID              string      `json:"id"`
 	FirstName       string      `json:"first_name"`
 	LastName        string      `json:"last_name"`
+	Group           interface{} `json:"group,omitempty"`
+	Settings        interface{} `json:"settings,omitempty"`
 	UserType        string      `json:"user_type"`
 	WorkRole        string      `json:"work_role,omitempty"`
 	IsDeleted       bool        `json:"is_deleted"`
@@ -34,7 +36,6 @@ type User struct {
 	Role            interface{} `json:"role"`
 	LastLoginDate   int         `json:"last_login_date"`
 	Projects        interface{} `json:"projects,omitempty"`
-	CreatedByUserID string      `json:"created_by_user_id,omitempty"`
 	LastModified    string      `json:"last_modified"`
 	CreatedTime     string      `json:"created_time"`
 }

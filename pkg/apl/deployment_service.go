@@ -26,10 +26,9 @@ type Deployment struct {
 	StackVersionID  string      `json:"stack_version_id"`
 	ProjectID       string      `json:"project_id"`
 	Name            string      `json:"name"`
-	ReleaseVersion  int         `json:"release_version"`
-	WorkloadID      string      `json:"workload_id,omitempty"`
-	WorkloadType    string      `json:"workload_type,omitempty"`
 	LeaseExpiration string      `json:"lease_expiration,omitempty"`
+	LastStartData   string      `json:"last_start_date,omitempty"`
+	DnsNames        interface{} `json:"dns_names"`
 	Workload        interface{} `json:"workload,omitempty"`
 	StackVersion    interface{} `json:"stack_version,omitempty"`
 	Location        interface{} `json:"location,omitempty"`
@@ -38,7 +37,7 @@ type Deployment struct {
 	Release         interface{} `json:"release,omitempty"`
 	CreatedTime     string      `json:"created_time"`
 	LastModified    string      `json:"last_modified"`
-	CreatedByUser   interface{} `json:"created_by_user"`
+	CreatedByUser   `json:"created_by_user"`
 }
 
 // DeploymentCreateInput is used for the create of deployments

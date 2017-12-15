@@ -31,7 +31,7 @@ func cmdListComponents(ccmd *cobra.Command, args []string) {
 	output := runListCommand(&componentParams, aplSvc.Components.List)
 
 	if output != nil {
-		fields := []string{"ID", "Name", "Category"}
+		fields := []string{"ID", "Name", "Category", "Versions"}
 		printTableResultsCustom(output.([]apl.Component), fields)
 	}
 }
@@ -43,7 +43,7 @@ func cmdGetComponents(ccmd *cobra.Command, args []string) {
 	output := runGetCommand(args, aplSvc.Components.Get)
 
 	if output != nil {
-		fields := []string{"ID", "Name", "Category"}
+		fields := []string{"ID", "Name", "Category", "Versions"}
 		printTableResultsCustom(output.(apl.Component), fields)
 	}
 }
