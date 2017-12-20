@@ -17,8 +17,8 @@ func NewDeploymentsCommand() *cobra.Command {
 	cmd.Flags().StringVar(&deploymentParams.Name, "name", "", "Filter deployments by name")
 	cmd.Flags().StringVar(&deploymentParams.StackVersionID, "stack-version-id", "", "Filter deployments by stack_version_id")
 	cmd.Flags().StringVar(&deploymentParams.ProjectID, "project-id", "", "Filter deployments by project_id")
-	cmd.Flags().StringVar(&deploymentParams.WorkloadID, "workload-id", "", "Filter deployments by workload_id")
-	cmd.Flags().StringVar(&deploymentParams.WorkloadType, "workload-type", "", "Filter deployments by workload_type")
+	//cmd.Flags().StringVar(&deploymentParams.ID, "workload-id", "", "Filter deployments by workload_id")
+	cmd.Flags().StringVar(&deploymentParams.Workload.WorkloadType, "workload-type", "", "Filter deployments by workload_type")
 
 	// Get
 	getCmd := createGetCommand(cmdGetDeployments, "deployment", "")
@@ -58,7 +58,7 @@ func cmdListDeployments(ccmd *cobra.Command, args []string) {
 	output := runListCommand(&deploymentParams, aplSvc.Deployments.List)
 
 	if output != nil {
-		fields := []string{"ID", "Name", "CreatedTime"}
+		fields := []string{"ID", "Name", "CreatedTime", "Workload.WorkloadType"}
 		printTableResultsCustom(output.([]apl.Deployment), fields)
 	}
 }
@@ -70,7 +70,7 @@ func cmdGetDeployments(ccmd *cobra.Command, args []string) {
 	output := runGetCommand(args, aplSvc.Deployments.Get)
 
 	if output != nil {
-		fields := []string{"ID", "Name", "CreatedTime"}
+		fields := []string{"ID", "Name", "CreatedTime", "Workload.WorkloadType"}
 		printTableResultsCustom(output.(apl.Deployment), fields)
 	}
 }

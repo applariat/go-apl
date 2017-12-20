@@ -4,12 +4,14 @@ import (
 	"github.com/dghubble/sling"
 	"net/http"
 	"strings"
+
 )
 
 // Helper function for list
 func doList(sling *sling.Sling, path string, params interface{}, output interface{}) (*http.Response, error) {
 	apiError := new(WrappedAPIError)
 	resp, err := sling.New().Get(path).QueryStruct(params).Receive(output, apiError)
+
 	return resp, relevantError(err, apiError)
 }
 

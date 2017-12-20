@@ -143,11 +143,9 @@ func printTableResultsCustom(results interface{}, fields []string) {
 	if results != nil {
 		header := make([]string, len(fields))
 		output := reflect.ValueOf(results)
-
 		switch reflect.TypeOf(results).Kind() {
 
 		case reflect.Struct:
-
 			dataRow := make([]string, len(fields))
 			for i := 0; i < len(fields); i++ {
 				key, val := getSubField(fields[i], output)
@@ -159,7 +157,6 @@ func printTableResultsCustom(results interface{}, fields []string) {
 			printTableResults(data, header)
 
 		case reflect.Slice:
-
 			data := make([][]string, output.Len())
 
 			for i := 0; i < output.Len(); i++ {
