@@ -34,7 +34,7 @@ func cmdListEvents(ccmd *cobra.Command, args []string) {
 	output := runListCommand(&eventParams, aplSvc.Events.List)
 
 	if output != nil {
-		fields := []string{"ID", "ObjectName", "ObjectType", "Active"}
+		fields := []string{"ID", "ObjectName", "ObjectType", "Source", "Active", "Message"}
 		printTableResultsCustom(output.([]apl.Event), fields)
 	}
 }
@@ -46,7 +46,7 @@ func cmdGetEvents(ccmd *cobra.Command, args []string) {
 	output := runGetCommand(args, aplSvc.Events.Get)
 
 	if output != nil {
-		fields := []string{"ID", "ObjectName", "ObjectType", "Active"}
+		fields := []string{"ID", "ObjectName", "ObjectType", "Source", "Active", "Message"}
 		printTableResultsCustom(output.(apl.Event), fields)
 	}
 }

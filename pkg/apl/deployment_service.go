@@ -26,11 +26,10 @@ type Deployment struct {
 	StackVersionID  string      `json:"stack_version_id"`
 	ProjectID       string      `json:"project_id"`
 	Name            string      `json:"name"`
-	ReleaseVersion  int         `json:"release_version"`
-	WorkloadID      string      `json:"workload_id,omitempty"`
-	WorkloadType    string      `json:"workload_type,omitempty"`
 	LeaseExpiration string      `json:"lease_expiration,omitempty"`
-	Workload        interface{} `json:"workload,omitempty"`
+	LastStartData   string      `json:"last_start_date,omitempty"`
+	DnsNames        interface{} `json:"dns_names"`
+	Workload                    `json:"workload,omitempty"`
 	StackVersion    interface{} `json:"stack_version,omitempty"`
 	Location        interface{} `json:"location,omitempty"`
 	Status          interface{} `json:"status,omitempty"`
@@ -38,19 +37,17 @@ type Deployment struct {
 	Release         interface{} `json:"release,omitempty"`
 	CreatedTime     string      `json:"created_time"`
 	LastModified    string      `json:"last_modified"`
-	CreatedByUser   interface{} `json:"created_by_user"`
+	CreatedByUser               `json:"created_by_user"`
 }
 
 // DeploymentCreateInput is used for the create of deployments
 type DeploymentCreateInput struct {
-	ID           string      `json:"id,omitempty"`
-	Name         string      `json:"name"`
-	ReleaseID    string      `json:"release_id"`
-	LocDeployID  string      `json:"loc_deploy_id"`
-	WorkloadType string      `json:"workload_type,omitempty"`
-	WorkloadID   string      `json:"workload_id,omitempty"`
-	Workload     interface{} `json:"workload,omitempty"`
-	Components   interface{} `json:"components,omitempty"`
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name"`
+	ReleaseID   string `json:"release_id"`
+	LocDeployID string `json:"loc_deploy_id"`
+	Workload               `json:"workload,omitempty"`
+	Components interface{} `json:"components,omitempty"`
 }
 
 // DeploymentCmdComponent components for command update
@@ -62,11 +59,10 @@ type DeploymentComponent struct {
 
 // DeploymentUpdateInput used to update a deployment
 type DeploymentUpdateInput struct {
-	Name         string                `json:"name,omitempty"`
-	Command      string                `json:"command,omitempty"`
-	WorkloadType string                `json:"workload_type,omitempty"`
-	Workload     interface{}           `json:"workload,omitempty"`
-	Components   []DeploymentComponent `json:"components,omitempty"`
+	Name    string `json:"name,omitempty"`
+	Command string `json:"command,omitempty"`
+	Workload                         `json:"workload,omitempty"`
+	Components []DeploymentComponent `json:"components,omitempty"`
 }
 
 // DeploymentParams filter parameters used in list operations
@@ -74,8 +70,7 @@ type DeploymentParams struct {
 	Name           string `url:"name,omitempty"`
 	StackVersionID string `url:"stack_version_id,omitempty"`
 	ProjectID      string `url:"project_id,omitempty"`
-	WorkloadID     string `url:"workload_id,omitempty"`
-	WorkloadType   string `url:"workload_type,omitempty"`
+	Workload   WorkloadParams `url:"workload,omitempty"`
 }
 
 // List gets a list of deployments with optional filter params

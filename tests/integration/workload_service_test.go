@@ -22,7 +22,7 @@ var (
 //		WorkloadType: 	"wl-level1",
 //		Description:    "The Test Description",
 //		LeaseType: 		"temporary",
-//		MaxLeasePeriodDays: 7,
+//		MaxLeasePeriodMins: 7,
 //		Priority: 			300,
 //		QualityOfService: "best_effort",
 //	}

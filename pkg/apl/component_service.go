@@ -22,13 +22,13 @@ func NewComponentsService(sling *sling.Sling) *ComponentService {
 
 // Component represents a component row
 type Component struct {
-	ID                string      `json:"id"`
-	Name              string      `json:"name"`
-	Category          string      `json:"category"`
-	LastModified      string      `json:"last_modified"`
-	CreatedTime       string      `json:"created_time"`
-	ComponentVersions interface{} `json:"component_versions,omitempty"`
-	MetaData          `json:"meta_data,omitempty"`
+	ID           string            `json:"id"`
+	Name         string            `json:"name"`
+	Category     string            `json:"category"`
+	LastModified string            `json:"last_modified"`
+	CreatedTime  string            `json:"created_time"`
+	Versions     []string          `json:"versions,omitempty"`
+	MetaData     map[string]string `json:"meta_data,omitempty"`
 }
 
 // ComponentParams filter parameters used in list operations

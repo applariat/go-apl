@@ -22,13 +22,13 @@ func NewProjectsService(sling *sling.Sling) *ProjectService {
 
 // Project represents a project row
 type Project struct {
-	ID       string      `json:"id,omitempty"`
-	Name     string      `json:"name"`
-	Settings interface{} `json:"settings"`
-	Users    interface{} `json:"users"`
-
-	LastModified  string `json:"last_modified"`
-	CreatedTime   string `json:"created_time"`
+	ID            string            `json:"id,omitempty"`
+	Name          string            `json:"name"`
+	Settings      interface{}       `json:"settings"`
+	Users         interface{}       `json:"users"`
+	MetaData      map[string]string `json:"meta_data,omitempty"`
+	LastModified  string            `json:"last_modified"`
+	CreatedTime   string            `json:"created_time"`
 	CreatedByUser `json:"created_by_user"`
 }
 

@@ -27,7 +27,7 @@ type Workload struct {
 	Description        string `json:"description"`
 	WorkloadType       string `json:"workload_type"`
 	LeaseType          string `json:"lease_type"`
-	MaxLeasePeriodDays int    `json:"max_lease_period_days"`
+	MaxLeasePeriodMins int    `json:"max_lease_period_minutes"`
 	Priority           int    `json:"priority"`
 	QualityOfService   string `json:"quality_of_service"`
 	LastModified       string `json:"last_modified"`
@@ -40,7 +40,7 @@ type WorkloadUpdateInput struct {
 	Description        string `json:"description,omitempty"`
 	WorkloadType       string `json:"workload_type,omitempty"`
 	LeaseType          string `json:"lease_type,omitempty"`
-	MaxLeasePeriodDays int    `json:"max_lease_period_days,omitempty"`
+	MaxLeasePeriodMins int    `json:"max_lease_period_minutes,omitempty"`
 	Priority           int    `json:"priority,omitempty"`
 	QualityOfService   string `json:"quality_of_service,omitempty"`
 }
@@ -50,7 +50,7 @@ type WorkloadParams struct {
 	Name               string `url:"name,omitempty"`
 	WorkloadType       string `url:"workload_type,omitempty"`
 	LeaseType          string `url:"lease_type,omitempty"`
-	MaxLeasePeriodDays int    `url:"max_lease_period_days,omitempty"`
+	MaxLeasePeriodMins int    `url:"max_lease_period_minutes,omitempty"`
 	Priority           int    `url:"priority,omitempty"`
 	QualityOfService   string `url:"quality_of_service,omitempty"`
 }

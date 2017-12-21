@@ -101,9 +101,10 @@ func NewDeploymentsCreateCommand() *cobra.Command {
 				}
 
 				if workloadType != "" {
-					in.WorkloadType = workloadType
+					in.Workload = apl.Workload{
+						WorkloadType: workloadType,
+					}
 				}
-
 			}
 
 			runCreateCommand(in, aplSvc.Deployments.Create)
