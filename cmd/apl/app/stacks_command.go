@@ -15,6 +15,7 @@ func NewStacksCommand() *cobra.Command {
 	createCmd := createCreateCommand(cmdCreateStacks, "stack", "")
 	updateCmd := createUpdateCommand(cmdUpdateStacks, "stack", "")
 	deleteCmd := createDeleteCommand(cmdDeleteStacks, "stack", "")
+	editCmd := createEditCommand(cmdEditStacks, "stack", "")
 
 	// command flags
 	cmd.Flags().StringVar(&stackParams.Name, "name", "", "Filter stacks by name")
@@ -24,6 +25,7 @@ func NewStacksCommand() *cobra.Command {
 	cmd.AddCommand(createCmd)
 	cmd.AddCommand(updateCmd)
 	cmd.AddCommand(deleteCmd)
+	cmd.AddCommand(editCmd)
 
 	return cmd
 }
@@ -50,14 +52,19 @@ func cmdGetStacks(ccmd *cobra.Command, args []string) {
 
 func cmdCreateStacks(ccmd *cobra.Command, args []string) {
 	aplSvs := apl.NewClient()
-	in := &apl.StackCreateInput{}
+	in := &apl.Stack{}
 	runCreateCommand(in, aplSvs.Stacks.Create)
 }
 
 func cmdUpdateStacks(ccmd *cobra.Command, args []string) {
 	aplSvs := apl.NewClient()
-	in := &apl.StackUpdateInput{}
+	in := &apl.Stack{}
 	runUpdateCommand(args, in, aplSvs.Stacks.Update)
+}
+
+func cmdEditStacks(ccmd *cobra.Command, args []string) {
+	aplSvs := apl.NewClient()
+	runEditCommand(args, aplSvs.Stacks.Edit)
 }
 
 func cmdDeleteStacks(ccmd *cobra.Command, args []string) {

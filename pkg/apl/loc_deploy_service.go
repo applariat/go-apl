@@ -43,7 +43,7 @@ type LocDeploy struct {
 	//Policies      interface{}       `json:"policies,omitempty"`
 	Config        interface{}       `json:"config"`
 	Metadata      map[string]string `json:"meta_data,omitempty"`
-	CreatedByUser string            `json:"created_by_user"`
+	CreatedByUser interface{}          `json:"created_by_user"`
 }
 
 // LocDeployCreateInput is used for the create of loc_deploys

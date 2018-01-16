@@ -57,6 +57,20 @@ func createCreateCommand(cb func(ccmd *cobra.Command, args []string), label stri
 	return ccmd
 }
 
+// createEditCommand returns a standard post/create command
+func createEditCommand(cb func(ccmd *cobra.Command, args []string), label string, desc string) *cobra.Command {
+	ccmd := &cobra.Command{
+		Use:   "edit [ID]",
+		Short: fmt.Sprintf("edit a %s", label),
+		Long:  desc,
+		Run:   cb,
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return checkCommandHasIDInArgs(args, label)
+		},
+	}
+	return ccmd
+}
+
 // createUpdateCommand returns a standard put/update command
 func createUpdateCommand(cb func(ccmd *cobra.Command, args []string), label string, desc string) *cobra.Command {
 	ccmd := &cobra.Command{
@@ -213,6 +227,25 @@ func runUpdateCommand(args []string, input interface{}, callMe interface{}) {
 			reflect.ValueOf(input),
 		}
 	}
+
+	response := reflect.ValueOf(callMe).Call(in)
+	output, _, err := getReflectOutput(response)
+	if err != nil {
+		printResults(err)
+		os.Exit(1)
+	}
+
+	printResults(output)
+}
+
+func runEditCommand(args []string, callMe interface{}) {
+
+	var id string
+	if len(args) != 0 {
+		id = args[0]
+	}
+
+	in := []reflect.Value{reflect.ValueOf(id)}
 
 	response := reflect.ValueOf(callMe).Call(in)
 	output, _, err := getReflectOutput(response)
