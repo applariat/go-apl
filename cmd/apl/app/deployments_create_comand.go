@@ -13,7 +13,7 @@ func NewDeploymentsCreateCommand() *cobra.Command {
 		name          string
 		stack         string
 		releaseID     string
-		locDeployId	  string
+		locDeployId   string
 		locDeployName string
 		version       string
 		workloadType  string
@@ -103,11 +103,11 @@ func NewDeploymentsCreateCommand() *cobra.Command {
 				}
 
 				in = &apl.DeploymentCreateInput{
-					Name:       name,
-					Stack:      stack,
-					LocDeploy:  locDeployName,
-					Version:    version,
-					ReleaseID:  releaseID,
+					Name:         name,
+					Stack:        stack,
+					LocDeploy:    locDeployName,
+					Version:      version,
+					ReleaseID:    releaseID,
 					WorkloadType: workloadType,
 				}
 

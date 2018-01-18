@@ -1,13 +1,13 @@
 package apl
 
 import (
-	"github.com/dghubble/sling"
-	"net/http"
-	"strings"
 	"encoding/json"
+	"github.com/dghubble/sling"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 // Helper function for list
@@ -81,7 +81,7 @@ func doEdit(sling *sling.Sling, path string) (ModifyResult, *http.Response, erro
 }
 
 // editFile creates a file
-func editFile(fileData interface{}) ([]byte,error) {
+func editFile(fileData interface{}) ([]byte, error) {
 
 	rawData, err := json.MarshalIndent(fileData, "", "  ")
 	if err != nil {
@@ -95,7 +95,7 @@ func editFile(fileData interface{}) ([]byte,error) {
 	cmd.Stdout = os.Stdout
 	err = cmd.Run()
 	if err != nil {
-		return rawData,err
+		return rawData, err
 	}
 	return rawData, nil
 }

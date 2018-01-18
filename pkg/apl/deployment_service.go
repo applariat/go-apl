@@ -42,13 +42,13 @@ type Deployment struct {
 
 // DeploymentCreateInput is used for the create of deployments
 type DeploymentCreateInput struct {
-	ID          string `json:"id,omitempty"`
-	Name        string `json:"name"`
-	Stack       string `json:"stack_name"`
-	Version     string `json:"version"`
-	ReleaseID   string `json:"release_id"`
-	LocDeployID string `json:"loc_deploy_id"`
-	LocDeploy   string `json:"loc_deploy_name"`
+	ID           string `json:"id,omitempty"`
+	Name         string `json:"name"`
+	Stack        string `json:"stack_name"`
+	Version      string `json:"version"`
+	ReleaseID    string `json:"release_id"`
+	LocDeployID  string `json:"loc_deploy_id"`
+	LocDeploy    string `json:"loc_deploy_name"`
 	WorkloadType string `json:"workload_type"`
 	//Workload    `json:"workload,omitempty"`
 	//Components  interface{} `json:"components,omitempty"`

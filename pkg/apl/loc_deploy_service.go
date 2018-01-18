@@ -22,28 +22,28 @@ func NewLocDeploysService(sling *sling.Sling) *LocDeployService {
 
 // LocDeploy represents a loc_deploy row
 type LocDeploy struct {
-	ID             string            `json:"id,omitempty"`
-	Name           string            `json:"name"`
-	OrgID          string            `json:"org_id,omitempty"`
-	IsDeleted      bool              `json:"is_deleted"`
-	AplManaged     bool              `json:"apl_managed"`
-	AplOnApl       bool              `json:"apL_on_apl"`
-	LocalScript    bool              `json:"local_script"`
-	LocDeploysType string            `json:"loc_deploys_type"`
-	CredentialID   string            `json:"credential_id"`
-	CredentialType string            `json:"credential_type,omitempty"`
-	LastModified   string            `json:"last_modified"`
-	CreatedTime    string            `json:"created_time"`
-	Description    string            `json:"description"`
-	Workloads      []string          `json:"workloads"`
-	Status         LocDeployStatus   `json:"status"`
-	DNS            interface{} `json:"dns,omitempty"`
-	Cluster        interface{}       `json:"cluster"`
+	ID             string          `json:"id,omitempty"`
+	Name           string          `json:"name"`
+	OrgID          string          `json:"org_id,omitempty"`
+	IsDeleted      bool            `json:"is_deleted"`
+	AplManaged     bool            `json:"apl_managed"`
+	AplOnApl       bool            `json:"apL_on_apl"`
+	LocalScript    bool            `json:"local_script"`
+	LocDeploysType string          `json:"loc_deploys_type"`
+	CredentialID   string          `json:"credential_id"`
+	CredentialType string          `json:"credential_type,omitempty"`
+	LastModified   string          `json:"last_modified"`
+	CreatedTime    string          `json:"created_time"`
+	Description    string          `json:"description"`
+	Workloads      []string        `json:"workloads"`
+	Status         LocDeployStatus `json:"status"`
+	DNS            interface{}     `json:"dns,omitempty"`
+	Cluster        interface{}     `json:"cluster"`
 	//CommandPayload interface{}       `json:"command_payload,omitempty"`
 	//Policies      interface{}       `json:"policies,omitempty"`
 	Config        interface{}       `json:"config"`
 	Metadata      map[string]string `json:"meta_data,omitempty"`
-	CreatedByUser interface{}          `json:"created_by_user"`
+	CreatedByUser interface{}       `json:"created_by_user"`
 }
 
 // LocDeployCreateInput is used for the create of loc_deploys

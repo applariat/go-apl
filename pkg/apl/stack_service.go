@@ -1,10 +1,10 @@
 package apl
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/dghubble/sling"
 	"net/http"
-	"encoding/json"
 )
 
 // StackService is the service object for stack operations
@@ -23,20 +23,20 @@ func NewStacksService(sling *sling.Sling) *StackService {
 
 // Stack represents a stack row
 type Stack struct {
-	ID             string      `json:"id,omitempty"`
-	Name           string      `json:"name"`
-	MetaData   interface{} `json:"meta_data"`
+	ID       string      `json:"id,omitempty"`
+	Name     string      `json:"name"`
+	MetaData interface{} `json:"meta_data"`
 	//VersionNumber  int         `json:"version_number,omitempty"`
-	UseVersion int         `json:"use_version"`
+	UseVersion     int         `json:"use_version"`
 	ReleaseNumber  int         `json:"release_number,omitempty"`
-	ProjectID  string      `json:"project_id"`
-	Components interface{} `json:"components"`
+	ProjectID      string      `json:"project_id"`
+	Components     interface{} `json:"components"`
 	Project        interface{} `json:"project"`
 	StackVersions  interface{} `json:"stack_versions"`
 	StackArtifacts interface{} `json:"stack_artifacts"`
-	CreatedByUser `json:"created_by_user"`
-	LastModified  string `json:"last_modified"`
-	CreatedTime   string `json:"created_time"`
+	CreatedByUser  `json:"created_by_user"`
+	LastModified   string `json:"last_modified"`
+	CreatedTime    string `json:"created_time"`
 }
 
 /*
@@ -63,9 +63,9 @@ type StackUpdateInput struct {
 
 // StackParams filter parameters used in list operations
 type StackParams struct {
-	Name          string `url:"name,omitempty"`
+	Name string `url:"name,omitempty"`
 	//VersionNumber int    `url:"version_number,omitempty"`
-	ReleaseNumber int    `url:"release_number,omitempty"`
+	ReleaseNumber int `url:"release_number,omitempty"`
 }
 
 // List gets a list of stacks with optional filter params

@@ -22,22 +22,22 @@ func NewUsersService(sling *sling.Sling) *UserService {
 
 // User represents a user row
 type User struct {
-	ID              string      `json:"id"`
-	FirstName       string      `json:"first_name"`
-	LastName        string      `json:"last_name"`
-	Group           interface{} `json:"group,omitempty"`
-	Settings        interface{} `json:"settings,omitempty"`
-	UserType        string      `json:"user_type"`
-	WorkRole        string      `json:"work_role,omitempty"`
-	IsDeleted       bool        `json:"is_deleted"`
-	Email           string      `json:"email"`
-	EmailVerified   bool        `json:"email_verified"`
-	Phone           string      `json:"phone,omitempty"`
-	Role            interface{} `json:"role"`
-	LastLoginDate   int         `json:"last_login_date"`
-	Projects        interface{} `json:"projects,omitempty"`
-	LastModified    string      `json:"last_modified"`
-	CreatedTime     string      `json:"created_time"`
+	ID            string      `json:"id"`
+	FirstName     string      `json:"first_name"`
+	LastName      string      `json:"last_name"`
+	Group         interface{} `json:"group,omitempty"`
+	Settings      interface{} `json:"settings,omitempty"`
+	UserType      string      `json:"user_type"`
+	WorkRole      string      `json:"work_role,omitempty"`
+	IsDeleted     bool        `json:"is_deleted"`
+	Email         string      `json:"email"`
+	EmailVerified bool        `json:"email_verified"`
+	Phone         string      `json:"phone,omitempty"`
+	Role          interface{} `json:"role"`
+	LastLoginDate int         `json:"last_login_date"`
+	Projects      interface{} `json:"projects,omitempty"`
+	LastModified  string      `json:"last_modified"`
+	CreatedTime   string      `json:"created_time"`
 }
 
 // UserCreateInput is used for the create of users
