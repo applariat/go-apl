@@ -1,6 +1,7 @@
 package apl
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/dghubble/sling"
 	"net/http"
@@ -22,19 +23,23 @@ func NewStacksService(sling *sling.Sling) *StackService {
 
 // Stack represents a stack row
 type Stack struct {
-	ID             string      `json:"id,omitempty"`
-	Name           string      `json:"name"`
+	ID       string      `json:"id,omitempty"`
+	Name     string      `json:"name"`
+	MetaData interface{} `json:"meta_data"`
 	//VersionNumber  int         `json:"version_number,omitempty"`
+	UseVersion     int         `json:"use_version"`
 	ReleaseNumber  int         `json:"release_number,omitempty"`
+	ProjectID      string      `json:"project_id"`
+	Components     interface{} `json:"components"`
 	Project        interface{} `json:"project"`
 	StackVersions  interface{} `json:"stack_versions"`
 	StackArtifacts interface{} `json:"stack_artifacts"`
-
-	CreatedByUser `json:"created_by_user"`
-	LastModified  string `json:"last_modified"`
-	CreatedTime   string `json:"created_time"`
+	CreatedByUser  `json:"created_by_user"`
+	LastModified   string `json:"last_modified"`
+	CreatedTime    string `json:"created_time"`
 }
 
+/*
 // StackCreateInput is used for the create of stacks
 type StackCreateInput struct {
 	ID         string      `json:"id,omitempty"`
@@ -54,12 +59,13 @@ type StackUpdateInput struct {
 	StackVersions  interface{} `json:"stack_versions,omitempty"`
 	StackArtifacts interface{} `json:"stack_artifacts,omitempty"`
 }
+*/
 
 // StackParams filter parameters used in list operations
 type StackParams struct {
-	Name          string `url:"name,omitempty"`
-	VersionNumber int    `url:"version_number,omitempty"`
-	ReleaseNumber int    `url:"release_number,omitempty"`
+	Name string `url:"name,omitempty"`
+	//VersionNumber int    `url:"version_number,omitempty"`
+	ReleaseNumber int `url:"release_number,omitempty"`
 }
 
 // List gets a list of stacks with optional filter params
@@ -82,12 +88,12 @@ func (c *StackService) Get(id string) (Stack, *http.Response, error) {
 }
 
 // Create will create a stack
-func (c *StackService) Create(input *StackCreateInput) (CreateResult, *http.Response, error) {
+func (c *StackService) Create(input *Stack) (CreateResult, *http.Response, error) {
 	return doCreate(c.sling, c.endpoint, input)
 }
 
 // Update will update a stack for the id specified
-func (c *StackService) Update(id string, input *StackUpdateInput) (ModifyResult, *http.Response, error) {
+func (c *StackService) Update(id string, input *Stack) (ModifyResult, *http.Response, error) {
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	return doUpdate(c.sling, path, input)
 }
@@ -96,4 +102,20 @@ func (c *StackService) Update(id string, input *StackUpdateInput) (ModifyResult,
 func (c *StackService) Delete(id string) (ModifyResult, *http.Response, error) {
 	path := fmt.Sprintf("%s/%s", c.endpoint, id)
 	return doDelete(c.sling, path)
+}
+
+// Edit will edit the stack for the id specified
+func (c *StackService) Edit(id string) (ModifyResult, *http.Response, error) {
+	// Get the payload
+	input := &struct {
+		Data Stack `json:"data"`
+	}{}
+	path := fmt.Sprintf("%s/%s", c.endpoint, id)
+	doGet(c.sling, path, input)
+	// Create and edit the file
+	updateData, _ := editFile(input.Data)
+	var stack *Stack
+	json.Unmarshal(updateData, &stack)
+	return doUpdate(c.sling, path, stack)
+
 }

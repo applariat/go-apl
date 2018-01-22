@@ -26,16 +26,16 @@ type Release struct {
 	Version        int         `json:"version"`
 	StackID        string      `json:"stack_id"`
 	StackVersionID string      `json:"stack_version_id"`
-	ReleaseTag     string 		`json:"release_tag"`
+	ReleaseTag     string      `json:"release_tag"`
 	ProjectID      string      `json:"project_id"`
 	LocImageID     string      `json:"loc_image_id,omitempty"`
 	BuildStatus    string      `json:"build_status,omitempty"`
 	Components     interface{} `json:"components"`
 	MetaData       interface{} `json:"meta_data,omitempty"`
 	Deployment     interface{} `json:"deployment,omitempty"`
-	LastModified  string      `json:"last_modified"`
-	CreatedTime   string      `json:"created_time"`
-	CreatedByUser interface{} `json:"created_by_user"`
+	LastModified   string      `json:"last_modified"`
+	CreatedTime    string      `json:"created_time"`
+	CreatedByUser  interface{} `json:"created_by_user"`
 }
 
 // ReleaseCreateInput is used for the create of releases

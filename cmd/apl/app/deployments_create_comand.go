@@ -10,11 +10,13 @@ import (
 func NewDeploymentsCreateCommand() *cobra.Command {
 
 	var (
-		name         string
-		releaseID    string
-		locDeployID  string
-		workloadType string
-		//instances     int
+		name          string
+		stack         string
+		releaseID     string
+		locDeployId   string
+		locDeployName string
+		version       string
+		workloadType  string
 		componentsMap ComponentStringMap
 	)
 
@@ -38,18 +40,25 @@ func NewDeploymentsCreateCommand() *cobra.Command {
 				name = subdomainSafe(name)
 			}
 
-			if releaseID == "" {
+			if stack != "" {
+				if version == "" {
+					missingFlags = append(missingFlags, "--version")
+				}
+			}
+
+			if version != "" {
+				if stack == "" {
+					missingFlags = append(missingFlags, "--stack")
+				}
+			}
+
+			if releaseID == "" && stack == "" {
 				missingFlags = append(missingFlags, "--release-id")
 			}
 
-			if locDeployID == "" {
-				missingFlags = append(missingFlags, "--loc-deploy-id")
+			if locDeployName == "" {
+				missingFlags = append(missingFlags, "--location")
 			}
-
-			// Should this be required? I don't think so.
-			//if len(componentsMap.Values) < 1 {
-			//	missingFlags = append(missingFlags, "--component")
-			//}
 
 			if len(missingFlags) > 0 {
 				return fmt.Errorf("Missing required flags: %s", missingFlags)
@@ -94,17 +103,14 @@ func NewDeploymentsCreateCommand() *cobra.Command {
 				}
 
 				in = &apl.DeploymentCreateInput{
-					Name:        name,
-					LocDeployID: locDeployID,
-					ReleaseID:   releaseID,
-					Components:  c,
+					Name:         name,
+					Stack:        stack,
+					LocDeploy:    locDeployName,
+					Version:      version,
+					ReleaseID:    releaseID,
+					WorkloadType: workloadType,
 				}
 
-				if workloadType != "" {
-					in.Workload = apl.Workload{
-						WorkloadType: workloadType,
-					}
-				}
 			}
 
 			runCreateCommand(in, aplSvc.Deployments.Create)
@@ -112,9 +118,12 @@ func NewDeploymentsCreateCommand() *cobra.Command {
 	}
 	addInputFileFlag(cmd)
 	cmd.Flags().StringVar(&name, "name", "", "")
+	cmd.Flags().StringVar(&stack, "stack", "", "")
 	cmd.Flags().StringVar(&workloadType, "workload-type", "", "")
 	cmd.Flags().StringVar(&releaseID, "release-id", "", "")
-	cmd.Flags().StringVar(&locDeployID, "loc-deploy-id", "", "")
+	cmd.Flags().StringVar(&locDeployId, "loc-deploy-id", "", "")
+	cmd.Flags().StringVar(&locDeployName, "location", "", "")
+	cmd.Flags().StringVar(&version, "version", "", "")
 	cmd.Flags().Var(&componentsMap, "component", componentsMap.Usage())
 
 	//cmd.Flags().IntVar(&instances, "instances", 1, "")

@@ -125,6 +125,39 @@ func printResults(data interface{}) {
 	}
 }
 
+/*
+func printForEdit(data interface{}) {
+
+	switch printerType {
+
+	case "json":
+		if data == nil {
+			fmt.Println("{}")
+			return
+		}
+		j, err := json.MarshalIndent(data, "", "  ")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+
+	case "yaml":
+		if data == nil {
+			fmt.Println("---")
+			return
+		}
+		y, err := yaml.Marshal(data)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(string(y))
+
+	}
+}
+*/
+
 func printTableResults(data [][]string, header []string) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoFormatHeaders(false)

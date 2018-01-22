@@ -98,30 +98,3 @@ type EnvVars []map[string]string // `json:"envvars,omitempty"`
 type Run struct {
 	Instances int `json:"instances,omitempty"`
 } // `json:"run,omitempty"`
-
-//// HealthProbe ...
-//type HealthProbe   struct {
-//	Delay   interface{} `json:"delay,omitempty"`
-//	URL     interface{} `json:"url,omitempty"`
-//	Type    interface{} `json:"type,omitempty"`
-//	Port    interface{} `json:"port,omitempty"`
-//	Timeout interface{} `json:"timeout,omitempty"`
-//} // `json:"health_probe"`
-//
-//// Defaults ...
-//type Defaults struct {
-//	// TODO: Figure out why this is an int and not string
-//	//ReserveMemory   string `json:"reserve_memory,omitempty"`
-//	Instances       int    `json:"instances,omitempty"`
-//	StorageSize     int    `json:"storage_size,omitempty"`
-//	ClientPort      int    `json:"client_port,omitempty"`
-//	LimitMemory     string `json:"limit_memory,omitempty"`
-//	StorageType     string `json:"storage_type,omitempty"`
-//	HealthCheckType string `json:"health_check_type,omitempty"`
-//	ServicePort     int    `json:"service_port,omitempty"`
-//	ServiceName     string `json:"service_name,omitempty"`
-//	ReserveCPU      string `json:"reserve_cpu,omitempty"`
-//	ExternalNetwork bool   `json:"external_network,omitempty"`
-//	LimitCPU        string `json:"limit_cpu,omitempty"`
-//	HealthProbe     `json:"health_probe,omitempty"`
-//} // `json:"defaults"`
