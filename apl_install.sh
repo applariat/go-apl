@@ -17,19 +17,22 @@ CONFIG_DIR="$HOME/.apl"
 CONFIG_FILE="config.toml"
 APL_ENV="apl.bashrc"
 
-#DOWNLOAD_URL=$(curl -s ${FIND_LATEST} | grep browser_download_url | grep ${OS_TYPE} | head -n 1 | cut -d '"' -f 4)
-#APL_CLI_VERSION=$(echo $DOWNLOAD_URL | awk -F"/" '{print $(NF - 1)}')
-#APL_FILE=$(echo $DOWNLOAD_URL | awk -F"/" '{print $NF}')
+DOWNLOAD_URL=$(curl -s ${FIND_LATEST} | grep browser_download_url | grep ${OS_TYPE} | head -n 1 | cut -d '"' -f 4)
+APL_CLI_VERSION=$(echo $DOWNLOAD_URL | awk -F"/" '{print $(NF - 1)}')
+APL_FILE=$(echo $DOWNLOAD_URL | awk -F"/" '{print $NF}')
 
-if [ ! -f bin/apl ]  || [ ! -d scripts ]; then
-	echo "APL CLI files not found, run this script from the local directory - ./$(basename "$0")"
-	exit 1
-fi
+#Install apl command
+SDIR=$(pwd)
+echo
+echo "Downloading apl cli tool: $DOWNLOAD_URL"
+cd /tmp
+wget -q $DOWNLOAD_URL 
+tar zxf ${APL_FILE}
+mv -f bin/apl $CMD_DIR
+rm -rf bin
+echo "Installed: APL Version - $(apl version)"
 
 #Place bundle files
-echo "Moving apl to /usr/local/bin"
-mv -f bin/apl $CMD_DIR
-rm -rf bin 
 if [ -d "$SCRIPT_DIR" ]; then
 	echo "Detected an existing ${SCRIPT_DIR}, moving in case of user changes"
 	[ -d "${SCRIPT_DIR}.old" ] && rm -rf "${SCRIPT_DIR}.old"
@@ -55,7 +58,6 @@ else
 #!/bin/bash
 export APL_SCRIPT_HOME=${SCRIPT_DIR}
 export PATH="${PATH}:${SCRIPT_DIR}"
-export APL_LOC_DEPLOY_ID=$LOC_DEPLOY_ID
 EOL
 	
 	if [[ "$OS_TYPE" == "darwin" ]]; then
@@ -125,8 +127,9 @@ echo "Run apl -h to see command options"
 #apl -h
 
 #Try to Clean up
-#rm -f ${APL_FILE}
+rm -f ${APL_FILE}
 
+cd $SDIR
 echo
 echo "APL CLI Installation Complete, $message"
 
